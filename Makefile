@@ -1,21 +1,47 @@
-CXX = g++
-CXXFLAGS = -Wall -std=c++17 -I include -I my_lib/include -I ~/raylib/include
-LDFLAGS = -L ~/raylib/lib -L my_lib/lib -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -lmy_lib
+# Detecteer besturingssysteem
+ifeq ($(OS),Windows_NT)
+    OS_TYPE = windows
+else
+    OS_TYPE = unix
+endif
+
+CXX = clang++
+CXXFLAGS = -Wall -std=c++17 -I include -I my_lib/include -I /mingw64/include/raylib
+
+# Standaard LDFLAGS (geen Linux-specifieke libraries hier)
+LDFLAGS = -L /mingw64/lib -L my_lib/lib -lgdi32 -luser32 -lmy_lib -lraylib
+
+# Voor Windows, pas de flags aan
+ifeq ($(OS_TYPE), windows)
+    CXXFLAGS += -DPLATFORM_WINDOWS
+    LDFLAGS += -lgdi32 -luser32 -lmy_lib
+endif
+
+# Windows Release-specifieke flags
+RELEASE_LDFLAGS = $(LDFLAGS)
+ifeq ($(OS_TYPE), windows)
+    RELEASE_LDFLAGS += -mwindows
+endif
 
 SRC = $(wildcard src/*.cpp)
 OBJ = $(patsubst src/%.cpp, obj/%.o, $(SRC))
 MY_LIB_SRC = $(wildcard my_lib/src/*.cpp)
 MY_LIB_OBJ = $(patsubst my_lib/src/%.cpp, my_lib/obj/%.o, $(MY_LIB_SRC))
 
-OUT = bin/game
+OUT = bin/game.exe
+RELEASE_OUT = bin/game_release.exe
 LIB_NAME = my_lib/lib/libmy_lib.a
 RELEASE_DIR = release
 
 all: $(LIB_NAME) $(OUT)
 
-# Compile de game
+# Compile de game (development versie met console)
 $(OUT): $(OBJ) $(LIB_NAME) | bin
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(LDFLAGS)
+
+# Compile release versie (zonder console)
+$(RELEASE_OUT): $(OBJ) $(LIB_NAME) | bin
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(RELEASE_LDFLAGS)
 
 # Compile my_lib als een statische library
 $(LIB_NAME): $(MY_LIB_OBJ) | my_lib/lib
@@ -37,16 +63,17 @@ run: all
 	./$(OUT)
 
 clean:
-	rm -rf obj my_lib/obj bin/game
+	rm -rf obj my_lib/obj bin/game.exe bin/game_release.exe
 
 fclean: clean
 	rm -rf my_lib/lib bin release
 
 re: fclean all
 
-# Release aanmaken zonder circulaire afhankelijkheid
-release: all
+release: $(RELEASE_OUT)
 	rm -rf $(RELEASE_DIR)
 	mkdir -p $(RELEASE_DIR)
-	cp -r bin/game data $(RELEASE_DIR)/
-
+	cp -r bin/game_release.exe $(RELEASE_DIR)/game.exe
+	cp -r data $(RELEASE_DIR)/
+	cp /mingw64/bin/libraylib.dll $(RELEASE_DIR)/
+	cp /mingw64/bin/glfw3.dll $(RELEASE_DIR)/

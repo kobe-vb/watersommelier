@@ -17,3 +17,11 @@ int main(void)
     Game().run();
     return 0;
 }
+
+// #include <iostream>
+
+// int main(void)
+// {
+//     std::cout << "lol" << std::endl;
+//     return 0;
+// }
