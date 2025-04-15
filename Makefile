@@ -6,7 +6,7 @@ else
 endif
 
 CXX = clang++
-CXXFLAGS = -Wall -std=c++17 -I include -I my_lib/include -I /mingw64/include/raylib
+CXXFLAGS = -g -Wall -std=c++17 -I include -I my_lib/include -I /mingw64/include/raylib
 
 # Standaard LDFLAGS (geen Linux-specifieke libraries hier)
 LDFLAGS = -L /mingw64/lib -L my_lib/lib -lgdi32 -luser32 -lmy_lib -lraylib
@@ -20,7 +20,7 @@ endif
 # Windows Release-specifieke flags
 RELEASE_LDFLAGS = $(LDFLAGS)
 ifeq ($(OS_TYPE), windows)
-    RELEASE_LDFLAGS += -mwindows
+    RELEASE_LDFLAGS += -mwindows -static-libgcc -static-libstdc++
 endif
 
 SRC = $(wildcard src/*.cpp)
@@ -77,3 +77,7 @@ release: $(RELEASE_OUT)
 	cp -r data $(RELEASE_DIR)/
 	cp /mingw64/bin/libraylib.dll $(RELEASE_DIR)/
 	cp /mingw64/bin/glfw3.dll $(RELEASE_DIR)/
+	cp /mingw64/bin/libwinpthread-1.dll $(RELEASE_DIR)/
+
+# cd /c/Users/32477/OneDrive\ -\ Thomas\ More/Documenten/1school/tibs
+# min

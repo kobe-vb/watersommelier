@@ -24,8 +24,12 @@ void Tokel::update(void)
     is_hover = CheckCollisionPointRec(GetMousePosition(), bounds);
     if (is_hover && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ENTER)))
         active = !active;
-    if (IsKeyPressed(KEY_ENTER) && tab)
+    else if (IsKeyPressed(KEY_ENTER) && is_tabt)
         active = !active;
+    else
+        return ;
+    if (active)
+        run_callback();
 }
 
 void Tokel::draw(void) const
@@ -35,9 +39,22 @@ void Tokel::draw(void) const
         col = {0, 255, 0, 255};
     if (is_hover)
         col.a = 30;
-    if (tab)
+    if (is_tabt)
         col.a = 30;
         
     DrawRectangleRec(bounds, col);
     DrawText(text.c_str(), bounds.x, bounds.y, 20, {255, 255, 255, 255});
 }
+
+
+void Tokel::set_tokel(bool value)
+{
+    active = value;
+    if (value)
+        run_callback();
+}
+
+const std::string &Tokel::get_text(void)
+{
+    return (text);
+} 

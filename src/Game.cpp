@@ -12,9 +12,9 @@
 
 #include "Game.hpp"
 
-#include "Tab.hpp"
 #include "Button.hpp"
 #include "Text.hpp"
+#include "Tokel.hpp"
 
 #include <iostream>
 void myFunction(UI &ui) {
@@ -28,27 +28,64 @@ void lol(UI &ui)
     t.get_text().clear();
 }
 
-Game::Game() : UIWin("tiboon", 800, 600, 60)
+Game::Game() : App("tiboon", 800, 600, 60)
 {
-    add_ui(std::make_unique<Tokel>(10, 10, 100, 50, "Tokel"));
-    add_ui(std::make_unique<Tokel>(10, 100, 100, 50, "Tokel2"));
-    add_ui(std::make_unique<Button>(10, 200, 100, 50, "button3", myFunction));
-    add_ui(std::make_unique<Button>(10, 300, 100, 50, "button3", myFunction));
-    add_ui(std::make_unique<Text>(10, 400, 100, 50, lol));
-    add_ui(std::make_unique<Tab>(10, 500, 100, 50, std::initializer_list<std::string>{"tab1", "tab2", "tab3"}));
+    win.add_ui(std::make_unique<Text>(
+        10, 10, 100, 50,
+        [this](UI& ui) { create_new_player(ui); }
+    ));
 }
 
 Game::~Game()
 {
 }
 
+void Game::create_new_player(UI &ui)
+{
+    Text &t = dynamic_cast<Text &>(ui);
+
+    auto tokel = std::make_unique<Tokel>(t.get_rect().x, 10, 100, 50, t.get_text(), 
+    [this](UI& uii) { switch_players(uii); });
+    Tokel* tokel_ptr = tokel.get();
+
+    auto pl = std::make_unique<Player>(t.get_text());
+    Player* pl_ptr = pl.get();
+    
+    win.add_ui(std::move(tokel));
+    win.add_ui(std::move(pl));
+
+    players.push_back({tokel_ptr, pl_ptr});
+
+    t.get_text().clear();
+    t.move(120, 0);
+    tokel_ptr->set_tokel(true);
+}
+
+
+void Game::switch_players(UI &ui)
+{
+    Tokel &t = dynamic_cast<Tokel &>(ui);
+    
+    for (auto pl : players)
+    {
+        if (pl.tokel != &t)
+        {
+            pl.tokel->set_tokel(false);
+            pl.player->set_active(false);
+        }
+        else
+            pl.player->set_active(true);
+    }
+}
+
 void Game::draw() const
 {
     ClearBackground(RAYWHITE);
-    UIWin::draw();
+    win.draw();
 }
 
 void Game::update()
 {
-    UIWin::update();
+    win.update();
+    win.update_tabs();
 }

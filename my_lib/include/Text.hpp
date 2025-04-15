@@ -18,16 +18,17 @@
 class Text : public UI
 {
 private:
-    bool is_active = false;
     bool is_hover;
-    const Rectangle bounds;
+    bool is_active = false;
+    Rectangle bounds;
     std::string text;
 
 public:
     Text(float x, float y, float w, float h, std::function<void(UI&)> callback = nullptr);
     void draw(void) const override;
     void update(void) override;
-    bool set_tab(void) override;
-    void remove_tab(void) override;
     std::string &get_text(void);
+    const Rectangle &get_rect(void); 
+    bool capture_tab(void) override;
+    void move(int x, int y);
 };

@@ -28,4 +28,7 @@ public:
     ~Tokel(void);
     void draw(void) const override;
     void update(void) override;
+
+    void set_tokel(bool value);
+    const std::string &get_text(void);
 };

@@ -19,13 +19,13 @@ Button::Button(float x, float y, float w, float h, const std::string &text, std:
     Button::~Button(void) {}
 
 void Button::draw(void) const {
-    DrawRectangleRec(bounds, (is_hover || tab) ? LIGHTGRAY : GRAY);
+    DrawRectangleRec(bounds, (is_hover || is_tabt) ? LIGHTGRAY : GRAY);
     DrawText(text.c_str(), bounds.x + 10, bounds.y + 10, 20, BLACK);
 }
 
 void Button::update(void) {
     is_hover = CheckCollisionPointRec(GetMousePosition(), bounds);
 
-    if ((is_hover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) || (tab && IsKeyPressed(KEY_ENTER)))
+    if ((is_hover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) || (is_tabt && IsKeyPressed(KEY_ENTER)))
         run_callback();
 }

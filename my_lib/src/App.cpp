@@ -1,42 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   UI.cpp                                             :+:      :+:    :+:   */
+/*   Win.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/24 12:00:53 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/03/24 18:38:36 by kvanden-         ###   ########.fr       */
+/*   Created: 2025/03/13 18:53:08 by kvanden-          #+#    #+#             */
+/*   Updated: 2025/03/24 14:43:27 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "UI.hpp"
+#include "App.hpp"
 
-bool UI::capture_tab(void)
+App::App(std::string title, int w, int h, int fps)
+: is_running(true)
 {
-    if (!_is_active)
-        return (false);
-    is_tabt = !is_tabt;
-    return (is_tabt);
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(w, h, title.c_str());
+    SetTargetFPS(fps);
+    SetExitKey(KEY_Q);
 }
 
-void UI::remove_tab(void)
+App::~App()
 {
-    is_tabt = false;
+    CloseWindow();
 }
 
-void UI::set_callback(std::function<void(UI&)> new_callback)
+void App::run()
 {
-    callback = new_callback;
-}
-
-void UI::run_callback()
-{
-    if (callback)
-        callback(*this);
-}
-
-void UI::set_active(bool val)
-{
-    _is_active = val;
+    while (is_running && !WindowShouldClose())
+    {
+        update();
+        BeginDrawing();
+        draw();
+        EndDrawing();
+    }
 }

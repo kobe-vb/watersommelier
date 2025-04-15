@@ -12,15 +12,24 @@
 
 #pragma once
 
-# include "UIWin.hpp"
+# include "App.hpp"
+# include "Win.hpp"
 # include "Player.hpp"
+# include "Tokel.hpp"
 
 # include <vector>
 
-class Game : public UIWin
+struct Player_data
+{
+    Tokel *tokel;
+    Player *player;
+};
+
+class Game : public App
 {
     private:
-        std::vector<Player> players;
+        std::vector<Player_data> players;
+        Win win;
         
     public:
         Game();
@@ -28,5 +37,7 @@ class Game : public UIWin
         
         void update() override;
         void draw() const override;
-};
+        void create_new_player(UI &ui);
+        void switch_players(UI &ui);
+    };
 

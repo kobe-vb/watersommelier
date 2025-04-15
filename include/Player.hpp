@@ -12,12 +12,15 @@
 
 # pragma once
 
-class Player
+#include "Win.hpp"
+#include "Glass.hpp"
+
+class Player: public Win
 {
 private:
-    /* data */
+    const std::string name;
 public:
-    Player(/* args */);
-    ~Player();
+    Player(std::string &name);
+    ~Player() = default;;
 };
 

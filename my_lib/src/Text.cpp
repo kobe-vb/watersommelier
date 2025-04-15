@@ -21,7 +21,7 @@ void Text::update(void)
     is_hover = CheckCollisionPointRec(GetMousePosition(), bounds);
     if (is_active && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         is_active = false;
-    if ((is_hover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) || (tab && IsKeyPressed(KEY_ENTER) && !is_active))
+    if ((is_hover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) || (is_tabt && IsKeyPressed(KEY_ENTER) && !is_active))
     {
         is_active = !is_active;
         return ;
@@ -44,9 +44,19 @@ void Text::update(void)
     }
 }
 
+bool Text::capture_tab(void)
+{
+    if (!_is_active)
+        return (false);
+    is_tabt = !is_tabt;
+    if (!is_tabt)
+        is_active = false;
+    return (is_tabt);
+}
+
 void Text::draw(void) const
 {
-    DrawRectangleRec(bounds, (is_hover || tab) ? LIGHTGRAY : GRAY);
+    DrawRectangleRec(bounds, (is_hover || is_tabt) ? LIGHTGRAY : GRAY);
     DrawText(text.c_str(), bounds.x + 10, bounds.y + 10, 20, BLACK);
 
     if (is_active && (static_cast<int>(GetTime() * 2) % 2 == 0))
@@ -57,15 +67,18 @@ void Text::draw(void) const
     }
 }
 
-bool Text::set_tab(void)
-{
-    tab = true;
-    is_active = true;
-    return (true);
-}
-void Text::remove_tab(void) {tab = false; is_active = false; std::cout << "removed tab" << std::endl;}
-
 std::string &Text::get_text(void)
 {
     return (text);
 } 
+
+const Rectangle &Text::get_rect(void)
+{
+    return (bounds);
+}
+
+void Text::move(int x, int y)
+{
+    bounds.x += x;
+    bounds.y += y;
+}

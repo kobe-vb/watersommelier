@@ -12,10 +12,7 @@
 
 # include "Player.hpp"
 
-Player::Player(/* args */)
+Player::Player(std::string &name) : name(name)
 {
-}
-
-Player::~Player()
-{
+    add_ui(std::make_unique<Glass>(0));
 }

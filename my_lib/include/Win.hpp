@@ -1,31 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Win.hpp                                            :+:      :+:    :+:   */
+/*   UIWin.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/13 18:51:55 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/03/24 18:44:10 by kvanden-         ###   ########.fr       */
+/*   Created: 2025/03/24 12:53:25 by kvanden-          #+#    #+#             */
+/*   Updated: 2025/03/25 18:08:27 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "raylib.h"
-#include <string>
-#include <iostream>
+#include "Win.hpp"
+#include "UI.hpp"
 
-class Win
+# include <vector>
+# include <memory>
+# include <iostream>
+
+class Win: public UI
 {
     private:
-        bool is_running;
-
+        std::vector<std::unique_ptr<UI>> ui_elements;
+        bool next_tab(bool round);
+        void rm_tab(void);
+        int current_tab = -1;
     public:
-        Win(std::string title, int w, int h, int fps);
-        ~Win();
+        Win() = default;
+        ~Win() = default;
+        void add_ui(std::unique_ptr<UI> element);
+        void update() override;
+        void draw() const override;
 
-        void run();
-        virtual void update() = 0;
-        virtual void draw() const = 0;
+        void update_tabs(void);
+        bool capture_tab(void) override;
 };

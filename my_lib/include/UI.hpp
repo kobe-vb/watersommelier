@@ -16,10 +16,14 @@
 
 #include <functional>
 
+#include <iostream>
+
 class UI
 {
+private:
 protected:
-    bool tab = false;
+    bool _is_active = true;
+    bool is_tabt = false;
     std::function<void(UI &)> callback;
 
 public:
@@ -29,10 +33,10 @@ public:
     virtual void draw(void) const = 0;
     virtual void update(void) = 0;
 
-    virtual bool set_tab(void);
+    virtual bool capture_tab(void);
     virtual void remove_tab(void);
-    const bool get_tab(void) const;
 
     void set_callback(std::function<void(UI &)> new_callback);
-    void run_callback();
+    void run_callback(void);
+    void set_active(bool val);
 };
