@@ -6,7 +6,7 @@ else
 endif
 
 CXX = clang++
-CXXFLAGS = -g -Wall -std=c++17 -I include -I my_lib/include -I /mingw64/include/raylib
+CXXFLAGS = -g -Wall -std=c++17 -I include -I my_lib/include -I /mingw64/include
 
 # Standaard LDFLAGS (geen Linux-specifieke libraries hier)
 LDFLAGS = -L /mingw64/lib -L my_lib/lib -lgdi32 -luser32 -lmy_lib -lraylib
@@ -28,7 +28,7 @@ OBJ = $(patsubst src/%.cpp, obj/%.o, $(SRC))
 MY_LIB_SRC = $(wildcard my_lib/src/*.cpp)
 MY_LIB_OBJ = $(patsubst my_lib/src/%.cpp, my_lib/obj/%.o, $(MY_LIB_SRC))
 
-OUT = bin/game.exe
+OUT = bin/water_woeter.exe
 RELEASE_OUT = bin/game_release.exe
 LIB_NAME = my_lib/lib/libmy_lib.a
 RELEASE_DIR = release
@@ -73,7 +73,7 @@ re: fclean all
 release: $(RELEASE_OUT)
 	rm -rf $(RELEASE_DIR)
 	mkdir -p $(RELEASE_DIR)
-	cp -r bin/game_release.exe $(RELEASE_DIR)/game.exe
+	cp -r bin/game_release.exe $(RELEASE_DIR)/water_woeter.exe
 	cp -r data $(RELEASE_DIR)/
 	cp /mingw64/bin/libraylib.dll $(RELEASE_DIR)/
 	cp /mingw64/bin/glfw3.dll $(RELEASE_DIR)/
