@@ -18,7 +18,11 @@ App::App(std::string title, int w, int h, int fps)
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(w, h, title.c_str());
     SetTargetFPS(fps);
-    SetExitKey(KEY_Q);
+    SetExitKey(NULL);
+
+    Image icon = LoadImage("data/img/mijn_icoon.png");
+    SetWindowIcon(icon);
+    UnloadImage(icon);
 }
 
 App::~App()

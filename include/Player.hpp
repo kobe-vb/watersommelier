@@ -14,13 +14,14 @@
 
 #include "Win.hpp"
 #include "Glass.hpp"
+#include "GameData.hpp"
 
 class Player: public Win
 {
 private:
     const std::string name;
 public:
-    Player(std::string &name);
+    Player(std::string &name, GameData &data);
     ~Player() = default;;
 };
 

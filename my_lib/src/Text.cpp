@@ -13,8 +13,8 @@
 #include "Text.hpp"
 #include <iostream>
 
-Text::Text(float x, float y, float w, float h, std::function<void(UI&)> callback)
-    : UI(callback), is_hover(false), bounds{x, y, w, h}, text("") {}
+Text::Text(float x, float y, float w, float h, std::function<void(UI&)> callback, const std::string &tmp)
+    : UI(callback), is_hover(false), bounds{x, y, w, h}, text(""), tmp(tmp){}
 
 void Text::update(void)
 {
@@ -57,7 +57,11 @@ bool Text::capture_tab(void)
 void Text::draw(void) const
 {
     DrawRectangleRec(bounds, (is_hover || is_tabt) ? LIGHTGRAY : GRAY);
-    DrawText(text.c_str(), bounds.x + 10, bounds.y + 10, 20, BLACK);
+    
+    if (text.size() == 0 && !is_active)
+        DrawText(tmp.c_str(), bounds.x + 10, bounds.y + 10, 20, RED);
+    else
+        DrawText(text.c_str(), bounds.x + 10, bounds.y + 10, 20, BLACK);
 
     if (is_active && (static_cast<int>(GetTime() * 2) % 2 == 0))
     {
@@ -81,4 +85,9 @@ void Text::move(int x, int y)
 {
     bounds.x += x;
     bounds.y += y;
+}
+
+void Text::reset(void)
+{
+    text.clear();
 }

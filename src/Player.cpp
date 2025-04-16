@@ -12,7 +12,7 @@
 
 # include "Player.hpp"
 
-Player::Player(std::string &name) : name(name)
+Player::Player(std::string &name, GameData &data) : name(name)
 {
-    add_ui(std::make_unique<Glass>(0));
+    add_ui(std::make_unique<Glass>(0, data));
 }

@@ -16,6 +16,7 @@
 # include "Win.hpp"
 # include "Player.hpp"
 # include "Tokel.hpp"
+# include "GameData.hpp"
 
 # include <vector>
 
@@ -29,6 +30,7 @@ class Game : public App
 {
     private:
         std::vector<Player_data> players;
+        GameData data;
         Win win;
         
     public:

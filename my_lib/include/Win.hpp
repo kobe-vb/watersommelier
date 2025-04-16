@@ -35,4 +35,5 @@ class Win: public UI
 
         void update_tabs(void);
         bool capture_tab(void) override;
+        UI *get_ui_at(int i) const;
 };

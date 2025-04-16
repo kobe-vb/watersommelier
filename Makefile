@@ -66,7 +66,7 @@ clean:
 	rm -rf obj my_lib/obj bin/game.exe bin/game_release.exe
 
 fclean: clean
-	rm -rf my_lib/lib bin release
+	rm -rf my_lib/lib bin release release.zip 
 
 re: fclean all
 

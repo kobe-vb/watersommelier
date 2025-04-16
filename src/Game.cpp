@@ -30,9 +30,11 @@ void lol(UI &ui)
 
 Game::Game() : App("tiboon", 800, 600, 60)
 {
+
+    load_data(data);
     win.add_ui(std::make_unique<Text>(
         10, 10, 100, 50,
-        [this](UI& ui) { create_new_player(ui); }
+        [this](UI& ui) { create_new_player(ui); }, "name?"
     ));
 }
 
@@ -48,7 +50,7 @@ void Game::create_new_player(UI &ui)
     [this](UI& uii) { switch_players(uii); });
     Tokel* tokel_ptr = tokel.get();
 
-    auto pl = std::make_unique<Player>(t.get_text());
+    auto pl = std::make_unique<Player>(t.get_text(), data);
     Player* pl_ptr = pl.get();
     
     win.add_ui(std::move(tokel));

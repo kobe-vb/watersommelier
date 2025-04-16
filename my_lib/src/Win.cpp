@@ -91,3 +91,8 @@ void Win::draw() const
         element->draw();
     }
 }
+
+UI* Win::get_ui_at(int i) const
+{
+    return (ui_elements[i].get());
+}
