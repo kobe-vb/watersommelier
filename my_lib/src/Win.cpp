@@ -46,8 +46,7 @@ bool Win::next_tab(bool round)
         i++;
         if (round)
             i %= size;
-    }
-    while (round ? i != start : (i != size));
+    } while (round ? i != start : (i != size));
     return (false);
 }
 
@@ -55,29 +54,28 @@ bool Win::capture_tab(void)
 {
     if (!_is_active)
         return (false);
-    
+
     if (!next_tab(false))
         current_tab = -1;
     return (current_tab != -1);
 }
 
-
 void Win::update()
 {
     if (!_is_active)
-        return ;
+        return;
     if (current_tab >= 0 && (GetMouseDelta().x > 0 || GetMouseDelta().y > 0 || IsKeyPressed(KEY_ESCAPE)))
         rm_tab();
     for (size_t i = 0; i < ui_elements.size(); ++i)
     {
         ui_elements[i]->update();
-    }   
+    }
 }
 
 void Win::update_tabs(void)
 {
     if (!_is_active)
-        return ;
+        return;
     if (IsKeyPressed(KEY_TAB))
         next_tab(true);
 }
@@ -85,14 +83,19 @@ void Win::update_tabs(void)
 void Win::draw() const
 {
     if (!_is_active)
-        return ;
-    for (const auto &element : ui_elements)
+        return;
+    for (const auto &element : std::ranges::views::reverse(ui_elements))
     {
         element->draw();
     }
 }
 
-UI* Win::get_ui_at(int i) const
+UI *Win::get_ui_at(int i) const
 {
     return (ui_elements[i].get());
+}
+
+int Win::get_num_of_elements() const
+{
+    return (ui_elements.size());
 }

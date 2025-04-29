@@ -2,7 +2,7 @@
 
 #include "Win.hpp"
 #include "Button.hpp"
-#include "Text.hpp"
+#include "TextInp.hpp"
 #include "Dropdown.hpp"
 #include "GameData.hpp"
 #include "StackedBar.hpp"
@@ -13,13 +13,23 @@ private:
     int ind;
     Rectangle rect;
     Dropdown    *name;
-    Text        *amount;
+    TextInp        *amount;
     StackedBar  bar;
+    GameData    &data;
+    float       ph = 0;
+    float       mol = 0;
+
+    int         x;
+    int         y;
+
+    std::function<void(UI &)> close_glas_func;
+
 public:
-    Glass(int ind, GameData &data);
+    Glass(int ind, GameData &data, std::function<void(UI &)> close_glas);
     ~Glass() = default;
 
     void draw(void) const override;
 
     void save_druple(UI &ui);
+    void add_comment(UI &ui);
 };

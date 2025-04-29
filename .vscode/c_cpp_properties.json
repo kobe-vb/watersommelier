@@ -1,22 +1,21 @@
 {
-    "configurations": [
-      {
-        "name": "Windows",
-        "includePath": [
-          "${workspaceFolder}/**",
-          "${workspaceFolder}/include",
-          "${workspaceFolder}/my_lib/include",
-          "/mingw64/include/raylib"
-        ],
-        "defines": [
-          "PLATFORM_WINDOWS"
-        ],
-        "compilerPath": "C:/Program Files/LLVM/bin/clang++.exe",
-        "cStandard": "c11",
-        "cppStandard": "c++17",
-        "intelliSenseMode": "windows-clang-x64"
-      }
-    ],
-    "version": 4
-  }
-  
+  "configurations": [
+    {
+      "name": "Win32",
+      "includePath": [
+        "${workspaceFolder}/include",
+        "${workspaceFolder}/my_lib/include",
+        "C:/msys64/mingw64/include",         // raylib of andere globale headers
+        "C:/msys64/mingw64/include/raylib"   // raylib specifiek
+      ],
+      "defines": [
+        "PLATFORM_WINDOWS"
+      ],
+      "compilerPath": "C:/msys64/mingw64/bin/g++.exe",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "windows-gcc-x64"
+    }
+  ],
+  "version": 4
+}

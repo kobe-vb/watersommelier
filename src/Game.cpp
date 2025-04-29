@@ -12,27 +12,11 @@
 
 #include "Game.hpp"
 
-#include "Button.hpp"
-#include "Text.hpp"
-#include "Tokel.hpp"
-
-#include <iostream>
-void myFunction(UI &ui) {
-    std::cout << "Button clicked!" << std::endl;
-}
-
-void lol(UI &ui)
-{
-    Text &t = dynamic_cast<Text &>(ui);
-    std::cout << "got tis: "<< t.get_text() << std::endl;
-    t.get_text().clear();
-}
-
 Game::Game() : App("tiboon", 800, 600, 60)
 {
 
     load_data(data);
-    win.add_ui(std::make_unique<Text>(
+    win.add_ui(std::make_unique<TextInp>(
         10, 10, 100, 50,
         [this](UI& ui) { create_new_player(ui); }, "name?"
     ));
@@ -44,7 +28,7 @@ Game::~Game()
 
 void Game::create_new_player(UI &ui)
 {
-    Text &t = dynamic_cast<Text &>(ui);
+    TextInp &t = dynamic_cast<TextInp &>(ui);
 
     auto tokel = std::make_unique<Tokel>(t.get_rect().x, 10, 100, 50, t.get_text(), 
     [this](UI& uii) { switch_players(uii); });

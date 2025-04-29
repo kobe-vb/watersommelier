@@ -16,6 +16,7 @@
 # include "Win.hpp"
 # include "Player.hpp"
 # include "Tokel.hpp"
+# include "TextInp.hpp"
 # include "GameData.hpp"
 
 # include <vector>

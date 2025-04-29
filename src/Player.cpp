@@ -12,7 +12,15 @@
 
 # include "Player.hpp"
 
-Player::Player(std::string &name, GameData &data) : name(name)
+Player::Player(std::string &name, GameData &data) : name(name), data(data)
 {
-    add_ui(std::make_unique<Glass>(0, data));
+    add_ui(std::make_unique<Glass>(0, data, [this](UI &ui)
+    { next_glass(ui); }));
+}
+
+void Player::next_glass(UI &ui)
+{
+    (void)ui;
+    add_ui(std::make_unique<Glass>(get_num_of_elements(), data, [this](UI &ui)
+    { next_glass(ui); }));
 }

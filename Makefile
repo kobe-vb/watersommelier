@@ -6,7 +6,7 @@ else
 endif
 
 CXX = clang++
-CXXFLAGS = -g -Wall -std=c++17 -I include -I my_lib/include -I /mingw64/include
+CXXFLAGS = -g -Wall -std=c++20 -I include -I my_lib/include -I /mingw64/include
 
 # Standaard LDFLAGS (geen Linux-specifieke libraries hier)
 LDFLAGS = -L /mingw64/lib -L my_lib/lib -lgdi32 -luser32 -lmy_lib -lraylib
