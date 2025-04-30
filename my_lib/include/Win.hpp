@@ -15,25 +15,28 @@
 #include "Win.hpp"
 #include "UI.hpp"
 
-# include <vector>
-# include <memory>
-# include <iostream>
+#include <vector>
+#include <memory>
+#include <iostream>
+#include <ranges>
 
-class Win: public UI
+class Win : public UI
 {
-    private:
-        std::vector<std::unique_ptr<UI>> ui_elements;
-        bool next_tab(bool round);
-        void rm_tab(void);
-        int current_tab = -1;
-    public:
-        Win() = default;
-        ~Win() = default;
-        void add_ui(std::unique_ptr<UI> element);
-        void update() override;
-        void draw() const override;
+private:
+    std::vector<std::unique_ptr<UI>> ui_elements;
+    bool next_tab(bool round);
+    void rm_tab(void);
+    int current_tab = -1;
 
-        void update_tabs(void);
-        bool capture_tab(void) override;
-        UI *get_ui_at(int i) const;
+public:
+    Win() = default;
+    ~Win() = default;
+    void add_ui(std::unique_ptr<UI> element);
+    void update() override;
+    void draw() const override;
+
+    void update_tabs(void);
+    bool capture_tab(void) override;
+    UI *get_ui_at(int i) const;
+    int get_num_of_elements() const;
 };

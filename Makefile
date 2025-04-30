@@ -6,8 +6,7 @@ else
 endif
 
 CXX = clang++
-CXXFLAGS = -g -Wall -std=c++17 -I include -I my_lib/include
-LDFLAGS = -L my_lib/lib -lmy_lib -lraylib
+CXXFLAGS = -g -Wall -std=c++20 -I include -I my_lib/include -I /mingw64/include
 
 # Platform-specifieke include/lib directories
 ifeq ($(OS_TYPE), windows)

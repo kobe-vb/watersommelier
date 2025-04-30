@@ -50,7 +50,7 @@ void StackedBar::draw() const
     if (is_hover)
     {
         int textWidth = MeasureText(label.c_str(), 20) + 10;
-        DrawRectangle(mouse.x + 10, mouse.y - 20, textWidth, 20, BLACK);
-        DrawText(label.c_str(), mouse.x + 15, mouse.y - 18, 20, WHITE);
+        DrawRectangle(mouse.x + 10, mouse.y - 20, textWidth + 20, 30, BLACK);
+        DrawText(label.c_str(), mouse.x + 20, mouse.y - 18, 20, WHITE);
     }
 }

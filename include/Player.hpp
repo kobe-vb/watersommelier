@@ -20,8 +20,11 @@ class Player: public Win
 {
 private:
     const std::string name;
+    GameData &data;
 public:
     Player(std::string &name, GameData &data);
-    ~Player() = default;;
+    ~Player() = default;
+
+    void next_glass(UI &ui);
 };
 
