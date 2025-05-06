@@ -52,7 +52,7 @@ void Dropdown::handle_text(void)
 void Dropdown::update()
 {
     Vector2 mouse = GetMousePosition();
-    bool hover = CheckCollisionPointRec(mouse, bounds);
+    hover = CheckCollisionPointRec(mouse, bounds);
 
     if ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && hover) ||
         ((IsKeyPressed(KEY_ENTER)) && is_tabt && !is_open))
@@ -61,7 +61,7 @@ void Dropdown::update()
         filter_options();
         ind = 0;
         current_ind = 0;
-        return ;
+        return;
     }
 
     if (IsKeyPressed(KEY_ESCAPE))
@@ -119,7 +119,6 @@ void Dropdown::update()
 void Dropdown::draw() const
 {
     Vector2 mouse = GetMousePosition();
-    bool hover = CheckCollisionPointRec(mouse, bounds);
 
     DrawRectangleRec(bounds, hover || is_tabt ? LIGHTGRAY : GRAY);
     DrawText(input_text.empty() ? placeholder.c_str() : input_text.c_str(), bounds.x + 10, bounds.y + 10, 20, input_text.empty() ? DARKGRAY : BLACK);

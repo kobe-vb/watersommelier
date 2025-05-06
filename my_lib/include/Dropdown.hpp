@@ -18,6 +18,8 @@ private:
     int ind = 0;
     int current_ind = 0;
 
+    bool hover = false;
+
 public:
     Dropdown(float x, float y, float w, float h, const std::vector<std::string>& opts, const std::string& ph = "", std::function<void(UI&)> cb = nullptr);
 

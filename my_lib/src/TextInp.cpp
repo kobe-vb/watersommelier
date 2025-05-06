@@ -117,3 +117,10 @@ void TextInp::reset(void)
 {
     text.clear();
 }
+
+void TextInp::remove_active(void)
+{
+    is_active = false;
+    is_hover = false;
+    is_tabt = false;
+}

@@ -23,4 +23,6 @@ public:
     bool capture_tab(void) override;
     void move(int x, int y);
     void reset(void);
+
+    void remove_active(void);
 };

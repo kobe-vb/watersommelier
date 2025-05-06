@@ -15,7 +15,7 @@ ifeq ($(OS_TYPE), windows)
 else
     # Linux: gebruik jouw lokale raylib build
     CXXFLAGS += -I $(HOME)/raylib/include
-    LDFLAGS += -L $(HOME)/raylib/lib
+    LDFLAGS += -L $(HOME)/raylib/lib -lraylib -lm -ldl -lpthread -lX11 -Lmy_lib/lib -lmy_lib
 endif
 
 # Release-specifieke linker flags (alleen Windows)

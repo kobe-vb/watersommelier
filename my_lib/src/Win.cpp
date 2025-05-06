@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   UIWin.cpp                                          :+:      :+:    :+:   */
+/*   Win.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 12:57:06 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/03/25 18:21:32 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:15:18 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,16 @@ void Win::update_tabs(void)
 
 void Win::draw() const
 {
-    if (!_is_active)
+    if (!_is_visible)
         return;
-    for (const auto &element : std::ranges::views::reverse(ui_elements))
-    {
+    // for (const auto &element : std::ranges::views::reverse(ui_elements))
+    // {
+
+    for (auto it = ui_elements.rbegin(); it != ui_elements.rend(); ++it) {
+    const auto& element = *it;
         element->draw();
     }
+
 }
 
 UI *Win::get_ui_at(int i) const

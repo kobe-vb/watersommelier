@@ -6,7 +6,7 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 12:00:53 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/03/24 18:38:36 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:14:59 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,24 @@ void UI::run_callback()
         callback(*this);
 }
 
-void UI::set_active(bool val)
+void UI::set_active(bool value)
 {
-    _is_active = val;
+    _is_active = value;
+}
+
+void UI::set_visible(bool value)
+{
+    _is_visible = value;
+}
+
+void UI::activate(void)
+{
+    set_active(true);
+    set_visible(true);
+}
+
+void UI::disable(void)
+{
+    set_active(false);
+    set_visible(false);
 }

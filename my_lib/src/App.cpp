@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Win.cpp                                            :+:      :+:    :+:   */
+/*   App.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 18:53:08 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/03/24 14:43:27 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/04/22 13:26:53 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 App::App(std::string title, int w, int h, int fps)
 : is_running(true)
 {
+    SetTraceLogLevel(LOG_ALL);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(w, h, title.c_str());
     SetTargetFPS(fps);

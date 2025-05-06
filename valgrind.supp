@@ -1,0 +1,105 @@
+{
+   libX11_XIM_memory_leak
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:_XimOpenIM
+   fun:_XimRegisterIMInstantiateCallback
+   fun:XRegisterIMInstantiateCallback
+   ...
+}
+
+{
+   dl_find_object_leak
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_dl_find_object_update
+   ...
+}
+
+{
+   dl_load_invalid_read
+   Memcheck:Addr8
+   fun:strncmp
+   fun:is_dst
+   ...
+   obj:*/ld-*.so
+}
+
+{
+   radeonsi_uninitialized_value_1
+   Memcheck:Cond
+   obj:*/dri/radeonsi_dri.so
+   ...
+}
+
+{
+   mesa_opengl_uninitialized_value
+   Memcheck:Cond
+   obj:*/libGLX_mesa.so*
+   ...
+}
+
+{
+   glfw_x11_uninitialized_value
+   Memcheck:Cond
+   fun:*glfw*
+   ...
+}
+
+{
+   dl_load_invalid_read_strncmp
+   Memcheck:Addr8
+   fun:strncmp
+   fun:is_dst
+   fun:*dl_dst*
+   ...
+}
+
+{
+   dl_load_invalid_read_decompose_rpath
+   Memcheck:Addr8
+   fun:strncmp
+   fun:is_dst
+   fun:_dl_dst_substitute
+   fun:fillin_rpath*
+   fun:decompose_rpath
+   ...
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:malloc
+   fun:_dl_find_object_update
+   fun:dl_open_worker_begin
+   fun:_dl_catch_exception
+   fun:dl_open_worker
+   fun:_dl_catch_exception
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_exception
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen_implementation
+   fun:dlopen@@GLIBC_2.34
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:calloc
+   fun:_XimOpenIM
+   fun:_XimRegisterIMInstantiateCallback
+   fun:XRegisterIMInstantiateCallback
+   fun:_glfwInitX11
+   fun:glfwInit
+   fun:InitPlatform
+   fun:InitWindow
+   fun:_ZN3AppC2ENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiii
+   fun:_ZN4GameC1Ev
+   fun:main
+}

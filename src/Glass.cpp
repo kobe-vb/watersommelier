@@ -26,9 +26,6 @@ Glass::Glass(int ind, GameData &data, std::function<void(UI &)> close_glas) : in
                                     [this](UI &ui)
                                     { add_comment(ui); }));
     bar = StackedBar(x + 630, y + 10, 400, 50);
-    // bar.add_value("lol", {255, 0, 0, 255}, 5);
-    // bar.add_value("dirk", {255, 255, 0, 255}, 10);
-    // bar.add_value("dirk", {255, 255, 0, 255}, 10);
     name = (Dropdown *)get_ui_at(0);
     amount = (TextInp *)get_ui_at(1);
 }
@@ -59,7 +56,6 @@ void Glass::save_druple(UI &ui)
 
 void Glass::add_comment(UI &ui)
 {
-    _is_active = false;
     add_ui(std::make_unique<TextInp>(x + 20, y + 80, 500, 50, close_glas_func, "coment?"));
     
     rect.height += 70;

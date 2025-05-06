@@ -6,13 +6,13 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 18:56:03 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/03/25 18:22:32 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:38:37 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Game.hpp"
 
-Game::Game() : App("tiboon", 800, 600, 60)
+Game::Game() : App("tiboon", 2000, 600, 60)
 {
 
     load_data(data);
@@ -57,10 +57,10 @@ void Game::switch_players(UI &ui)
         if (pl.tokel != &t)
         {
             pl.tokel->set_tokel(false);
-            pl.player->set_active(false);
+            pl.player->disable();
         }
         else
-            pl.player->set_active(true);
+            pl.player->activate();
     }
 }
 
