@@ -15,7 +15,7 @@
 Player::Player(std::string &name, GameData &data) : name(name), data(data), 
 scroll(ScrollBar({1800, 100, 70, 500}, 800, 200, [this](float height) { scroll_update(height); }))
 {
-    add_ui(std::make_unique<Glass>(0, 0, data, [this](UI &ui)
+    add_ui(std::make_unique<Glass>(0, 200, data, [this](UI &ui)
     { next_glass(ui); }));
 }
 
@@ -25,7 +25,8 @@ void Player::next_glass(UI &ui)
     int i = get_num_of_elements();
     
     get_ui_at(i - 1)->set_active(false);
-    add_ui(std::make_unique<Glass>(get_num_of_elements(), scroll.get_height(), data, [this](UI &ui)
+    float y = dynamic_cast<Glass *>(get_ui_at(i - 1))->get_pos().y + 200;
+    add_ui(std::make_unique<Glass>(i, y, data, [this](UI &ui)
     { next_glass(ui); }));
     scroll.add_height(300);
     scroll.scroll(300);

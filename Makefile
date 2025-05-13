@@ -11,7 +11,7 @@ CXXFLAGS = -g -Wall -std=c++20 -I include -I my_lib/include -I /mingw64/include
 # Platform-specifieke include/lib directories
 ifeq ($(OS_TYPE), windows)
     CXXFLAGS += -I /mingw64/include -DPLATFORM_WINDOWS
-    LDFLAGS += -L /mingw64/lib -lgdi32 -luser32
+    LDFLAGS += -L /mingw64/lib -lgdi32 -luser32 -lraylib -Lmy_lib/lib -lmy_lib
 else
     # Linux: gebruik jouw lokale raylib build
     CXXFLAGS += -I $(HOME)/raylib/include
@@ -40,11 +40,11 @@ RELEASE_DIR = release
 
 all: $(LIB_NAME) $(OUT)
 
-$(OUT): $(OBJ) $(LIB_NAME) | bin
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(LDFLAGS)
+$(OUT): $(OBJ) $(MY_LIB_OBJ) | bin
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(MY_LIB_OBJ) $(LDFLAGS)
 
 $(RELEASE_OUT): $(OBJ) $(LIB_NAME) | bin
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(RELEASE_LDFLAGS)
+	g++ $(CXXFLAGS) -o $@ $(OBJ) $(MY_LIB_OBJ)  $(RELEASE_LDFLAGS)
 
 $(LIB_NAME): $(MY_LIB_OBJ) | my_lib/lib
 	ar rcs $@ $^

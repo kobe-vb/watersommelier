@@ -60,3 +60,8 @@ void BufferedWin::set_pos(int x, int y)
     this->pos.x = x;
     this->pos.y = y;
 }
+
+Vector2 BufferedWin::get_pos(void) const
+{
+    return (this->pos);
+}

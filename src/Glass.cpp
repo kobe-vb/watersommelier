@@ -9,7 +9,7 @@ void draw_my_text(const char *name, float val, int x, int y)
 }
 
 Glass::Glass(int ind, float height, GameData &data, std::function<void(UI &)> close_glas) : 
-BufferedWin(100, 200 + ind * 165 - height, 1550, 300),
+BufferedWin(100, height, 1550, 300),
 ind(ind), data(data), close_glas_func(close_glas)
 {
     rect = {10.0f, 10.0f, 1510, 80};
@@ -24,6 +24,7 @@ ind(ind), data(data), close_glas_func(close_glas)
     add_ui(std::make_unique<Button>(1400, 10, 100, 50, "save?",
                                     [this](UI &ui)
                                     { add_comment(ui); }));
+    // add_ui(std::make_unique<Button>(1400, 10, 100, 50, "gek", close_glas));
     bar = StackedBar(630, 10, 400, 50);
     name = (Dropdown *)get_ui_at(0);
     amount = (TextInp *)get_ui_at(1);
@@ -56,7 +57,6 @@ void Glass::save_druple(UI &ui)
 void Glass::add_comment(UI &ui)
 {
     add_ui(std::make_unique<TextInp>(20, 80, 500, 50, close_glas_func, "coment?"));
-    
     rect.height += 70;
 }
 

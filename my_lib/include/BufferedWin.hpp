@@ -31,4 +31,6 @@ class BufferedWin : public Win
         void move(int x, int y);
         void set_pos(int x, int y);
         virtual void clear(void) const;
+
+        Vector2 get_pos(void) const;
 };
