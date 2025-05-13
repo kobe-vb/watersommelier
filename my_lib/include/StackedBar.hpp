@@ -23,5 +23,5 @@ public:
     ~StackedBar() = default;
 
     void add_value(const std::string &name, Color col, float val);
-    void draw() const;
+    void draw(Vector2 mouse) const;
 };

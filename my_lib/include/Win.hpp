@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   UIWin.hpp                                          :+:      :+:    :+:   */
+/*   Win.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 12:53:25 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/03/25 18:08:27 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:14:45 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "Win.hpp"
 #include "UI.hpp"
 
 #include <vector>
@@ -31,7 +30,7 @@ private:
 public:
     Win() = default;
     ~Win() = default;
-    void add_ui(std::unique_ptr<UI> element);
+    virtual void add_ui(std::unique_ptr<UI> element);
     void update() override;
     void draw() const override;
 

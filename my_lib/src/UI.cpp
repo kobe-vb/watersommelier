@@ -6,11 +6,12 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 12:00:53 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/06 18:14:59 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:35:41 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "UI.hpp"
+#include "BufferedWin.hpp"
 
 bool UI::capture_tab(void)
 {
@@ -56,4 +57,21 @@ void UI::disable(void)
 {
     set_active(false);
     set_visible(false);
+}
+
+void UI::set_parent(BufferedWin *parent)
+{
+    this->parent = parent;
+}
+
+BufferedWin *UI::get_parent(void) const
+{
+    return (this->parent);
+}
+
+Vector2 UI::get_mouse_pos(void) const
+{
+    if (parent)
+        return (parent->get_mouse_pos());
+    return (GetMousePosition());
 }

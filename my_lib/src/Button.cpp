@@ -6,7 +6,7 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 14:48:43 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/03/24 17:00:27 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:55:44 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void Button::draw(void) const {
 }
 
 void Button::update(void) {
-    is_hover = CheckCollisionPointRec(GetMousePosition(), bounds);
+    is_hover = CheckCollisionPointRec(this->get_mouse_pos(), bounds);
 
     if ((is_hover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) || (is_tabt && IsKeyPressed(KEY_ENTER)))
         run_callback();

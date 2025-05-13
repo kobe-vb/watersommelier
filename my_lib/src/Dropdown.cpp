@@ -51,7 +51,7 @@ void Dropdown::handle_text(void)
 }
 void Dropdown::update()
 {
-    Vector2 mouse = GetMousePosition();
+    Vector2 mouse = this->get_mouse_pos();
     hover = CheckCollisionPointRec(mouse, bounds);
 
     if ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && hover) ||
@@ -118,7 +118,7 @@ void Dropdown::update()
 
 void Dropdown::draw() const
 {
-    Vector2 mouse = GetMousePosition();
+    Vector2 mouse = this->get_mouse_pos();
 
     DrawRectangleRec(bounds, hover || is_tabt ? LIGHTGRAY : GRAY);
     DrawText(input_text.empty() ? placeholder.c_str() : input_text.c_str(), bounds.x + 10, bounds.y + 10, 20, input_text.empty() ? DARKGRAY : BLACK);

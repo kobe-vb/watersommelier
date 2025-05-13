@@ -6,7 +6,7 @@ TextInp::TextInp(float x, float y, float w, float h, std::function<void(UI&)> ca
 
 void TextInp::update(void)
 {
-    is_hover = CheckCollisionPointRec(GetMousePosition(), bounds);
+    is_hover = CheckCollisionPointRec(this->get_mouse_pos(), bounds);
     if (is_active && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         is_active = false;
     if ((is_hover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) || (is_tabt && IsKeyPressed(KEY_ENTER) && !is_active))

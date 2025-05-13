@@ -6,7 +6,7 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 12:22:43 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/03/24 17:03:40 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:56:01 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ Tokel::~Tokel(void) {}
 
 void Tokel::update(void)
 {
-    is_hover = CheckCollisionPointRec(GetMousePosition(), bounds);
+    is_hover = CheckCollisionPointRec(this->get_mouse_pos(), bounds);
     if (is_hover && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ENTER)))
         active = !active;
     else if (IsKeyPressed(KEY_ENTER) && is_tabt)

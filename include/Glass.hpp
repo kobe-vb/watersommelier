@@ -1,13 +1,13 @@
 # pragma once
 
-#include "Win.hpp"
+#include "BufferedWin.hpp"
 #include "Button.hpp"
 #include "TextInp.hpp"
 #include "Dropdown.hpp"
 #include "GameData.hpp"
 #include "StackedBar.hpp"
 
-class Glass: public Win
+class Glass: public BufferedWin
 {
 private:
     int ind;
@@ -19,13 +19,10 @@ private:
     float       ph = 0;
     float       mol = 0;
 
-    int         x;
-    int         y;
-
     std::function<void(UI &)> close_glas_func;
 
 public:
-    Glass(int ind, GameData &data, std::function<void(UI &)> close_glas);
+    Glass(int ind, float height, GameData &data, std::function<void(UI &)> close_glas);
     ~Glass() = default;
 
     void draw(void) const override;

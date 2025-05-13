@@ -6,15 +6,16 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:29:17 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/06 18:30:42 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/13 18:24:19 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Player.hpp"
 
-Player::Player(std::string &name, GameData &data) : name(name), data(data)
+Player::Player(std::string &name, GameData &data) : name(name), data(data), 
+scroll(ScrollBar({1800, 100, 70, 500}, 800, 200, [this](float height) { scroll_update(height); }))
 {
-    add_ui(std::make_unique<Glass>(0, data, [this](UI &ui)
+    add_ui(std::make_unique<Glass>(0, 0, data, [this](UI &ui)
     { next_glass(ui); }));
 }
 
@@ -24,6 +25,27 @@ void Player::next_glass(UI &ui)
     int i = get_num_of_elements();
     
     get_ui_at(i - 1)->set_active(false);
-    add_ui(std::make_unique<Glass>(get_num_of_elements(), data, [this](UI &ui)
+    add_ui(std::make_unique<Glass>(get_num_of_elements(), scroll.get_height(), data, [this](UI &ui)
     { next_glass(ui); }));
+    scroll.add_height(300);
+    scroll.scroll(300);
+}
+
+void Player::scroll_update(float height)
+{
+    std::cout << "Scroll update: " << height << std::endl;
+    for (int i = 0; i < get_num_of_elements(); i++)
+        dynamic_cast<Glass &>(*get_ui_at(i)).move(0, -height);
+}
+
+void Player::update(void)
+{
+    scroll.update();
+    Win::update();
+}
+
+void Player::draw(void) const
+{
+    scroll.draw();
+    Win::draw();
 }

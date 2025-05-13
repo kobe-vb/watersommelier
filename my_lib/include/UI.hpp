@@ -6,18 +6,17 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:02:04 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/06 18:12:45 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:36:21 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "raylib.h"
-
 #include <functional>
-
 #include <iostream>
 
+class BufferedWin;
 class UI
 {
 private:
@@ -26,6 +25,8 @@ protected:
     bool _is_visible = true;
     bool is_tabt = false;
     std::function<void(UI &)> callback;
+    
+    BufferedWin *parent = nullptr;
 
 public:
     UI(std::function<void(UI &)> callback = nullptr) : callback(callback) {}
@@ -44,4 +45,9 @@ public:
     void set_visible(bool value);
     void disable(void);
     void activate(void);
+
+    void set_parent(BufferedWin *parent);
+    BufferedWin *get_parent(void) const;
+
+    Vector2 get_mouse_pos(void) const;
 };

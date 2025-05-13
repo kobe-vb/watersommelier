@@ -8,24 +8,23 @@ void draw_my_text(const char *name, float val, int x, int y)
     DrawText(buffer, x, y, 30, DARKBLUE);
 }
 
-Glass::Glass(int ind, GameData &data, std::function<void(UI &)> close_glas) : ind(ind), data(data), close_glas_func(close_glas)
+Glass::Glass(int ind, float height, GameData &data, std::function<void(UI &)> close_glas) : 
+BufferedWin(100, 200 + ind * 165 - height, 1550, 300),
+ind(ind), data(data), close_glas_func(close_glas)
 {
-    x = 100;
-    y = 200 + ind * 165;
-
-    rect = {static_cast<float>(x), static_cast<float>(y), 1500, 70};
+    rect = {10.0f, 10.0f, 1510, 80};
     add_ui(std::make_unique<Dropdown>(
-        x, y + 10, 400, 50,
+        0, 10, 400, 50,
         data.names, "lol"));
-    add_ui(std::make_unique<TextInp>(x + 410, y + 10, 100, 50, [this](UI &ui)
+    add_ui(std::make_unique<TextInp>(410, 10, 100, 50, [this](UI &ui)
                                   { save_druple(ui); }, "hoeveel?"));
-    add_ui(std::make_unique<Button>(x + 520, y + 10, 100, 50, "save",
+    add_ui(std::make_unique<Button>(520, 10, 100, 50, "save",
                                     [this](UI &ui)
                                     { save_druple(ui); }));
-    add_ui(std::make_unique<Button>(x + 1400, y + 10, 100, 50, "save?",
+    add_ui(std::make_unique<Button>(1400, 10, 100, 50, "save?",
                                     [this](UI &ui)
                                     { add_comment(ui); }));
-    bar = StackedBar(x + 630, y + 10, 400, 50);
+    bar = StackedBar(630, 10, 400, 50);
     name = (Dropdown *)get_ui_at(0);
     amount = (TextInp *)get_ui_at(1);
 }
@@ -56,17 +55,27 @@ void Glass::save_druple(UI &ui)
 
 void Glass::add_comment(UI &ui)
 {
-    add_ui(std::make_unique<TextInp>(x + 20, y + 80, 500, 50, close_glas_func, "coment?"));
+    add_ui(std::make_unique<TextInp>(20, 80, 500, 50, close_glas_func, "coment?"));
     
     rect.height += 70;
 }
 
 void Glass::draw(void) const
 {
+    if (!_is_visible)
+        return;
+    BeginTextureMode(this->win);
+    clear();
+
     DrawRectangleRounded(rect, 0.2, 8, LIGHTGRAY);
     DrawRectangleRoundedLinesEx(rect, 0.2, 8, 6.0f, BLACK);
-    draw_my_text("pH: %.2f", ph, x + 1050, y + 10);
-    draw_my_text("mol: %.2f", mol, x + 1180, y + 10);
-    bar.draw();
+    draw_my_text("pH: %.2f", ph, 1050, 10);
+    draw_my_text("mol: %.2f", mol, 1180, 10);
+    bar.draw(this->get_mouse_pos());
     Win::draw();
+
+    EndTextureMode();
+    Rectangle source = { 0.0f, 0.0f, (float)this->win.texture.width, -(float)this->win.texture.height };
+    Vector2 position = { this->pos.x, this->pos.y };
+    DrawTextureRec(this->win.texture, source, position, WHITE);
 }

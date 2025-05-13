@@ -18,7 +18,7 @@ void StackedBar::add_value(const std::string &name, Color col, float val)
     total_volume += val;
 }
 
-void StackedBar::draw() const
+void StackedBar::draw(Vector2 mouse) const
 {
     if (total_volume <= 0)
     {
@@ -26,7 +26,6 @@ void StackedBar::draw() const
         return;
     }
     float currentX = static_cast<float>(x);
-    Vector2 mouse = GetMousePosition();
     bool is_hover = false;
     std::string label;
 
