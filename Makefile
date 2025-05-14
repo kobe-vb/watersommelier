@@ -85,3 +85,6 @@ ifeq ($(OS_TYPE), windows)
 	cp /mingw64/bin/glfw3.dll $(RELEASE_DIR)/
 	cp /mingw64/bin/libwinpthread-1.dll $(RELEASE_DIR)/
 endif
+
+
+# cd /c/Users/32477/OneDrive\ -\ Thomas\ More/Documenten/1school/tibs

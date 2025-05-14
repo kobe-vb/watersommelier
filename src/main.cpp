@@ -18,10 +18,11 @@ int main(void)
     return 0;
 }
 
-// #include <iostream>
-
-// int main(void)
-// {
-//     std::cout << "lol" << std::endl;
-//     return 0;
-// }
+        // working.clear();
+        // int key = GetCharPressed();
+        // while (key > 0) {
+        //     working += (char)key;
+        //     key = GetCharPressed();
+        // }
+        // if (working.length() > 2)
+        //     barcodeInput = working;
