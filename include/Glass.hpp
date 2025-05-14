@@ -26,6 +26,7 @@ public:
     ~Glass() = default;
 
     void draw(void) const override;
+    void draww(void) const;
 
     void save_druple(UI &ui);
     void add_comment(UI &ui);

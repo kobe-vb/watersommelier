@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Glass.cpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 16:31:31 by kvanden-          #+#    #+#             */
+/*   Updated: 2025/05/14 16:31:39 by kvanden-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "Glass.hpp"
 
@@ -8,16 +19,15 @@ void draw_my_text(const char *name, float val, int x, int y)
     DrawText(buffer, x, y, 30, DARKBLUE);
 }
 
-Glass::Glass(int ind, float height, GameData &data, std::function<void(UI &)> close_glas) : 
-BufferedWin(100, height, 1550, 300),
-ind(ind), data(data), close_glas_func(close_glas)
+Glass::Glass(int ind, float height, GameData &data, std::function<void(UI &)> close_glas) : BufferedWin(100, height, 1550, 300),
+                                                                                            ind(ind), data(data), close_glas_func(close_glas)
 {
     rect = {10.0f, 10.0f, 1510, 80};
     add_ui(std::make_unique<Dropdown>(
         0, 10, 400, 50,
         data.names, "lol"));
     add_ui(std::make_unique<TextInp>(410, 10, 100, 50, [this](UI &ui)
-                                  { save_druple(ui); }, "hoeveel?"));
+                                     { save_druple(ui); }, "hoeveel?"));
     add_ui(std::make_unique<Button>(520, 10, 100, 50, "save",
                                     [this](UI &ui)
                                     { save_druple(ui); }));
@@ -49,7 +59,7 @@ void Glass::save_druple(UI &ui)
 
     ph += elm->ph * a;
     mol += elm->mol * a;
-    
+
     name->reset();
     amount->reset();
 }
@@ -60,10 +70,8 @@ void Glass::add_comment(UI &ui)
     rect.height += 70;
 }
 
-void Glass::draw(void) const
+void Glass::draww(void) const
 {
-    if (!_is_visible)
-        return;
     BeginTextureMode(this->win);
     clear();
 
@@ -73,9 +81,14 @@ void Glass::draw(void) const
     draw_my_text("mol: %.2f", mol, 1180, 10);
     bar.draw(this->get_mouse_pos());
     Win::draw();
-
     EndTextureMode();
-    Rectangle source = { 0.0f, 0.0f, (float)this->win.texture.width, -(float)this->win.texture.height };
-    Vector2 position = { this->pos.x, this->pos.y };
+}
+
+void Glass::draw(void) const
+{
+    if (!_is_visible)
+        return;
+    Rectangle source = {0.0f, 0.0f, (float)this->win.texture.width, -(float)this->win.texture.height};
+    Vector2 position = {this->pos.x, this->pos.y};
     DrawTextureRec(this->win.texture, source, position, WHITE);
 }

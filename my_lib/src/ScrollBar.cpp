@@ -6,7 +6,7 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:26:40 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/13 18:27:14 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:34:08 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ ScrollBar::ScrollBar(Rectangle bouns, float winheight, float scrollheight, std::
         0
     };
 
-    scrollpos = scrollheight;
+    scrollpos = 0;
     add_height(0);
 }
 
@@ -56,8 +56,8 @@ void ScrollBar::scroll_update(void)
         float scrollRange = scrollheight - winheight;
         float pixelRange = bounds.height - 10 - scroll_bar.height;
 
-        float scrolled = scrollheight - scrollpos - winheight;
-        scroll_bar.y = bounds.y + 5 + (scrolled / scrollRange) * pixelRange;
+        float scrollPercent = scrollpos / scrollRange;
+        scroll_bar.y = bounds.y + 5 + (scrollPercent * pixelRange);
     }
 }
 
@@ -69,17 +69,22 @@ void ScrollBar::scroll(float height)
     float oldScroll = scrollpos;
 
     scrollpos += height;
-    scrollpos = std::min(scrollpos, scrollheight);
-    scrollpos = std::max(scrollpos, winheight);
+    
+    float maxScroll = scrollheight - winheight;
+    scrollpos = std::min(scrollpos, maxScroll);
+    scrollpos = std::max(scrollpos, 0.0f);
 
-    if (callback && scrollpos != oldScroll)
-        callback(scrollpos - oldScroll);
+    float delta = scrollpos - oldScroll;
+    if (callback && delta != 0)
+        callback(delta);
 
     scroll_update();
 }
 
 void ScrollBar::update(void)
 {
+    
+    
     if (IsMouseOver() && GetMouseWheelMove() != 0)
     {
         scroll(-GetMouseWheelMove() * 20);

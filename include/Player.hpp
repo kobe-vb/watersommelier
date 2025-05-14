@@ -6,13 +6,13 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:24:37 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/13 17:57:33 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:06:10 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # pragma once
 
-#include "Win.hpp"
+#include "BufferedWin.hpp"
 #include "Glass.hpp"
 #include "GameData.hpp"
 #include "ScrollBar.hpp"
