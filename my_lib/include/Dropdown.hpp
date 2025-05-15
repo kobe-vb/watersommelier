@@ -29,6 +29,7 @@ public:
     int get_selected_ind() const;
     void set_max_opt(int i);
     void reset(void);
+    void set(int index);
 
 private:
     void filter_options();

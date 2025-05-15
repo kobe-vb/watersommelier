@@ -6,7 +6,7 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:31:31 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/14 16:31:39 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:22:07 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,16 @@ void Glass::draw(void) const
     Rectangle source = {0.0f, 0.0f, (float)this->win.texture.width, -(float)this->win.texture.height};
     Vector2 position = {this->pos.x, this->pos.y};
     DrawTextureRec(this->win.texture, source, position, WHITE);
+}
+
+bool Glass::take_code(std::string &code) const
+{
+    auto it = std::find(this->data.codes.begin(), this->data.codes.end(), code);
+    if (it == this->data.codes.end())
+        return false;
+
+    int index = std::distance(this->data.codes.begin(), it);
+    name->set(index);
+    // todo drupel saven?
+    return true;
 }

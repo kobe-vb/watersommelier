@@ -28,6 +28,8 @@ public:
     void draw(void) const override;
     void draww(void) const;
 
+    bool take_code(std::string &code) const;
+
     void save_druple(UI &ui);
     void add_comment(UI &ui);
 };

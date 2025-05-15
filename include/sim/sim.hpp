@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   sim.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/13 19:04:09 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/15 15:35:09 by kvanden-         ###   ########.fr       */
+/*   Created: 2025/05/14 17:26:01 by kvanden-          #+#    #+#             */
+/*   Updated: 2025/05/15 15:34:37 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "Game.hpp"
+#pragma once
 
-int main(void)
+class Sim
 {
-    Game().run();
-    return 0;
-}
+    public:
+        Sim(void) = default;
+        ~Sim(void) = default;
+};

@@ -6,7 +6,7 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 18:55:01 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/03/24 13:22:09 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:22:51 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,14 @@ class Game : public App
         std::vector<Player_data> players;
         GameData data;
         Win win;
+
+        Player *activePlayer = nullptr;
         
+        std::string code;
+        std::string nextPlayerCode;
+        void handleCode();
+        void prepareNextPlayer();
+ 
     public:
         Game();
         ~Game();

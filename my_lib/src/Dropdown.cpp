@@ -173,3 +173,10 @@ void Dropdown::reset(void)
     ind = 0;
     current_ind = 0;
 }
+
+void Dropdown::set(int index)
+{
+    input_text = options[index];
+    ind = 0;
+    current_ind = 0;
+}

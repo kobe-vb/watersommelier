@@ -6,16 +6,17 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:29:17 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/14 16:36:26 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:24:07 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Player.hpp"
 
 // BufferedWin(100, 100, 1800, 600),
-Player::Player(std::string &name, GameData &data) : 
-name(name), data(data), 
-scroll(ScrollBar({1800, 100, 70, 500}, 800, 200, [this](float height) { scroll_update(height); }))
+Player::Player(std::string &name, GameData &data, std::string code) : 
+name(name), data(data),
+scroll(ScrollBar({1800, 100, 70, 500}, 800, 200, [this](float height) { scroll_update(height); })),
+code(code)
 {
     add_ui(std::make_unique<Glass>(0, 200, data, [this](UI &ui)
     { next_glass(ui); }));
@@ -39,6 +40,17 @@ void Player::scroll_update(float height)
     std::cout << "Scroll update: " << height << std::endl;
     for (int i = 0; i < get_num_of_elements(); i++)
         dynamic_cast<Glass &>(*get_ui_at(i)).move(0, -height);
+}
+
+bool Player::is_my_code(std::string &code) const
+{
+    return (code == this->code);
+}
+
+bool Player::take_code(std::string &code) const
+{
+    Glass &g = dynamic_cast<Glass &>(*get_ui_at(0));
+    return (g.take_code(code));
 }
 
 void Player::update(void)
