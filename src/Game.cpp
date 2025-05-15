@@ -6,7 +6,7 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 18:56:03 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/15 16:30:57 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/15 17:55:37 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void Game::draw() const
 {
     ClearBackground(RAYWHITE);
     win.draw();
+    sim.draw();
 }
 
 void Game::prepareNextPlayer()
@@ -103,6 +104,7 @@ void Game::handleCode()
 
 void Game::update()
 {
+    this->sim.update(GetFrameTime());
     this->win.update();
     this->win.update_tabs();
 

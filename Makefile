@@ -6,7 +6,7 @@ else
 endif
 
 CXX = clang++
-CXXFLAGS = -g -Wall -std=c++20 -I include -I my_lib/include -I /mingw64/include
+CXXFLAGS = -g -Wall -std=c++20 -I include -I include/sim -I my_lib/include -I /mingw64/include
 
 # Platform-specifieke include/lib directories
 ifeq ($(OS_TYPE), windows)
@@ -25,8 +25,8 @@ ifeq ($(OS_TYPE), windows)
 endif
 
 # Source-bestanden
-SRC = $(wildcard src/*.cpp)
-OBJ = $(patsubst src/%.cpp, obj/%.o, $(SRC))
+SRC := $(shell find src -name '*.cpp')
+OBJ := $(patsubst src/%.cpp,obj/%.o,$(SRC))
 MY_LIB_SRC = $(wildcard my_lib/src/*.cpp)
 MY_LIB_OBJ = $(patsubst my_lib/src/%.cpp, my_lib/obj/%.o, $(MY_LIB_SRC))
 
@@ -53,8 +53,8 @@ $(LIB_NAME): $(MY_LIB_OBJ) | my_lib/lib
 bin obj my_lib/obj my_lib/lib:
 	mkdir -p $@
 
-# Object files compileren
-obj/%.o: src/%.cpp | obj
+obj/%.o: src/%.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 my_lib/obj/%.o: my_lib/src/%.cpp | my_lib/obj

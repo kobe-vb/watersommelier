@@ -4,6 +4,7 @@
       "name": "Linux",
       "includePath": [
         "${workspaceFolder}/include",
+        "${workspaceFolder}/include/sim",
         "${workspaceFolder}/my_lib/include",
         "${HOME}/raylib/include",
         "/usr/include",

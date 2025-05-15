@@ -1,20 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sim.hpp                                            :+:      :+:    :+:   */
+/*   Particle.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 17:26:01 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/15 15:34:37 by kvanden-         ###   ########.fr       */
+/*   Created: 2025/05/15 17:23:04 by kvanden-          #+#    #+#             */
+/*   Updated: 2025/05/15 18:16:46 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
+#include "raylib.h"
 
-class Sim
+class Particle
 {
-    public:
-        Sim(void) = default;
-        ~Sim(void) = default;
+private:
+    Vector2 vel;
+    float radius = 20.0f;
+    Color color = BLUE;
+
+public:
+    Vector2 pos;
+    
+    Particle(Vector2 pos, Vector2 vel);
+    ~Particle() = default;
+
+    void update(float dt);
+    void draw(void) const;
 };
