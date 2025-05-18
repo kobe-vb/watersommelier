@@ -39,6 +39,7 @@ class Game : public App
         Player *activePlayer = nullptr;
         
         std::string code;
+        Rectangle rect;
                 
     private:  
         void handleCode();

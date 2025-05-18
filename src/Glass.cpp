@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Glass.hpp"
+#include "Settings.hpp"
 
 void draw_my_text(const char *name, float val, int x, int y)
 {
@@ -19,25 +20,43 @@ void draw_my_text(const char *name, float val, int x, int y)
     DrawText(buffer, x, y, 30, DARKBLUE);
 }
 
-Glass::Glass(int ind, float height, GameData &data, std::function<void(UI &)> close_glas) : BufferedWin(100, height, 1550, 300),
-                                                                                            ind(ind), data(data), close_glas_func(close_glas)
+Glass::Glass(GameData &data, std::function<void(UI &)> close_glas) : 
+data(data), next_glas_func(close_glas)
 {
-    rect = {10.0f, 10.0f, 1510, 80};
+    rect.height = GetScreenHeight() - LINE - PEDING;
+    rect.width = (GetScreenWidth() * 1 / 3) - (PEDING * 3);
+    rect.x = PEDING;
+    rect.y = LINE;
+
+    bar = StackedBar(PEDING * 2, LINE + PEDING * 4, rect.width - PEDING * 2, 60);
+
     add_ui(std::make_unique<Dropdown>(
-        0, 10, 400, 50,
+        PEDING * 2, LINE + 200,
+        rect.width - 200, 60,
         data.names, "lol"));
-    add_ui(std::make_unique<TextInp>(410, 10, 100, 50, [this](UI &ui)
-                                     { save_druple(ui); }, "hoeveel?"));
-    add_ui(std::make_unique<Button>(520, 10, 100, 50, "save",
-                                    [this](UI &ui)
-                                    { save_druple(ui); }));
-    add_ui(std::make_unique<Button>(1400, 10, 100, 50, "save?",
-                                    [this](UI &ui)
-                                    { add_comment(ui); }));
+
+    add_ui(std::make_unique<TextInp>(
+        PEDING * 2 + (rect.width - 170), LINE + 200,
+        150, 60,
+        [this](UI &ui)
+        { save_druple(ui); }, "hoeveel?"));
+
+    add_ui(std::make_unique<Button>(
+        PEDING * 2 + (rect.width - 170), LINE + 120,
+        150, 60,
+        "save?",
+        [this](UI &ui)
+        { add_comment(ui); }));
     // add_ui(std::make_unique<Button>(1400, 10, 100, 50, "gek", close_glas));
-    bar = StackedBar(630, 10, 400, 50);
     name = (Dropdown *)get_ui_at(0);
     amount = (TextInp *)get_ui_at(1);
+}
+
+void Glass::reset(void)
+{
+    ph = 0;
+    mol = 0;
+    // bar.reset();
 }
 
 void Glass::save_druple(UI &ui)
@@ -66,31 +85,40 @@ void Glass::save_druple(UI &ui)
 
 void Glass::add_comment(UI &ui)
 {
-    add_ui(std::make_unique<TextInp>(20, 80, 500, 50, close_glas_func, "coment?"));
-    rect.height += 70;
+    add_ui(std::make_unique<TextInp>(
+        PEDING * 2, LINE + 300,
+        rect.width - 200, 300, nullptr, "coment?"));
+
+    add_ui(std::make_unique<Button>(
+        PEDING * 2 + (rect.width - 170), LINE + 300,
+        150, 300,
+        "save?", next_glas_func));
 }
 
-void Glass::draww(void) const
-{
-    BeginTextureMode(this->win);
-    clear();
+// void Glass::draww(void) const
+// {
+//     BeginTextureMode(this->win);
+//     clear();
 
-    DrawRectangleRounded(rect, 0.2, 8, LIGHTGRAY);
-    DrawRectangleRoundedLinesEx(rect, 0.2, 8, 6.0f, BLACK);
-    draw_my_text("pH: %.2f", ph, 1050, 10);
-    draw_my_text("mol: %.2f", mol, 1180, 10);
-    bar.draw(this->get_mouse_pos());
-    Win::draw();
-    EndTextureMode();
-}
+//     DrawRectangleRounded(rect, 0.2, 8, LIGHTGRAY);
+//     DrawRectangleRoundedLinesEx(rect, 0.2, 8, 6.0f, BLACK);
+//     draw_my_text("pH: %.2f", ph, 1050, 10);
+//     draw_my_text("mol: %.2f", mol, 1180, 10);
+//     bar.draw(this->get_mouse_pos());
+//     Win::draw();
+//     EndTextureMode();
+// }
 
 void Glass::draw(void) const
 {
     if (!_is_visible)
         return;
-    Rectangle source = {0.0f, 0.0f, (float)this->win.texture.width, -(float)this->win.texture.height};
-    Vector2 position = {this->pos.x, this->pos.y};
-    DrawTextureRec(this->win.texture, source, position, WHITE);
+    DrawRectangleRounded(rect, ROUNDED, 10, COL_1);
+    DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
+    draw_my_text("pH: %.2f", ph, PEDING * 3, LINE + 130);
+    draw_my_text("mol: %.2f", mol, PEDING * 3 + 200, LINE + 130);
+    bar.draw(this->get_mouse_pos());
+    Win::draw();
 }
 
 bool Glass::take_code(std::string &code) const

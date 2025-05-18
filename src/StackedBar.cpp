@@ -3,6 +3,26 @@
 StackedBar::StackedBar(int x, int y, int w, int h)
     : x(x), y(y), width(w), height(h) {}
 
+StackedBar::StackedBar(const StackedBar &other)
+    : data(other.data), total_volume(other.total_volume),
+      x(other.x), y(other.y), width(other.width), height(other.height)
+{
+}
+
+StackedBar &StackedBar::operator=(const StackedBar &other)
+{
+    if (this != &other)
+    {
+        data = other.data;
+        total_volume = other.total_volume;
+        x = other.x;
+        y = other.y;
+        width = other.width;
+        height = other.height;
+    }
+    return *this;
+}
+
 void StackedBar::add_value(const std::string &name, Color col, float val)
 {
     for (auto &segment : data)

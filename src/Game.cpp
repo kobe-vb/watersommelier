@@ -11,13 +11,17 @@
 /* ************************************************************************** */
 
 #include "Game.hpp"
+#include "Settings.hpp"
 
-Game::Game() : App("tiboon", 1500, 600, 60)
+Game::Game() : App("tiboon", 1000, 600, 60)
 {
-
+    rect.height = 80;
+    rect.width = (GetScreenWidth() * 2 / 3) - 20;
+    rect.x = 10;
+    rect.y = 10;
     load_data(data);
     win.add_ui(std::make_unique<TextInp>(
-        10, 10, 100, 50,
+        PEDING * 2, PEDING * 2, 100, 50,
         [this](UI &ui)
         { create_new_player(ui); }, "name?"));
 }
@@ -30,7 +34,7 @@ void Game::create_new_player(UI &ui)
 {
     TextInp &t = dynamic_cast<TextInp &>(ui);
 
-    auto tokel = std::make_unique<Tokel>(t.get_rect().x, 10, 100, 50, t.get_text(),
+    auto tokel = std::make_unique<Tokel>(t.get_rect().x, t.get_rect().y, 100, 50, t.get_text(),
                                          [this](UI &uii)
                                          { switch_players(uii); });
     Tokel *tokel_ptr = tokel.get();
@@ -70,7 +74,9 @@ void Game::switch_players(UI &ui)
 
 void Game::draw() const
 {
-    ClearBackground(RAYWHITE);
+    ClearBackground(COL_BG);
+    DrawRectangleRounded(rect, 0.2, 8, COL_1);
+    DrawRectangleRoundedLinesEx(rect, 0.2, 8, 6.0f, BLACK);
     win.draw();
     // sim.draw();
 }
