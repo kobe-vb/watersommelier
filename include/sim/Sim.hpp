@@ -15,13 +15,14 @@
 #include <unordered_map>
 #include <vector>
 #include <cmath>
+#include <cstdint>
 
 class Sim
 {
 public:
 
     Sim(void);
-    ~Sim(void) = default;
+    ~Sim(void);
 
     void addParticles(float n, Color col);
     void update(float dt);
@@ -33,6 +34,12 @@ private:
     std::vector<Particle> particles;
     using Cell = std::vector<Particle *>;
     std::unordered_map<int64_t, Cell> spatialMap;
+
+    RenderTexture2D win;
+    Shader shader;
+
+    int timeLoc;
+    float time;
 
 private:
 

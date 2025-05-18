@@ -13,7 +13,8 @@
 #include "Particle.hpp"
 
 
-Particle::Particle(Vector2 pos, Vector2 vel) : vel(vel), pos(pos)
+Particle::Particle(Vector2 pos, Vector2 vel, Color col) :
+vel(vel), col(col),  pos(pos)
 {}
 
 void Particle::update(float dt)
@@ -24,5 +25,5 @@ void Particle::update(float dt)
 
 void Particle::draw(void) const
 {
-    DrawCircleV(this->pos, this->radius, this->color);
+    DrawCircleV(this->pos, this->radius, this->col);
 }

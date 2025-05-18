@@ -17,13 +17,13 @@ class Particle
 {
 private:
     Vector2 vel;
-    float radius = 20.0f;
-    Color color = BLUE;
+    float radius = 5.0f;
+    Color col = BLUE;
 
 public:
     Vector2 pos;
     
-    Particle(Vector2 pos, Vector2 vel);
+    Particle(Vector2 pos, Vector2 vel, Color col);
     ~Particle() = default;
 
     void update(float dt);

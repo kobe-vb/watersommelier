@@ -1,35 +1,20 @@
 {
   "configurations": [
     {
-      "name": "Linux",
+      "name": "Win32",
       "includePath": [
-        "${workspaceFolder}/include",
-        "${workspaceFolder}/include/sim",
-        "${workspaceFolder}/my_lib/include",
-        "${HOME}/raylib/include",
-        "/usr/include",
-        "/usr/local/include"
-      ],
-      "defines": [],
-      "compilerPath": "/usr/bin/clang++",
-      "cStandard": "c17",
-      "cppStandard": "c++20",
-      "intelliSenseMode": "linux-clang-x64"
-    },
-    {
-      "name": "Windows",
-      "includePath": [
-        "${workspaceFolder}/include",
-        "${workspaceFolder}/my_lib/include",
+        "${workspaceFolder}/**",
         "C:/msys64/mingw64/include"
       ],
       "defines": [
-        "PLATFORM_WINDOWS"
+        "_DEBUG",
+        "UNICODE"
       ],
-      "compilerPath": "C:/msys64/mingw64/bin/clang++.exe",
-      "cStandard": "c17",
-      "cppStandard": "c++20",
-      "intelliSenseMode": "windows-clang-x64"
+      "windowsSdkVersion": "10.0.19041.0", // Je kan deze aanpassen aan je systeem
+      "compilerPath": "C:/msys64/ucrt64/bin/g++.exe", // Of waar jouw g++ zich bevindt
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "windows-gcc-x64"
     }
   ],
   "version": 4

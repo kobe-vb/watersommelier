@@ -14,7 +14,29 @@
 
 Sim::Sim(void)
 {
+
+    this->win = LoadRenderTexture(600, 600);
+    this->shader = LoadShader(0, "data/water.fs");
+
+    int radiusLoc = GetShaderLocation(this->shader, "radius");
+    int resolutionLoc = GetShaderLocation(shader, "resolution");
+    timeLoc = GetShaderLocation(this->shader, "time");
+
+    float radius = 2.0f;
+    time = GetTime();
+    Vector2 resolution = { (float)win.texture.width, (float)win.texture.height };
+    SetShaderValue(shader, radiusLoc, &radius, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, timeLoc, &time, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, resolutionLoc, &resolution, SHADER_UNIFORM_VEC2);
+
     this->addParticles(100, RED);
+    // this->addParticles(100, GREEN);
+}
+
+Sim::~Sim(void)
+{
+    UnloadRenderTexture(this->win);
+    UnloadShader(this->shader);
 }
 
 void Sim::addParticles(float n, Color col)
@@ -23,11 +45,14 @@ void Sim::addParticles(float n, Color col)
     Vector2 vel;
     for (int i = 0; i < (int)n; i++)
     {
-        pos.x = GetRandomValue(50, 100);
-        pos.y = GetRandomValue(20, 50);
+        // pos.x = GetRandomValue(50, 500);
+        // pos.y = GetRandomValue(20, 400);
+        pos.x = 15 * (i / 10);
+        pos.y = 15 * (i % 10);
+        
         vel.x = 0;
         vel.y = 0;
-        particles.emplace_back(pos, vel);
+        particles.emplace_back(pos, vel, col);
     }
 }
 
@@ -72,6 +97,11 @@ std::vector<Particle *> Sim::getNeighbors(const Particle &p)
 }
 void Sim::update(float dt)
 {
+
+    time = GetTime();
+    SetShaderValue(shader, timeLoc, &time, SHADER_UNIFORM_FLOAT);
+
+
     spatialMap.clear();
 
     for (auto &p : particles)
@@ -89,8 +119,21 @@ void Sim::update(float dt)
 
 void Sim::draw() const
 {
+    BeginTextureMode(this->win);
+    ClearBackground(BLANK);
     for (const auto &p : particles)
     {
         p.draw();
     }
+    EndTextureMode();
+
+    BeginShaderMode(shader);
+    DrawTextureRec(
+        this->win.texture,
+        (Rectangle){0, 0, (float)this->win.texture.width, -(float)this->win.texture.height},
+        (Vector2){0, 0},
+        WHITE
+    );
+    EndShaderMode();
+
 }

@@ -12,7 +12,7 @@
 
 #include "Game.hpp"
 
-Game::Game() : App("tiboon", 2000, 600, 60)
+Game::Game() : App("tiboon", 1500, 600, 60)
 {
 
     load_data(data);
@@ -35,7 +35,7 @@ void Game::create_new_player(UI &ui)
                                          { switch_players(uii); });
     Tokel *tokel_ptr = tokel.get();
 
-    auto pl = std::make_unique<Player>(t.get_text(), data, nextPlayerCode);
+    auto pl = std::make_unique<Player>(t.get_text(), data);
     Player *pl_ptr = pl.get();
     activePlayer = pl_ptr;
 
@@ -72,23 +72,13 @@ void Game::draw() const
 {
     ClearBackground(RAYWHITE);
     win.draw();
-    sim.draw();
-}
-
-void Game::prepareNextPlayer()
-{
-    this->nextPlayerCode = this->code;
-    auto& inputField = dynamic_cast<TextInp&>(*this->win.get_ui_at(0));
-    inputField.set_active(true);
+    // sim.draw();
 }
 
 void Game::handleCode()
 {
-    // Probeer eerst of de actieve speler de code kan gebruiken
-    if (this->activePlayer && this->activePlayer->take_code(this->code))
-        return;
+    std::cout << "code: " << this->code << std::endl;
 
-    // Loop door alle spelers om te controleren of de code bij iemand hoort
     for (auto& playerWrapper : players)
     {
         if (playerWrapper.player->is_my_code(this->code))
@@ -97,14 +87,14 @@ void Game::handleCode()
             return;
         }
     }
-    // Als niemand de code herkent, bereid de volgende speler voor
-    this->prepareNextPlayer();
+    if (this->activePlayer && this->activePlayer->take_code(this->code))
+        return;
 }
 
 
 void Game::update()
 {
-    this->sim.update(GetFrameTime());
+    // this->sim.update(GetFrameTime());
     this->win.update();
     this->win.update_tabs();
 

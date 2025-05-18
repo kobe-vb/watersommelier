@@ -39,12 +39,9 @@ class Game : public App
         Player *activePlayer = nullptr;
         
         std::string code;
-        std::string nextPlayerCode;
-        
-        
+                
     private:  
         void handleCode();
-        void prepareNextPlayer();
  
     public:
         Game();

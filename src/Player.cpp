@@ -13,10 +13,9 @@
 # include "Player.hpp"
 
 // BufferedWin(100, 100, 1800, 600),
-Player::Player(std::string &name, GameData &data, std::string code) : 
+Player::Player(std::string &name, GameData &data) : 
 name(name), data(data),
-scroll(ScrollBar({1800, 100, 70, 500}, 800, 200, [this](float height) { scroll_update(height); })),
-code(code)
+scroll(ScrollBar({1800, 100, 70, 500}, 800, 200, [this](float height) { scroll_update(height); }))
 {
     add_ui(std::make_unique<Glass>(0, 200, data, [this](UI &ui)
     { next_glass(ui); }));
@@ -47,10 +46,16 @@ bool Player::is_my_code(std::string &code) const
     return (code == this->code);
 }
 
-bool Player::take_code(std::string &code) const
+bool Player::take_code(std::string &new_code)
 {
+    std::cout << "code: " << code.length() << std::endl;
+    if (code.length() == 0)
+    {
+        this->code = new_code;
+        return true;
+    }
     Glass &g = dynamic_cast<Glass &>(*get_ui_at(0));
-    return (g.take_code(code));
+    return (g.take_code(new_code));
 }
 
 void Player::update(void)
@@ -66,6 +71,8 @@ void Player::draw(void) const
     if (!_is_visible)
         return;
     scroll.draw();
+
+    DrawText(("code: " + code).c_str(), 50, 100, 20, BLACK);
     
     for (int i = 0; i < get_num_of_elements(); i++)
         dynamic_cast<Glass &>(*get_ui_at(i)).draww();

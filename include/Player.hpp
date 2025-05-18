@@ -26,13 +26,13 @@ private:
     std::string code;
     
 public:
-    Player(std::string &name, GameData &data, std::string code);
+    Player(std::string &name, GameData &data);
     ~Player() = default;
 
     void next_glass(UI &ui);
     void scroll_update(float height);
 
-    bool take_code(std::string &code) const;
+    bool take_code(std::string &code);
     bool is_my_code(std::string &code) const;
 
     void update(void) override;
