@@ -6,14 +6,14 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:31:31 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/15 16:22:07 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/19 12:26:52 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Glass.hpp"
 #include "Settings.hpp"
 
-void draw_my_text(const char *name, float val, int x, int y)
+static void draw_my_text(const char *name, float val, int x, int y)
 {
     char buffer[64];
     snprintf(buffer, sizeof(buffer), name, val);
@@ -56,8 +56,15 @@ void Glass::reset(void)
 {
     ph = 0;
     mol = 0;
-    // bar.reset();
+    bar.reset();
+    this->pop_ui();
+    this->pop_ui();
 }
+
+std::string Glass::get_comment(void) const
+{
+    return ((TextInp *)get_ui_at(2))->get_text();
+} 
 
 void Glass::save_druple(UI &ui)
 {

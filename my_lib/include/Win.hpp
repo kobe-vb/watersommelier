@@ -6,7 +6,7 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 12:53:25 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/13 16:14:45 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/19 12:27:09 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,5 @@ public:
     bool capture_tab(void) override;
     UI *get_ui_at(int i) const;
     int get_num_of_elements() const;
+    void pop_ui(void);
 };

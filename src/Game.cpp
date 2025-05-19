@@ -6,15 +6,18 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 18:56:03 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/15 17:55:37 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/19 10:59:49 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Game.hpp"
 #include "Settings.hpp"
 
-Game::Game() : App("tiboon", 1000, 600, 60)
+Game::Game() : App("tiboon", 0, 600, 60)
 {
+while (!IsWindowReady()) {
+    // Doe niets, wacht tot het venster klaar is
+}
     rect.height = 80;
     rect.width = (GetScreenWidth() * 2 / 3) - 20;
     rect.x = 10;

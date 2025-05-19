@@ -38,6 +38,18 @@ void StackedBar::add_value(const std::string &name, Color col, float val)
     total_volume += val;
 }
 
+void StackedBar::reset(void)
+{
+    data.clear();
+    total_volume = 0;
+}
+
+void StackedBar::set_pos(int x, int y)
+{
+    this->x = x;
+    this->y = y;
+}
+
 void StackedBar::draw(Vector2 mouse) const
 {
     if (total_volume <= 0)

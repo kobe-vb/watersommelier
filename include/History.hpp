@@ -4,6 +4,7 @@
 
 #include "Win.hpp"
 #include "Glass.hpp"
+#include "HistoryGlass.hpp"
 #include "raylib.h"
 
 class History: public Win

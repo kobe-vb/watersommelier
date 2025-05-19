@@ -13,10 +13,7 @@ private:
     Rectangle rect;
     Dropdown    *name;
     TextInp        *amount;
-    StackedBar  bar;
     GameData    &data;
-    float       ph = 0;
-    float       mol = 0;
 
     std::function<void(UI &)> next_glas_func;
 
@@ -31,5 +28,12 @@ public:
     void save_druple(UI &ui);
     void add_comment(UI &ui);
 
+    std::string get_comment(void) const;
     void reset(void);
+
+public:
+
+    StackedBar  bar;
+    float       ph = 0;
+    float       mol = 0;
 };

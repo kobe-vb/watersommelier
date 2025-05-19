@@ -6,7 +6,7 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 12:57:06 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/06 18:15:18 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/19 12:27:28 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,4 +102,9 @@ UI *Win::get_ui_at(int i) const
 int Win::get_num_of_elements() const
 {
     return (ui_elements.size());
+}
+
+void Win::pop_ui(void)
+{
+    ui_elements.pop_back();
 }
