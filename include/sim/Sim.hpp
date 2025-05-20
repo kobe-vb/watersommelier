@@ -6,7 +6,7 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 17:26:01 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/15 18:16:41 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/20 21:59:29 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ public:
     ~Sim(void);
 
     void addParticles(float n, Color col);
+    void set_rect(void);
     void update(float dt);
     void draw(void) const;
 
@@ -41,9 +42,13 @@ private:
     int timeLoc;
     float time;
 
+    Rectangle rect;
+    Rectangle glass;
+
 private:
 
     int64_t hash(int x, int y) const;
     void insertIntoSpatialMap(Particle &p);
     std::vector<Particle *> getNeighbors(const Particle &p);
+    void relaxFluid(); // Nieuwe functie voor vloeistofstabilisatie
 };

@@ -33,13 +33,18 @@ vec4 getAverageColor(vec2 uv) {
 
 void main() {
     vec2 uv = fragTexCoord;
-    uv.x += sin(time); // lichte beweging zoals eerder
+    // uv.x += sin(time); // lichte beweging zoals eerder
 
     vec4 texColor = texture(texture0, uv);
 
     if (texColor.a < 0.01) {
-        // Transparant pixel, vervang met gemiddelde kleur
+        // Transparante pixel, vervang met gemiddelde kleur
         finalColor = getAverageColor(uv);
+
+        // // Controleer of de kleur zwart is (alle RGB-componenten zijn 0)
+        // if (finalColor.r == 0.0 && finalColor.g == 0.0 && finalColor.b == 0.0) {
+        //     finalColor = vec4(0.0, 0.0, 1.0, 1.0); // fallback: blauw
+        // }
     } else {
         finalColor = texColor;
     }

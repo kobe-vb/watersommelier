@@ -6,15 +6,18 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 17:20:57 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/15 18:16:54 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/20 21:59:17 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Sim.hpp"
+#include "Settings.hpp"
+
+
+#include <iostream>
 
 Sim::Sim(void)
 {
-
     this->win = LoadRenderTexture(600, 600);
     this->shader = LoadShader(0, "data/water.fs");
 
@@ -29,8 +32,15 @@ Sim::Sim(void)
     SetShaderValue(shader, timeLoc, &time, SHADER_UNIFORM_FLOAT);
     SetShaderValue(shader, resolutionLoc, &resolution, SHADER_UNIFORM_VEC2);
 
-    this->addParticles(100, RED);
-    // this->addParticles(100, GREEN);
+    // Meer deeltjes voor een mooier vloeistofeffect
+    this->addParticles(150, SKYBLUE);
+    this->addParticles(150, BLUE);
+    this->addParticles(150, Color{100, 100, 255, 180});
+
+    glass.x = 0;
+    glass.y = 0;
+    glass.width = 600;
+    glass.height = 600;
 }
 
 Sim::~Sim(void)
@@ -39,19 +49,33 @@ Sim::~Sim(void)
     UnloadShader(this->shader);
 }
 
+void Sim::set_rect(void)
+{    
+    rect.height = GetRenderHeight() - (PEDING * 2);
+    rect.width = (GetScreenWidth() * 1 / 3) - (PEDING * 3);
+    rect.x = PEDING + (GetScreenWidth() * 2 / 3);
+    rect.y = PEDING;
+
+}
+
 void Sim::addParticles(float n, Color col)
 {
-    Vector2 pos;
-    Vector2 vel;
+    // Betere initiële positie voor vloeistofgedrag
+    // Deeltjes worden onderaan het glas geplaatst met lage beginsnelheid
     for (int i = 0; i < (int)n; i++)
     {
-        // pos.x = GetRandomValue(50, 500);
-        // pos.y = GetRandomValue(20, 400);
-        pos.x = 15 * (i / 10);
-        pos.y = 15 * (i % 10);
+        // Verdeel de deeltjes over de breedte van het glas, onderaan
+        float x = glass.width * ((float)rand() / RAND_MAX) * 0.8f + glass.width * 0.1f;
+        float y = glass.height * 0.7f + (glass.height * 0.2f * ((float)rand() / RAND_MAX));
         
-        vel.x = 0;
-        vel.y = 0;
+        Vector2 pos = {x, y};
+        
+        // Lage, willekeurige beginsnelheid
+        Vector2 vel = {
+            ((float)rand() / RAND_MAX * 2.0f - 1.0f) * 5.0f,  // -5 tot 5
+            ((float)rand() / RAND_MAX * 2.0f - 1.0f) * 5.0f   // -5 tot 5
+        };
+        
         particles.emplace_back(pos, vel, col);
     }
 }
@@ -76,9 +100,10 @@ std::vector<Particle *> Sim::getNeighbors(const Particle &p)
     int cellX = (int)(p.pos.x / cellSize);
     int cellY = (int)(p.pos.y / cellSize);
 
-    for (int dx = -1; dx <= 1; dx++)
+    // Zoek in een groter gebied voor betere vloeistofsimulatie
+    for (int dx = -2; dx <= 2; dx++)
     {
-        for (int dy = -1; dy <= 1; dy++)
+        for (int dy = -2; dy <= 2; dy++)
         {
             int64_t h = hash(cellX + dx, cellY + dy);
             auto it = spatialMap.find(h);
@@ -95,12 +120,15 @@ std::vector<Particle *> Sim::getNeighbors(const Particle &p)
 
     return result;
 }
+
 void Sim::update(float dt)
 {
+    // Beperk tijdstap voor stabiliteit
+    float maxDt = 0.016f;  // Max 16ms tijdstap
+    if (dt > maxDt) dt = maxDt;
 
     time = GetTime();
     SetShaderValue(shader, timeLoc, &time, SHADER_UNIFORM_FLOAT);
-
 
     spatialMap.clear();
 
@@ -109,16 +137,74 @@ void Sim::update(float dt)
         insertIntoSpatialMap(p);
     }
 
+    // Meerdere sub-stappen voor betere stabiliteit
+    const int substeps = 3;
+    float subDt = dt / substeps;
+    
+    for (int step = 0; step < substeps; step++)
+    {
+        for (auto &p : particles)
+        {
+            auto neighbors = getNeighbors(p);
+            for (auto &n : neighbors)
+            {
+                p.interact(*n);
+            }
+            p.update(subDt);
+            p.resolveBounds(glass);
+        }
+    }
+
+    // Voeg relaxatie stap toe
+    relaxFluid();
+}
+
+void Sim::relaxFluid()
+{
+    // Eenvoudige relaxatie om het vloeistofveld te stabiliseren
     for (auto &p : particles)
     {
         auto neighbors = getNeighbors(p);
-        // TODO: implement a force calculation
-        p.update(dt);
+        
+        // Bereken lokale dichtheid
+        int count = 0;
+        for (auto &n : neighbors)
+        {
+            float dx = n->pos.x - p.pos.x;
+            float dy = n->pos.y - p.pos.y;
+            float dist2 = dx * dx + dy * dy;
+            
+            if (dist2 < 25.0f * 25.0f)  // 25.0 is ongeveer 5 keer de deeltjesradius
+                count++;
+        }
+        
+        // Als er te veel deeltjes zijn, pas een lichte repulsie toe
+        if (count > 12)
+        {
+            for (auto &n : neighbors)
+            {
+                float dx = n->pos.x - p.pos.x;
+                float dy = n->pos.y - p.pos.y;
+                float dist2 = dx * dx + dy * dy;
+                
+                if (dist2 > 0.001f && dist2 < 25.0f * 25.0f)
+                {
+                    float dist = sqrtf(dist2);
+                    float force = 0.01f * (1.0f - dist / (25.0f));
+                    
+                    Vector2 repel = { (dx / dist) * force, (dy / dist) * force };
+                    p.applyForce({ -repel.x, -repel.y });
+                }
+            }
+        }
     }
 }
 
 void Sim::draw() const
 {
+    DrawRectangleRounded(rect, ROUNDED, 10, COL_1);
+    DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
+    
     BeginTextureMode(this->win);
     ClearBackground(BLANK);
     for (const auto &p : particles)
@@ -131,9 +217,8 @@ void Sim::draw() const
     DrawTextureRec(
         this->win.texture,
         (Rectangle){0, 0, (float)this->win.texture.width, -(float)this->win.texture.height},
-        (Vector2){0, 0},
+        (Vector2){rect.x + PEDING * 2, rect.y + LINE + PEDING * 2},
         WHITE
     );
     EndShaderMode();
-
 }

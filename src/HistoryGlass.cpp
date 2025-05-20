@@ -6,7 +6,7 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:37:33 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/19 12:25:13 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/19 12:49:13 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void draw_my_text(const char *name, float val, int x, int y)
 
 HistoryGlass::HistoryGlass(int i, Glass &glass) : 
                                                   BufferedWin((GetScreenWidth() * 1 / 3) + PEDING, LINE + PEDING * 4,
-                                                              (GetScreenWidth() * 1 / 3) - PEDING * 2, 60),
+                                                              (GetScreenWidth() * 1 / 3) - PEDING * 4, 120),
                                                   i(i),
                                                   bar(glass.bar),
                                                   comment(glass.get_comment()),
@@ -36,7 +36,7 @@ HistoryGlass::HistoryGlass(int i, Glass &glass) :
 void HistoryGlass::set_pos(int i)
 {
     this->pos.x = (GetScreenWidth() * 1 / 3) + PEDING;
-    this->pos.y = LINE + PEDING * 4 + (i * 70);
+    this->pos.y = LINE + PEDING * 4 + (i * 140);
 
     rect.x = pos.x;
     rect.y = pos.y;
@@ -50,7 +50,6 @@ void HistoryGlass::draw(void) const
     DrawRectangleRounded(rect, ROUNDED, 10, COL_1);
     DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
 
-    DrawTexture(this->win.texture, this->pos.x, this->pos.y, WHITE);
     
         DrawTextureRec(
         this->win.texture,
@@ -68,8 +67,8 @@ void HistoryGlass::draww(void) const
     BeginTextureMode(this->win);
     clear();
     
-    draw_my_text("pH: %.2f", ph, PEDING * 3, LINE + 130);
-    draw_my_text("mol: %.2f", mol, PEDING * 3 + 200, LINE + 130);
+    draw_my_text("pH: %.2f", ph, PEDING * 3, 80);
+    draw_my_text("mol: %.2f, ####### #kobe #cool #8/10", mol, PEDING * 3 + 200, 80);
     bar.draw(this->get_mouse_pos());
     EndTextureMode();    
 };

@@ -6,14 +6,14 @@
 /*   By: kvanden- <kvanden-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 18:56:03 by kvanden-          #+#    #+#             */
-/*   Updated: 2025/05/19 10:59:49 by kvanden-         ###   ########.fr       */
+/*   Updated: 2025/05/20 20:47:41 by kvanden-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Game.hpp"
 #include "Settings.hpp"
 
-Game::Game() : App("tiboon", 0, 600, 60)
+Game::Game() : App("tiboon", 0, 0, 60)
 {
 while (!IsWindowReady()) {
     // Doe niets, wacht tot het venster klaar is
@@ -35,6 +35,7 @@ Game::~Game()
 
 void Game::create_new_player(UI &ui)
 {
+    sim.set_rect(); // //////////////////////
     TextInp &t = dynamic_cast<TextInp &>(ui);
 
     auto tokel = std::make_unique<Tokel>(t.get_rect().x, t.get_rect().y, 100, 50, t.get_text(),
@@ -81,7 +82,7 @@ void Game::draw() const
     DrawRectangleRounded(rect, 0.2, 8, COL_1);
     DrawRectangleRoundedLinesEx(rect, 0.2, 8, 6.0f, BLACK);
     win.draw();
-    // sim.draw();
+    sim.draw();
 }
 
 void Game::handleCode()
@@ -103,7 +104,7 @@ void Game::handleCode()
 
 void Game::update()
 {
-    // this->sim.update(GetFrameTime());
+    this->sim.update(GetFrameTime());
     this->win.update();
     this->win.update_tabs();
 
