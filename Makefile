@@ -5,75 +5,99 @@ else
     OS_TYPE = unix
 endif
 
+# Compilers
 CXX = clang++
-CXXFLAGS = -g -Wall -std=c++20 -I include -I include/sim -I my_lib/include -I /mingw64/include
 
-# Platform-specifieke include/lib directories
+# Algemene settings
+INCLUDES = -I include -I include/sim -I my_lib/include
+
+# Debug flags
+CXXFLAGS = -g -Wall -std=c++20 $(INCLUDES)
+
+# Release flags
+RELEASE_CXXFLAGS = -O2 -Wall -std=c++20 $(INCLUDES)
+
+# Platform-specifieke includes en libraries
 ifeq ($(OS_TYPE), windows)
     CXXFLAGS += -I /mingw64/include -DPLATFORM_WINDOWS
-    LDFLAGS += -L /mingw64/lib -lgdi32 -luser32 -lraylib -Lmy_lib/lib -lmy_lib
+    LDFLAGS = -L /mingw64/lib -lgdi32 -luser32 -lraylib -Lmy_lib/lib -lmy_lib
+    RELEASE_CXXFLAGS += -I /mingw64/include -DPLATFORM_WINDOWS
+    RELEASE_LDFLAGS = $(LDFLAGS) -mwindows -static-libgcc -static-libstdc++
 else
-    # Linux: gebruik jouw lokale raylib build
     CXXFLAGS += -I $(HOME)/raylib/include
-    LDFLAGS += -L $(HOME)/raylib/lib -lraylib -lm -ldl -lpthread -lX11 -Lmy_lib/lib -lmy_lib
+    LDFLAGS = -L $(HOME)/raylib/lib -lraylib -lm -ldl -lpthread -lX11 -Lmy_lib/lib -lmy_lib
+    RELEASE_CXXFLAGS += -I $(HOME)/raylib/include
+    RELEASE_LDFLAGS = $(LDFLAGS)
 endif
 
-# Release-specifieke linker flags (alleen Windows)
-RELEASE_LDFLAGS = $(LDFLAGS)
-ifeq ($(OS_TYPE), windows)
-    RELEASE_LDFLAGS += -mwindows -static-libgcc -static-libstdc++
-endif
-
-# Source-bestanden
+# Bestandsstructuur
 SRC := $(shell find src -name '*.cpp')
+MY_LIB_SRC := $(wildcard my_lib/src/*.cpp)
+
 OBJ := $(patsubst src/%.cpp,obj/%.o,$(SRC))
-MY_LIB_SRC = $(wildcard my_lib/src/*.cpp)
-MY_LIB_OBJ = $(patsubst my_lib/src/%.cpp, my_lib/obj/%.o, $(MY_LIB_SRC))
+MY_LIB_OBJ := $(patsubst my_lib/src/%.cpp,my_lib/obj/%.o,$(MY_LIB_SRC))
+
+RELEASE_OBJ := $(patsubst src/%.cpp,release_obj/%.o,$(SRC))
+RELEASE_MY_LIB_OBJ := $(patsubst my_lib/src/%.cpp,release_obj/my_lib_%.o,$(MY_LIB_SRC))
 
 # Outputs
 OUT = bin/water_woeter.exe
 RELEASE_OUT = bin/game_release.exe
 LIB_NAME = my_lib/lib/libmy_lib.a
 RELEASE_DIR = release
+RES_OBJ = resources/icon.o
 
 # Targets
-
 all: $(LIB_NAME) $(OUT)
 
 $(OUT): $(OBJ) $(MY_LIB_OBJ) | bin
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(MY_LIB_OBJ) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-$(RELEASE_OUT): $(OBJ) $(LIB_NAME) | bin
-	g++ $(CXXFLAGS) -o $@ $(OBJ) $(MY_LIB_OBJ)  $(RELEASE_LDFLAGS)
+resources/icon.o: resources/icon.rc resources/icon.ico
+	windres $< -O coff -o $@
+
+$(RELEASE_OUT): $(RELEASE_OBJ) $(RELEASE_MY_LIB_OBJ) $(RES_OBJ) | bin
+	$(CXX) -o $@ $^ $(RELEASE_LDFLAGS)
 
 $(LIB_NAME): $(MY_LIB_OBJ) | my_lib/lib
 	ar rcs $@ $^
 
-# Mappen aanmaken indien nodig
-bin obj my_lib/obj my_lib/lib:
-	mkdir -p $@
-
+# Debug build object files
 obj/%.o: src/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-my_lib/obj/%.o: my_lib/src/%.cpp | my_lib/obj
+my_lib/obj/%.o: my_lib/src/%.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Run de game
+# Release build object files
+release_obj/%.o: src/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(RELEASE_CXXFLAGS) -c $< -o $@
+
+release_obj/my_lib_%.o: my_lib/src/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(RELEASE_CXXFLAGS) -c $< -o $@
+
+# Mappen aanmaken
+bin obj my_lib/obj my_lib/lib release_obj:
+	mkdir -p $@
+
+# Runnen
 run: all
 	./$(OUT)
 
 # Opruimen
 clean:
-	rm -rf obj my_lib/obj bin/$(notdir $(OUT)) bin/$(notdir $(RELEASE_OUT))
+	rm -rf obj my_lib/obj bin/$(notdir $(OUT)) bin/$(notdir $(RELEASE_OUT)) resources/icon.o
 
 fclean: clean
 	rm -rf my_lib/lib bin release release.zip
 
 re: fclean all
 
-# Release-folder aanmaken met alle bestanden
+# Release target
 release: $(RELEASE_OUT)
 	rm -rf $(RELEASE_DIR)
 	mkdir -p $(RELEASE_DIR)
@@ -86,5 +110,4 @@ ifeq ($(OS_TYPE), windows)
 	cp /mingw64/bin/libwinpthread-1.dll $(RELEASE_DIR)/
 endif
 
-
-# cd /c/Users/32477/OneDrive\ -\ Thomas\ More/Documenten/1school/tibs
+.PHONY: all run clean fclean re release

@@ -17,23 +17,30 @@
 #include "GameData.hpp"
 #include "ScrollBar.hpp"
 #include "History.hpp"
+#include "Sim.hpp"
 
 class Player: public Win
 {
 private:
     const std::string name;
     GameData &data;
+    Sim &sim;
 
     Glass glass;
     History history;
     
     std::string code;
+
     
 public:
-    Player(std::string &name, GameData &data);
+    Player(std::string &name, GameData &data, Sim &sim);
     ~Player() = default;
 
+    bool capture_tab(void) override;
+
     void next_glass(UI &ui);
+
+    void fiks_sim(void);
 
     bool take_code(std::string &code);
     bool is_my_code(std::string &code) const;

@@ -24,7 +24,7 @@ class Win : public UI
 private:
     std::vector<std::unique_ptr<UI>> ui_elements;
     bool next_tab(bool round);
-    void rm_tab(void);
+    void remove_tab(void) override;
     int current_tab = -1;
 
 public:
@@ -39,4 +39,5 @@ public:
     UI *get_ui_at(int i) const;
     int get_num_of_elements() const;
     void pop_ui(void);
+    void set_current_tab(int i);
 };

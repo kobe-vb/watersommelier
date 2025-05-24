@@ -22,7 +22,7 @@ App::App(std::string title, int w, int h, int fps)
     SetExitKey(0);
     MaximizeWindow();
 
-    Image icon = LoadImage("data/img/mijn_icoon.png");
+    Image icon = LoadImage("data/img/icon.png");
     SetWindowIcon(icon);
     UnloadImage(icon);
 }

@@ -6,6 +6,7 @@
 #include "Dropdown.hpp"
 #include "GameData.hpp"
 #include "StackedBar.hpp"
+#include "Sim.hpp"
 
 class Glass: public Win
 {
@@ -14,11 +15,14 @@ private:
     Dropdown    *name;
     TextInp        *amount;
     GameData    &data;
+    Sim         &sim;
 
     std::function<void(UI &)> next_glas_func;
 
+    void save_ion(Ion &ion, int amount);
+
 public:
-    Glass(GameData &data, std::function<void(UI &)> close_glas);
+    Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim);
     ~Glass() = default;
 
     void draw(void) const override;
@@ -27,6 +31,7 @@ public:
 
     void save_druple(UI &ui);
     void add_comment(UI &ui);
+    void reset_sim(void);
 
     std::string get_comment(void) const;
     void reset(void);

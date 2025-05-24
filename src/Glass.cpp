@@ -20,8 +20,8 @@ static void draw_my_text(const char *name, float val, int x, int y)
     DrawText(buffer, x, y, 30, DARKBLUE);
 }
 
-Glass::Glass(GameData &data, std::function<void(UI &)> close_glas) : 
-data(data), next_glas_func(close_glas)
+Glass::Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim) : 
+data(data), sim(sim), next_glas_func(close_glas)
 {
     rect.height = GetScreenHeight() - LINE - PEDING;
     rect.width = (GetScreenWidth() * 1 / 3) - (PEDING * 3);
@@ -59,12 +59,33 @@ void Glass::reset(void)
     bar.reset();
     this->pop_ui();
     this->pop_ui();
+    this->sim.reset();
+}
+
+void Glass::reset_sim(void)
+{
+    this->sim.reset();
+
+    for (auto &ion : bar.get_data())
+    {
+        sim.addParticles((int)(ion.val * 20), ion.col);
+    }
 }
 
 std::string Glass::get_comment(void) const
 {
     return ((TextInp *)get_ui_at(2))->get_text();
 } 
+
+void Glass::save_ion(Ion &ion, int amount)
+{
+
+    std::string &ion_name = ion.ion;
+    Color col = data.get_color(ion.ion);
+    float mol = ion.mol * amount;
+    bar.add_value(ion_name, col, mol);
+    sim.addParticles(int(mol * 20), col);
+}
 
 void Glass::save_druple(UI &ui)
 {
@@ -80,8 +101,9 @@ void Glass::save_druple(UI &ui)
         std::cerr << e.what() << '\n';
         return;
     }
-    bar.add_value(elm->anion.ion, data.get_color(elm->anion.ion), elm->anion.mol * a);
-    bar.add_value(elm->kation.ion, data.get_color(elm->kation.ion), elm->kation.mol * a);
+
+    save_ion(elm->anion, a);
+    save_ion(elm->kation, a);
 
     ph += elm->ph * a;
     mol += elm->mol * a;

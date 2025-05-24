@@ -17,10 +17,12 @@ void Win::add_ui(std::unique_ptr<UI> element)
     ui_elements.push_back(std::move(element));
 }
 
-void Win::rm_tab(void)
+void Win::remove_tab(void)
 {
+    if (current_tab == -1)
+        return;
     ui_elements[current_tab]->remove_tab();
-    // current_tab = -1;
+    current_tab = -1;
 }
 bool Win::next_tab(bool round)
 {
@@ -65,11 +67,19 @@ void Win::update()
     if (!_is_active)
         return;
     if (current_tab >= 0 && (GetMouseDelta().x > 0 || GetMouseDelta().y > 0 || IsKeyPressed(KEY_ESCAPE)))
-        rm_tab();
+        remove_tab();
     for (size_t i = 0; i < ui_elements.size(); ++i)
     {
         ui_elements[i]->update();
     }
+}
+
+void Win::set_current_tab(int i)
+{
+    if (i >= ui_elements.size())
+        throw std::out_of_range("Index out of range");
+    current_tab = i;
+    ui_elements[i]->set_tab(true);
 }
 
 void Win::update_tabs(void)
@@ -106,5 +116,6 @@ int Win::get_num_of_elements() const
 
 void Win::pop_ui(void)
 {
+    this->remove_tab();
     ui_elements.pop_back();
 }

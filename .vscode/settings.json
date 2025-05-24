@@ -82,5 +82,13 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "variant": "cpp"
-    }
+    },
+    "terminal.integrated.defaultProfile.windows": "MINGW64",
+"terminal.integrated.profiles.windows": {
+  "MINGW64": {
+    "path": "C:\\msys64\\usr\\bin\\bash.exe",
+    "args": ["--login", "-i"]
+  }
+}
+
 }

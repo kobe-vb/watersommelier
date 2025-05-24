@@ -21,6 +21,11 @@ bool UI::capture_tab(void)
     return (is_tabt);
 }
 
+void UI::set_tab(bool value)
+{
+    is_tabt = value;
+}
+
 void UI::remove_tab(void)
 {
     is_tabt = false;

@@ -12,10 +12,22 @@
 
 # include "Player.hpp"
 
-Player::Player(std::string &name, GameData &data) : 
-name(name), data(data),
-glass(Glass(data, [this](UI &ui){ next_glass(ui); }))
+Player::Player(std::string &name, GameData &data, Sim &sim) : 
+name(name), data(data), sim(sim),
+glass(Glass(data, [this](UI &ui){ next_glass(ui); }, sim))
 {
+}
+
+void Player::fiks_sim(void)
+{
+    glass.reset_sim();
+}
+
+bool Player::capture_tab(void)
+{
+    if (!_is_active)
+        return (false);
+    return (glass.capture_tab());
 }
 
 void Player::next_glass(UI &ui)
@@ -53,7 +65,8 @@ void Player::draw(void) const
     if (!_is_visible)
         return;
 
-    DrawText(("code: " + code).c_str(), 50, 100, 20, BLACK);
+    DrawText(("Code: " + (code.length() ? code : "None")).c_str(), 50, 100, 80, BLACK);
+    DrawText(("Name: " + name).c_str(), 600, 100, 80, BLACK);
     
     history.draw();
     glass.draw();

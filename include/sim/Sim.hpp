@@ -26,6 +26,8 @@ public:
 
     void addParticles(float n, Color col);
     void set_rect(void);
+    void reset(void);
+
     void update(float dt);
     void draw(void) const;
 

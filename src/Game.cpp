@@ -16,7 +16,6 @@
 Game::Game() : App("tiboon", 0, 0, 60)
 {
 while (!IsWindowReady()) {
-    // Doe niets, wacht tot het venster klaar is
 }
     rect.height = 80;
     rect.width = (GetScreenWidth() * 2 / 3) - 20;
@@ -43,7 +42,7 @@ void Game::create_new_player(UI &ui)
                                          { switch_players(uii); });
     Tokel *tokel_ptr = tokel.get();
 
-    auto pl = std::make_unique<Player>(t.get_text(), data);
+    auto pl = std::make_unique<Player>(t.get_text(), data, sim);
     Player *pl_ptr = pl.get();
     activePlayer = pl_ptr;
 
@@ -55,6 +54,7 @@ void Game::create_new_player(UI &ui)
     t.get_text().clear();
     t.move(120, 0);
     tokel_ptr->set_tokel(true);
+    sim.reset();
 }
 
 void Game::switch_players(UI &ui)
@@ -72,6 +72,7 @@ void Game::switch_players(UI &ui)
         {
             pl.player->activate();
             activePlayer = pl.player;
+            activePlayer->fiks_sim();
         }
     }
 }

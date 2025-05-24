@@ -35,6 +35,8 @@ public:
     virtual void draw(void) const = 0;
     virtual void update(void) = 0;
 
+    void set_tab(bool value);
+
     virtual bool capture_tab(void);
     virtual void remove_tab(void);
 

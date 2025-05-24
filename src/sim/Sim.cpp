@@ -32,11 +32,6 @@ Sim::Sim(void)
     SetShaderValue(shader, timeLoc, &time, SHADER_UNIFORM_FLOAT);
     SetShaderValue(shader, resolutionLoc, &resolution, SHADER_UNIFORM_VEC2);
 
-    // Meer deeltjes voor een mooier vloeistofeffect
-    this->addParticles(150, SKYBLUE);
-    this->addParticles(150, BLUE);
-    this->addParticles(150, Color{100, 100, 255, 180});
-
     glass.x = 0;
     glass.y = 0;
     glass.width = 600;
@@ -47,6 +42,12 @@ Sim::~Sim(void)
 {
     UnloadRenderTexture(this->win);
     UnloadShader(this->shader);
+}
+
+void Sim::reset(void)
+{
+    this->particles.clear();
+    this->spatialMap.clear();
 }
 
 void Sim::set_rect(void)

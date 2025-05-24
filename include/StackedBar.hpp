@@ -30,4 +30,7 @@ public:
 
     void add_value(const std::string &name, Color col, float val);
     void draw(Vector2 mouse) const;
+
+    const std::vector<Data> &get_data(void) const { return data; }
+    float get_total_volume(void) const { return total_volume; }
 };
