@@ -28,20 +28,31 @@ HistoryGlass::HistoryGlass(int i, Glass &glass) :
                                                   comment(glass.get_comment()),
                                                   ph(glass.ph), mol(glass.mol)
 {
-    // keywords
     bar.set_pos(0, 0);
     rect = {((float)GetScreenWidth() * 1 / 3) + PEDING, LINE + PEDING * 4, (float)win.texture.width ,(float)win.texture.height};
 };
 
-void HistoryGlass::set_pos(int i)
+void HistoryGlass::set_pos(int i, float scrollOffset)
 {
     this->pos.x = (GetScreenWidth() * 1 / 3) + PEDING;
-    this->pos.y = LINE + PEDING * 4 + (i * 140);
+    this->pos.y = LINE + PEDING * 4 + (i * 140) - scrollOffset;
 
     rect.x = pos.x;
     rect.y = pos.y;
 
-    this->i++; ///////////
+    float screenTop = LINE;
+    float screenBottom = GetScreenHeight() - PEDING;
+    
+    if (rect.y + rect.height < screenTop || rect.y > screenBottom)
+    {
+        this->_is_visible = false;
+    }
+    else
+    {
+        this->_is_visible = true;
+    }
+
+    this->i++; // compiler
 }
 
 void HistoryGlass::draw(void) const

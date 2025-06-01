@@ -10,8 +10,12 @@
 class History: public Win
 {
 private:
-
+    float scrollOffset;    
+    float maxScrollOffset;
     Rectangle rect;
+
+    void calculateMaxScroll(void);
+    bool updateScroll(void);
     
 public:
 
@@ -20,6 +24,7 @@ public:
 
     void saveGlass(Glass &glass);
 
+    void update(void) override;
     void draw(void) const override;
 };
 

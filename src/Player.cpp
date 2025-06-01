@@ -58,6 +58,8 @@ void Player::update(void)
 {
     if (!_is_active)
         return;
+
+    history.update();
     glass.update();
 }
 

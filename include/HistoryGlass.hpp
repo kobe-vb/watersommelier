@@ -12,7 +12,7 @@ public:
     HistoryGlass(int i, Glass &glass);
     ~HistoryGlass() = default;
 
-    void set_pos(int i);
+    void set_pos(int i, float scrollOffset);
 
     void draw(void) const override;
     void draww(void) const;
