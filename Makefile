@@ -12,10 +12,10 @@ CXX = clang++
 INCLUDES = -I include -I include/sim -I my_lib/include
 
 # Debug flags
-CXXFLAGS = -g -Wall -std=c++20 $(INCLUDES)
+CXXFLAGS = -g -Wall -Wextra -Werror -std=c++20 $(INCLUDES)
 
 # Release flags
-RELEASE_CXXFLAGS = -O2 -Wall -std=c++20 $(INCLUDES)
+RELEASE_CXXFLAGS = -O2 -Wall -Wextra -Werror -std=c++20 $(INCLUDES)
 
 # Platform-specifieke includes en libraries
 ifeq ($(OS_TYPE), windows)
@@ -94,6 +94,7 @@ clean:
 
 fclean: clean
 	rm -rf my_lib/lib bin release release.zip
+	rm -rf release_obj
 
 re: fclean all
 

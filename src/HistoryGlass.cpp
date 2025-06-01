@@ -40,6 +40,8 @@ void HistoryGlass::set_pos(int i)
 
     rect.x = pos.x;
     rect.y = pos.y;
+
+    this->i++; ///////////
 }
 
 void HistoryGlass::draw(void) const

@@ -13,7 +13,7 @@
 # include "Player.hpp"
 
 Player::Player(std::string &name, GameData &data, Sim &sim) : 
-name(name), data(data), sim(sim),
+name(name),
 glass(Glass(data, [this](UI &ui){ next_glass(ui); }, sim))
 {
 }
@@ -32,6 +32,7 @@ bool Player::capture_tab(void)
 
 void Player::next_glass(UI &ui)
 {
+    (void)ui;
     history.saveGlass(glass);
     glass.reset();
 }

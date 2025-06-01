@@ -26,7 +26,7 @@ void Win::remove_tab(void)
 }
 bool Win::next_tab(bool round)
 {
-    size_t size = ui_elements.size();
+    int size = (int)ui_elements.size();
     if (size == 0)
         return (false);
 
@@ -76,7 +76,7 @@ void Win::update()
 
 void Win::set_current_tab(int i)
 {
-    if (i >= ui_elements.size())
+    if (i >= (int)ui_elements.size())
         throw std::out_of_range("Index out of range");
     current_tab = i;
     ui_elements[i]->set_tab(true);

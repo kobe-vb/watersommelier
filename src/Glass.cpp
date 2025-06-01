@@ -89,6 +89,7 @@ void Glass::save_ion(Ion &ion, int amount)
 
 void Glass::save_druple(UI &ui)
 {
+    (void)ui;
     int a;
     Element *elm;
     try
@@ -114,6 +115,8 @@ void Glass::save_druple(UI &ui)
 
 void Glass::add_comment(UI &ui)
 {
+    (void)ui;
+
     add_ui(std::make_unique<TextInp>(
         PEDING * 2, LINE + 300,
         rect.width - 200, 300, nullptr, "coment?"));

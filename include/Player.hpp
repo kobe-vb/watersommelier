@@ -23,8 +23,6 @@ class Player: public Win
 {
 private:
     const std::string name;
-    GameData &data;
-    Sim &sim;
 
     Glass glass;
     History history;

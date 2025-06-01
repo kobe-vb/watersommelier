@@ -101,7 +101,7 @@ void Dropdown::update()
         ind -= (int)(GetMouseWheelMove());
         ind = std::clamp(ind, 0, std::max(0, (int)filtered.size() - 1 - max_opt));
 
-        for (size_t i = 0; i + ind < filtered.size() && i < max_opt; ++i)
+        for (int i = 0; i + ind < (int)filtered.size() && i < max_opt; ++i)
         {
             Rectangle opt_rect = {bounds.x, bounds.y + (i + 1) * bounds.height, bounds.width, bounds.height};
             if (CheckCollisionPointRec(mouse, opt_rect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
@@ -125,7 +125,7 @@ void Dropdown::draw() const
 
     if (is_open)
     {
-        for (size_t i = 0; i + ind < filtered.size() && i < max_opt; ++i)
+        for (int i = 0; i + ind < (int)filtered.size() && i < max_opt; ++i)
         {
             Rectangle opt_rect = {bounds.x, bounds.y + (i + 1) * bounds.height, bounds.width, bounds.height};
             DrawRectangleRec(opt_rect, CheckCollisionPointRec(mouse, opt_rect) || i == current_ind ? LIGHTGRAY : GRAY);
