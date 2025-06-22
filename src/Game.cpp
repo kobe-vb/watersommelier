@@ -10,8 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <fstream>
+#include <cstdint>
+
 #include "Game.hpp"
 #include "Settings.hpp"
+
+static void saveCounter(size_t counter, const std::string& filename)
+{
+    std::ofstream out(filename, std::ios::binary);
+    if (!out) {
+        std::cerr << "Failed to open file for writing: " << filename << std::endl;
+        return;
+    }
+    out.write(reinterpret_cast<const char*>(&counter), sizeof(counter));
+}
+
+static size_t loadCounter(const std::string& filename)
+{
+    std::ifstream in(filename, std::ios::binary);
+    if (!in) 
+        return 1;
+    size_t counter;
+    in.read(reinterpret_cast<char*>(&counter), sizeof(counter));
+    return counter;
+}
 
 Game::Game() : App("tiboon", 0, 0, 60)
 {
@@ -30,6 +53,20 @@ while (!IsWindowReady()) {
 
 Game::~Game()
 {
+    save_data();
+}
+
+void Game::save_data(void)
+{
+    size_t counter = loadCounter("data/output/counter.bin");
+    std::ofstream file("data/output/data.csv", std::ios::app);
+    if (file.is_open())
+    {
+        for (auto &player : players)
+            player.player->save_data(file, counter);
+        file.close();
+    }
+    saveCounter(counter, "data/output/counter.bin");
 }
 
 void Game::create_new_player(UI &ui)

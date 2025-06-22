@@ -17,6 +17,8 @@ public:
     void draw(void) const override;
     void draww(void) const;
 
+    void save_data(std::ofstream &file);
+
 private:
 
     Rectangle rect;

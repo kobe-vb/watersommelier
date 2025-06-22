@@ -1,6 +1,5 @@
 
 
-
 #include "History.hpp"
 #include "Settings.hpp"
 
@@ -12,14 +11,27 @@ History::History(void) : scrollOffset(0), maxScrollOffset(0)
     rect.y = LINE;
 }
 
+void History::save_data(std::ofstream &file, size_t &counter, const std::string &name)
+{
+    for (int i = 0; i < get_num_of_elements(); i++)
+    {
+        file << counter << ","
+        << "datum" << ","
+        << name << ","
+        << "#" << i + 1 << ",";
+        counter++;
+        dynamic_cast<HistoryGlass &>(*get_ui_at(i)).save_data(file);
+    }
+}
+
 void History::saveGlass(Glass &glass)
 {
     int i = get_num_of_elements();
     add_ui(std::make_unique<HistoryGlass>(i, glass));
 
     for (int i = 0; i < get_num_of_elements(); i++)
-        dynamic_cast<HistoryGlass&>(*get_ui_at(i)).set_pos(get_num_of_elements() - i - 1, 0);
-    
+        dynamic_cast<HistoryGlass &>(*get_ui_at(i)).set_pos(get_num_of_elements() - i - 1, 0);
+
     calculateMaxScroll();
 }
 
@@ -32,7 +44,7 @@ void History::calculateMaxScroll()
 bool History::updateScroll()
 {
     Vector2 mousePos = this->get_mouse_pos();
-    
+
     if (CheckCollisionPointRec(mousePos, rect))
     {
         float wheelMove = GetMouseWheelMove();
@@ -52,7 +64,7 @@ void History::update()
     {
         for (int i = 0; i < get_num_of_elements(); i++)
         {
-            HistoryGlass& glass = dynamic_cast<HistoryGlass&>(*get_ui_at(i));
+            HistoryGlass &glass = dynamic_cast<HistoryGlass &>(*get_ui_at(i));
             glass.set_pos(get_num_of_elements() - i - 1, scrollOffset);
         }
     }
@@ -62,7 +74,7 @@ void History::draw(void) const
 {
 
     for (int i = 0; i < get_num_of_elements(); i++)
-        dynamic_cast<HistoryGlass&>(*get_ui_at(i)).draww();
+        dynamic_cast<HistoryGlass &>(*get_ui_at(i)).draww();
     DrawRectangleRounded(rect, ROUNDED, 10, COL_1);
 
     BeginScissorMode(rect.x, rect.y, rect.width, rect.height);

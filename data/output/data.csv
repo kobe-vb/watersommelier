@@ -1,0 +1,13 @@
+1,datum,kobe,#1,5,5,save?,
+2,datum,kobe,#2,5,5,save?,
+kobe 1-3,datum,kobe, end?
+3,datum,mark,#1,5,5,,
+4,datum,mark,#2,1,1,,
+mark 3-4,datum,mark, end?
+5,datum,papa,#1,7,7,,
+papa 5-5,datum,papa, end?
+6,datum,tiboon,#1,9,9,,
+7,datum,tiboon,#2,5,5,,
+tiboon 6-7,datum,tiboon, end?
+8,datum,mark,#1,5,5,werkt dit ?,
+mark 8-8,datum,mark, end?

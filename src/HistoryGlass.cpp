@@ -32,6 +32,12 @@ HistoryGlass::HistoryGlass(int i, Glass &glass) :
     rect = {((float)GetScreenWidth() * 1 / 3) + PEDING, LINE + PEDING * 4, (float)win.texture.width ,(float)win.texture.height};
 };
 
+void HistoryGlass::save_data(std::ofstream &file)
+{
+    file << mol << "," << ph << "," << comment << "," << keyWords << std::endl;
+    // TODO: save elements
+}
+
 void HistoryGlass::set_pos(int i, float scrollOffset)
 {
     this->pos.x = (GetScreenWidth() * 1 / 3) + PEDING;

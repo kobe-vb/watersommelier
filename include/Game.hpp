@@ -44,7 +44,8 @@ class Game : public App
     private:  
         void handleCode();
         bool name_is_taken(const std::string &name);
- 
+        void save_data();
+
     public:
         Game();
         ~Game();

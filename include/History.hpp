@@ -26,5 +26,7 @@ public:
 
     void update(void) override;
     void draw(void) const override;
+
+    void save_data(std::ofstream &file, size_t &counter, const std::string &name);
 };
 

@@ -74,7 +74,7 @@ void Glass::reset_sim(void)
 
 std::string Glass::get_comment(void) const
 {
-    return ((TextInp *)get_ui_at(2))->get_text();
+    return ((TextInp *)get_ui_at(3))->get_text();
 } 
 
 void Glass::save_ion(Ion &ion, int amount)

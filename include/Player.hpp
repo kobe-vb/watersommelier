@@ -47,5 +47,7 @@ public:
     void draw(void) const override;
 
     const std::string &get_name(void) const { return (name); }
+    
+    void save_data(std::ofstream &file, size_t &counter);
 };
 

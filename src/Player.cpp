@@ -18,6 +18,16 @@ glass(Glass(data, [this](UI &ui){ next_glass(ui); }, sim))
 {
 }
 
+void Player::save_data(std::ofstream &file, size_t &counter)
+{
+    if (history.get_num_of_elements() == 0)
+        return;
+    size_t beginCounter = counter;
+    history.save_data(file, counter, name);
+    file << name << " " << beginCounter << "-" << counter - 1
+         << ",datum," << name << ", end?" << std::endl;
+}
+
 void Player::fiks_sim(void)
 {
     glass.reset_sim();
