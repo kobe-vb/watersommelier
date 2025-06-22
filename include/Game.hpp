@@ -43,6 +43,7 @@ class Game : public App
                 
     private:  
         void handleCode();
+        bool name_is_taken(const std::string &name);
  
     public:
         Game();

@@ -35,7 +35,6 @@ bool History::updateScroll()
     
     if (CheckCollisionPointRec(mousePos, rect))
     {
-        std::cout << "scrolling" << std::endl;
         float wheelMove = GetMouseWheelMove();
         if (wheelMove != 0)
         {

@@ -23,7 +23,7 @@ while (!IsWindowReady()) {
     rect.y = 10;
     load_data(data);
     win.add_ui(std::make_unique<TextInp>(
-        PEDING * 2, PEDING * 2, 100, 50,
+        PEDING * 2, PEDING * 2, 100, 60,
         [this](UI &ui)
         { create_new_player(ui); }, "name?"));
 }
@@ -37,7 +37,7 @@ void Game::create_new_player(UI &ui)
     sim.set_rect(); // //////////////////////
     TextInp &t = dynamic_cast<TextInp &>(ui);
 
-    auto tokel = std::make_unique<Tokel>(t.get_rect().x, t.get_rect().y, 100, 50, t.get_text(),
+    auto tokel = std::make_unique<Tokel>(t.get_rect().x, t.get_rect().y, 110, 60, t.get_text(),
                                          [this](UI &uii)
                                          { switch_players(uii); });
     Tokel *tokel_ptr = tokel.get();
@@ -52,9 +52,29 @@ void Game::create_new_player(UI &ui)
     players.push_back({tokel_ptr, pl_ptr});
 
     t.get_text().clear();
-    t.move(120, 0);
+    t.move(125, 0);
     tokel_ptr->set_tokel(true);
     sim.reset();
+
+    if (players.size() == 9 )
+    {
+        t.set_text("tiboon");
+        t.run_callback();
+        return;
+    }
+
+    if (players.size() == 10 || this->name_is_taken("tiboon"))
+        win.pop_ui_front();
+}
+
+bool Game::name_is_taken(const std::string &name)
+{
+    for (auto &player : players)
+    {
+        if (player.player->get_name() == name)
+            return (true);
+    }
+    return (false);
 }
 
 void Game::switch_players(UI &ui)

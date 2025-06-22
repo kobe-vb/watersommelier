@@ -57,8 +57,8 @@ void Glass::reset(void)
     ph = 0;
     mol = 0;
     bar.reset();
-    this->pop_ui();
-    this->pop_ui();
+    this->pop_ui_back();
+    this->pop_ui_back();
     this->sim.reset();
 }
 

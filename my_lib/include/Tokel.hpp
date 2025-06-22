@@ -21,7 +21,10 @@ private:
     bool active;
     bool is_hover;
     const Rectangle bounds;
-    const std::string text;
+    std::string display_text;
+
+    float textX;
+    float textY;
 
 public:
     Tokel(float x, float y, float w, float h, const std::string &text, std::function<void(UI&)> callback = nullptr);

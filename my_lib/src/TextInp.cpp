@@ -124,3 +124,8 @@ void TextInp::remove_active(void)
     is_hover = false;
     is_tabt = false;
 }
+
+void TextInp::set_text(const std::string &text)
+{
+    this->text = text;
+}

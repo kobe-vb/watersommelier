@@ -13,8 +13,23 @@
 #include "Tokel.hpp"
 
 Tokel::Tokel(float x, float y, float w, float h, const std::string &text, std::function<void(UI&)> callback)
-    : UI(callback), active(false), is_hover(false), bounds({x, y, w, h}), text(text)
+    : UI(callback), active(false), is_hover(false), bounds({x, y, w, h})
 {
+    int fontSize = 20;
+    float padding = 10.0f;
+    float maxWidth = bounds.width - 2 * padding;
+
+    display_text = text;
+    while (!display_text.empty() && MeasureText((display_text + "...").c_str(), fontSize) > maxWidth) {
+        display_text.pop_back();
+    }
+    if (display_text != text)
+        display_text += "...";
+
+    int displayWidth = MeasureText(display_text.c_str(), fontSize);
+    textX = bounds.x + (bounds.width - displayWidth) / 2.0f;
+    textY = bounds.y + (bounds.height - fontSize) / 2.0f;
+
 }
 
 Tokel::~Tokel(void) {}
@@ -34,17 +49,20 @@ void Tokel::update(void)
 
 void Tokel::draw(void) const
 {
-    Color col = {255, 0, 0, 255};
-    if (active)
-        col = {0, 255, 0, 255};
-    if (is_hover)
-        col.a = 30;
-    if (is_tabt)
-        col.a = 30;
-        
-    DrawRectangleRec(bounds, col);
-    DrawText(text.c_str(), bounds.x, bounds.y, 20, {255, 255, 255, 255});
+    int fontSize = 20;
+
+    Color baseColor = active ? Color{40, 180, 99, 255} : Color{52, 73, 94, 255}; 
+    Color hoverOverlay = Color{255, 255, 255, 30}; 
+    Color borderColor = Color{236, 240, 241, 255}; 
+
+    DrawRectangleRounded(bounds, 0.2f, 10, baseColor);
+    if (is_hover || is_tabt)
+        DrawRectangleRounded(bounds, 0.2f, 10, hoverOverlay);
+    DrawRectangleRoundedLines(bounds, 0.2f, 10, borderColor);
+
+    DrawText(display_text.c_str(), (int)textX, (int)textY, fontSize, WHITE);
 }
+
 
 
 void Tokel::set_tokel(bool value)
@@ -56,5 +74,5 @@ void Tokel::set_tokel(bool value)
 
 const std::string &Tokel::get_text(void)
 {
-    return (text);
+    return (display_text);
 } 

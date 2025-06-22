@@ -23,6 +23,7 @@ public:
     bool capture_tab(void) override;
     void move(int x, int y);
     void reset(void);
+    void set_text(const std::string &text);
 
     void remove_active(void);
 };

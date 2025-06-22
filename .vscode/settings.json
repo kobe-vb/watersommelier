@@ -89,6 +89,9 @@
     "path": "C:\\msys64\\usr\\bin\\bash.exe",
     "args": ["--login", "-i"]
   }
-}
+},
+"cSpell.words": [
+  "tokel"
+]
 
 }

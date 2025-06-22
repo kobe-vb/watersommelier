@@ -38,6 +38,7 @@ public:
     bool capture_tab(void) override;
     UI *get_ui_at(int i) const;
     int get_num_of_elements() const;
-    void pop_ui(void);
     void set_current_tab(int i);
+    void pop_ui_back(void);
+    void pop_ui_front(void);
 };

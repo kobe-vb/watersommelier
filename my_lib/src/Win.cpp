@@ -97,11 +97,11 @@ void Win::draw() const
     // for (const auto &element : std::ranges::views::reverse(ui_elements))
     // {
 
-    for (auto it = ui_elements.rbegin(); it != ui_elements.rend(); ++it) {
-    const auto& element = *it;
+    for (auto it = ui_elements.rbegin(); it != ui_elements.rend(); ++it)
+    {
+        const auto &element = *it;
         element->draw();
     }
-
 }
 
 UI *Win::get_ui_at(int i) const
@@ -114,8 +114,16 @@ int Win::get_num_of_elements() const
     return (ui_elements.size());
 }
 
-void Win::pop_ui(void)
+void Win::pop_ui_back()
 {
     this->remove_tab();
-    ui_elements.pop_back();
+    if (!ui_elements.empty())
+        ui_elements.pop_back();
+}
+
+void Win::pop_ui_front()
+{
+    this->remove_tab();
+    if (!ui_elements.empty())
+        ui_elements.erase(ui_elements.begin());
 }

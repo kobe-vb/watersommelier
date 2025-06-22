@@ -45,5 +45,7 @@ public:
 
     void update(void) override;
     void draw(void) const override;
+
+    const std::string &get_name(void) const { return (name); }
 };
 
