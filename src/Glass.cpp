@@ -20,9 +20,10 @@ static void draw_my_text(const char *name, float val, int x, int y)
     DrawText(buffer, x, y, 30, DARKBLUE);
 }
 
-Glass::Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim) : 
-data(data), sim(sim), next_glas_func(close_glas)
+Glass::Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim, Rectangle &rect) : 
+rect(rect), data(data), sim(sim), next_glas_func(close_glas)
 {
+
     rect.height = GetScreenHeight() - LINE - PEDING;
     rect.width = (GetScreenWidth() * 1 / 3) - (PEDING * 3);
     rect.x = PEDING;
@@ -145,8 +146,6 @@ void Glass::draw(void) const
 {
     if (!_is_visible)
         return;
-    DrawRectangleRounded(rect, ROUNDED, 10, COL_1);
-    DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
     draw_my_text("pH: %.2f", ph, PEDING * 3, LINE + 130);
     draw_my_text("mol: %.2f", mol, PEDING * 3 + 200, LINE + 130);
     bar.draw(this->get_mouse_pos());

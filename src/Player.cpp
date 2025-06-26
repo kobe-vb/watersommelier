@@ -10,11 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "Player.hpp"
+#include "Player.hpp"
+#include "Settings.hpp"
 
-Player::Player(std::string &name, GameData &data, Sim &sim) : 
-name(name),
-glass(Glass(data, [this](UI &ui){ next_glass(ui); }, sim))
+Player::Player(std::string &name, GameData &data, Sim &sim) : name(name),
+                                                              glass(Glass(data, [this](UI &ui)
+                                                                          { next_glass(ui); }, sim, rect))
 {
 }
 
@@ -73,6 +74,38 @@ void Player::update(void)
     glass.update();
 }
 
+void Player::set_website(std::string website)
+{
+    this->website = website;
+    this->qr = qrcodegen::QrCode::encodeText(website.c_str(), qrcodegen::QrCode::Ecc::LOW);
+}
+
+void Player::draw_qr(void) const
+{
+
+    if (!qr.has_value())
+        return;
+
+    const int pixelSize = 10;
+    const int qrSize = qr.value().getSize();
+
+    int dx = rect.x + 150;
+    int dy = rect.y + 50;
+
+    for (int y = 0; y < qrSize; y++)
+    {
+        for (int x = 0; x < qrSize; x++)
+        {
+            if (qr.value().getModule(x, y))
+            {
+                DrawRectangle(dx + x * pixelSize, dy + y * pixelSize, pixelSize, pixelSize, BLACK);
+            }
+        }
+    }
+
+    DrawText(("Website: " + website).c_str(), 50, rect.y + 400, 30, BLACK);
+}
+
 void Player::draw(void) const
 {
     if (!_is_visible)
@@ -80,7 +113,16 @@ void Player::draw(void) const
 
     DrawText(("Code: " + (code.length() ? code : "None")).c_str(), 50, 100, 80, BLACK);
     DrawText(("Name: " + name).c_str(), 600, 100, 80, BLACK);
-    
+
     history.draw();
+
+    DrawRectangleRounded(rect, ROUNDED, 10, COL_1);
+    DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
+
+    if (!website.empty())
+    {
+        draw_qr();
+        return;
+    }
     glass.draw();
 }

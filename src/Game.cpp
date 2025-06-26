@@ -15,6 +15,7 @@
 
 #include "Game.hpp"
 #include "Settings.hpp"
+#include "SudoPlayer.hpp"
 
 static void saveCounter(size_t counter, const std::string& filename)
 {
@@ -79,12 +80,22 @@ void Game::create_new_player(UI &ui)
                                          { switch_players(uii); });
     Tokel *tokel_ptr = tokel.get();
 
-    auto pl = std::make_unique<Player>(t.get_text(), data, sim);
-    Player *pl_ptr = pl.get();
+    Player *pl_ptr = nullptr;
+    if (t.get_text() == "tiboon")
+    {
+        auto pl = std::make_unique<SudoPlayer>(t.get_text(), data, sim, players);
+        pl_ptr = pl.get();
+        win.add_ui(std::move(pl));
+    }
+    else
+    {
+        auto pl = std::make_unique<Player>(t.get_text(), data, sim);
+        pl_ptr = pl.get();
+        win.add_ui(std::move(pl));
+    }
     activePlayer = pl_ptr;
 
     win.add_ui(std::move(tokel));
-    win.add_ui(std::move(pl));
 
     players.push_back({tokel_ptr, pl_ptr});
 
@@ -139,8 +150,8 @@ void Game::draw() const
     ClearBackground(COL_BG);
     DrawRectangleRounded(rect, 0.2, 8, COL_1);
     DrawRectangleRoundedLinesEx(rect, 0.2, 8, 6.0f, BLACK);
-    win.draw();
     sim.draw();
+    win.draw();
 }
 
 void Game::handleCode()
