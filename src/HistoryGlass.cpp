@@ -13,6 +13,9 @@
 #include "HistoryGlass.hpp"
 #include "Settings.hpp"
 
+#include <string>
+#include <regex>
+
 void draw_my_text(const char *name, float val, int x, int y)
 {
     char buffer[64];
@@ -30,6 +33,18 @@ HistoryGlass::HistoryGlass(int i, Glass &glass) :
 {
     bar.set_pos(0, 0);
     rect = {((float)GetScreenWidth() * 1 / 3) + PEDING, LINE + PEDING * 4, (float)win.texture.width ,(float)win.texture.height};
+    
+    std::regex hashtagRegex("#\\w+");
+    std::smatch matches;
+
+    auto it = std::sregex_iterator(comment.begin(), comment.end(), hashtagRegex);
+    auto end = std::sregex_iterator();
+
+    for (; it != end; ++it)
+        keyWords += it->str() + " ";
+
+    if (!keyWords.empty()) 
+        keyWords.pop_back();
 };
 
 void HistoryGlass::save_data(std::ofstream &file)
@@ -87,7 +102,9 @@ void HistoryGlass::draww(void) const
     clear();
     
     draw_my_text("pH: %.2f", ph, PEDING * 3, 80);
-    draw_my_text("mol: %.2f, ####### #kobe #cool #8/10", mol, PEDING * 3 + 200, 80);
+    draw_my_text("mol: %.2f", mol, PEDING * 3 + 200, 80);
+    DrawText(keyWords.c_str(), PEDING * 3, 100, 20, DARKBLUE);
+
     bar.draw(this->get_mouse_pos());
     EndTextureMode();    
 };
