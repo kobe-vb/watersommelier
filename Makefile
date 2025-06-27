@@ -20,7 +20,8 @@ RELEASE_CXXFLAGS = -O2 -Wall -Wextra -Werror -std=c++20 $(INCLUDES)
 # Platform-specifieke includes en libraries
 ifeq ($(OS_TYPE), windows)
     CXXFLAGS += -I /mingw64/include -DPLATFORM_WINDOWS
-    LDFLAGS = -L /mingw64/lib -lgdi32 -luser32 -lraylib
+    LDFLAGS = -L /mingw64/lib -lgdi32 -luser32 -lraylib -lws2_32
+
     RELEASE_CXXFLAGS += -I /mingw64/include -DPLATFORM_WINDOWS
     RELEASE_LDFLAGS = $(LDFLAGS) -mwindows -static-libstdc++
 else

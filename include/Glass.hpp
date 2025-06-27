@@ -11,7 +11,7 @@
 class Glass: public Win
 {
 private:
-    Rectangle rect;
+    Rectangle &rect;
     Dropdown    *name;
     TextInp        *amount;
     GameData    &data;
@@ -22,7 +22,7 @@ private:
     void save_ion(Ion &ion, int amount);
 
 public:
-    Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim);
+    Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim, Rectangle &rect);
     ~Glass() = default;
 
     void draw(void) const override;

@@ -15,18 +15,11 @@
 # include "App.hpp"
 # include "Win.hpp"
 # include "Player.hpp"
-# include "Tokel.hpp"
 # include "TextInp.hpp"
 # include "GameData.hpp"
 # include "Sim.hpp"
 
 # include <vector>
-
-struct Player_data
-{
-    Tokel *tokel;
-    Player *player;
-};
 
 class Game : public App
 {

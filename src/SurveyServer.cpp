@@ -90,7 +90,6 @@ bool SurveyServer::startServer(const std::string &host, int port)
             server.listen(host.c_str(), port); });
     path = "http://" + host + ":" + std::to_string(port);
     is_running = true;
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     return true;
 }
 

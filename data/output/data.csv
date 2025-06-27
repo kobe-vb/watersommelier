@@ -11,3 +11,7 @@ papa 5-5,datum,papa, end?
 tiboon 6-7,datum,tiboon, end?
 8,datum,mark,#1,5,5,werkt dit ?,
 mark 8-8,datum,mark, end?
+9,datum,tiboon,#1,0,0,,
+10,datum,tiboon,#2,15,15,,
+11,datum,tiboon,#3,4,4,,
+tiboon 9-11,datum,tiboon, end?

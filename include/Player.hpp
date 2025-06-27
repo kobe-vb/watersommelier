@@ -18,6 +18,10 @@
 #include "ScrollBar.hpp"
 #include "History.hpp"
 #include "Sim.hpp"
+# include "Tokel.hpp"
+#include "qrcodegen.hpp"
+
+#include <optional>
 
 class Player: public Win
 {
@@ -26,9 +30,14 @@ private:
 
     Glass glass;
     History history;
-    
+    Rectangle rect;
+
     std::string code;
 
+    std::optional<qrcodegen::QrCode> qr;
+    std::string website;
+
+    void draw_qr(void) const;
     
 public:
     Player(std::string &name, GameData &data, Sim &sim);
@@ -46,8 +55,16 @@ public:
     void update(void) override;
     void draw(void) const override;
 
+    void set_website(std::string website);
+
     const std::string &get_name(void) const { return (name); }
     
     void save_data(std::ofstream &file, size_t &counter);
 };
 
+
+struct Player_data
+{
+    Tokel *tokel;
+    Player *player;
+};
