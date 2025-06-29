@@ -53,6 +53,19 @@ void HistoryGlass::save_data(std::ofstream &file)
     // TODO: save elements
 }
 
+std::string HistoryGlass::to_json() const
+{
+    std::stringstream json;
+    json << "    {\n";
+    json << "      \"ph\": " << ph << ",\n";
+    json << "      \"mol\": " << mol << ",\n";
+    json << "      \"comment\": \"" << comment << "\",\n";
+    json << "      \"keywords\": \"" << keyWords << "\"\n";
+    json << "    }";
+    // TODO: save elements
+    return json.str();
+}
+
 void HistoryGlass::set_pos(int i, float scrollOffset)
 {
     this->pos.x = (GetScreenWidth() * 1 / 3) + PEDING;
@@ -108,3 +121,4 @@ void HistoryGlass::draww(void) const
     bar.draw(this->get_mouse_pos());
     EndTextureMode();    
 };
+

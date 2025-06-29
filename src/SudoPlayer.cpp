@@ -29,13 +29,13 @@ std::string getLocalIP() {
     return std::string(ipStr);
 }
 
-SudoPlayer::SudoPlayer(std::string &name, GameData &data, Sim &sim, std::vector<Player_data> &players) :
-Player(name, data, sim)
+SudoPlayer::SudoPlayer(std::string &name, GameData &data, Sim &sim, std::vector<Player_data> &raw_players) :
+Player(name, data, sim), server(players)
 {
     int i = 0;
-    for (auto &player : players)
+    for (auto &player : raw_players)
     {
-        Players.insert({player.player->get_name(), *player.player});
+        players.insert({player.player->get_name(), *player.player});
         add_ui(std::make_unique<Tokel>(1300 + (i % 5) * 120, 100 + (i / 5) * 100, 110, 60, player.player->get_name(), 
                                              [this](UI &uii)
                                          { set_player_website(uii); }));
@@ -51,7 +51,7 @@ void SudoPlayer::set_player_website(UI &ui)
     server.startServer(getLocalIP(), 8080);
 
     Tokel &tokel = dynamic_cast<Tokel &>(ui);
-    Player &player = Players.at(tokel.get_text());
+    Player &player = players.at(tokel.get_text());
     std::cout << server.getPath(tokel.get_text()) << std::endl;
     player.set_website(server.getPath(tokel.get_text()));
 }

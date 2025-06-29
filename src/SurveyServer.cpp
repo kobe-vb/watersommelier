@@ -1,93 +1,100 @@
 #include "SurveyServer.hpp"
+#include <unordered_map>
 
 static std::string loadFile(const std::string &path)
 {
     std::ifstream file(path);
-    if (file.is_open())
+    if (!file.is_open())
     {
-        std::stringstream buffer;
-        buffer << file.rdbuf();
-        return buffer.str();
+        std::cerr << "⚠️  Kon bestand niet openen: " << path << std::endl;
+        return "";
     }
-    return "";
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    return buffer.str();
 }
 
-SurveyServer::SurveyServer() {}
+SurveyServer::SurveyServer(std::unordered_map<std::string, Player &> &Players) : players(Players)
+{
+}
 
 SurveyServer::~SurveyServer()
 {
     stopServer();
 }
 
+void SurveyServer::serveStaticFile(const std::string &route,
+                                   const std::string &file_path,
+                                   const std::string &content_type)
+{
+    server.Get(route.c_str(), [file_path, content_type](const httplib::Request &req, httplib::Response &res)
+               {
+        (void)req;
+
+        std::string file = loadFile(file_path);
+        if (!file.empty()) {
+            res.set_content(file, content_type.c_str());
+        } else {
+            res.status = 404;
+            res.set_content("Bestand niet gevonden", "text/plain");
+        } });
+}
+
 void SurveyServer::setupRoutes()
 {
-    server.Get("/", [this](const httplib::Request &req, httplib::Response &res)
+
+    server.Get("/get-data", [this](const httplib::Request &req, httplib::Response &res)
                {
-                (void)req;
-                (void)this;
-                std::string file = loadFile("./data/www/Form.html");
-                if (!file.empty())
-                {
-                    res.set_content(file, "text/html");
-                    return;
-                }
-                res.status = 404;
-                res.set_content("HTML file not found", "text/plain"); });
+    auto it = req.params.find("username");
+    if (it != req.params.end()) {
+        try {
+            // Use at() instead of operator[] - this throws if key doesn't exist
+            res.set_content(players.at(it->second).to_json().c_str(), "application/json");
+            res.status = 200;
+        } catch (const std::out_of_range&) {
+            res.status = 404;
+            res.set_content("Gebruiker niet gevonden", "text/plain");
+        }
+    } else {
+        res.status = 400;
+        res.set_content("Username parameter ontbreekt", "text/plain");
+    } });
 
-    server.Get("/Form.css", [](const httplib::Request &req, httplib::Response &res)
-               {
-                                (void)req;
+    server.Post("/send-data", [](const httplib::Request &req, httplib::Response &res)
+    {
+        std::cout << req.body << std::endl;
+        (void)res;
+    });
 
-                std::string file = loadFile("./data/www/Form.css");
-                if (!file.empty())
-                {
-                    res.set_content(file, "text/css");
-                    return;
-                }
-                res.status = 404;
-                res.set_content("css file not found", "text/plain"); });
-
-    server.Get("/Form.js", [](const httplib::Request &req, httplib::Response &res)
-               {
-                                (void)req;
-
-                std::string file = loadFile("./data/www/Form.js");
-                if (!file.empty())
-                {
-                    res.set_content(file, "application/javascript");
-                    return;
-                }
-                res.status = 404;
-                res.set_content("js file not found", "text/plain"); });
-
-    server.Post("/api/submit", [this](const httplib::Request &req, httplib::Response &res)
-                {
-                                    (void)this;
-
-                std::cout << "Antwoord ontvangen: " << req.body << std::endl;
-                res.body = "OK";
-                res.status = 200; });
-
+    // Pre-routing handler for CORS
     server.set_pre_routing_handler([](const httplib::Request &req, httplib::Response &res)
                                    {
-                                                    (void)req;
+        (void)req;
+        res.set_header("Access-Control-Allow-Origin", "*");
+        res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        res.set_header("Access-Control-Allow-Headers", "Content-Type");
+        return httplib::Server::HandlerResponse::Unhandled; });
 
-            res.set_header("Access-Control-Allow-Origin", "*");
-            res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-            res.set_header("Access-Control-Allow-Headers", "Content-Type");
-            return httplib::Server::HandlerResponse::Unhandled; });
+    // Serve static files
+    serveStaticFile("/", "./data/www/form.html", "text/html");
+    serveStaticFile("/form.css", "./data/www/form.css", "text/css");
+    serveStaticFile("/form.js", "./data/www/form.js", "application/javascript");
+    serveStaticFile("/cominication.js", "./data/www/cominication.js", "application/javascript");
 }
 
 bool SurveyServer::startServer(const std::string &host, int port)
 {
     if (is_running)
         return false;
+
     setupRoutes();
 
     server_thread = std::thread([this, host, port]()
                                 {
-            std::cout << "🌐 Survey server gestart op http://" << host << ":" << port << std::endl;
-            server.listen(host.c_str(), port); });
+        std::cout << "🌐 Survey server gestart op http://" << host << ":" << port << std::endl;
+        server.listen(host.c_str(), port); });
+
     path = "http://" + host + ":" + std::to_string(port);
     is_running = true;
     return true;
@@ -97,6 +104,7 @@ void SurveyServer::stopServer()
 {
     if (!is_running)
         return;
+
     std::cout << "🛑 Server wordt gestopt..." << std::endl;
     server.stop();
 

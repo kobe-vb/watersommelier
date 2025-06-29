@@ -1,13 +1,11 @@
-function getQueryParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
-}
 
-const username = getQueryParam('username');
+cool = function (data)
+{
+    console.log(data);
 
-console.log(username);
-if (username) {
-  document.getElementById('userId').textContent = username;
-} else {
-  document.getElementById('userId').textContent = 'gekie';
-}
+    let name = document.getElementById("name");
+    name.innerHTML = data.name;
+    
+};
+
+window.UserData.onReady(cool);

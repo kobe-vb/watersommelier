@@ -29,6 +29,25 @@ void Player::save_data(std::ofstream &file, size_t &counter)
          << ",datum," << name << ", end?" << std::endl;
 }
 
+std::string Player::to_json() const
+{
+    std::stringstream json;
+    json << "{\n";
+    json << "  \"name\": \"" << name << "\",\n";
+    json << "  \"code\": \"" << code << "\",\n";
+    json << "  \"history\": [\n";
+    
+    for (int i = 0; i < history.get_num_of_elements(); i++)
+    {
+        if (i > 0) json << ",\n";
+        const HistoryGlass& glass = dynamic_cast<const HistoryGlass&>(*history.get_ui_at(i));
+        json << glass.to_json();
+    }
+    
+    json << "\n  ]\n}";
+    return json.str();
+}
+
 void Player::fiks_sim(void)
 {
     glass.reset_sim();

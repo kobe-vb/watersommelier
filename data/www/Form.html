@@ -1,12 +1,32 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <title>Vragenlijst</title>
+    <meta charset="UTF-8">
+    <title>Watersommelier Vragenlijst</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="Form.css">
+    <link rel="stylesheet" href="form.css">
 </head>
 <body>
-    <h1>Jow <span id="userId"></span></h1>
-    <script src="Form.js"></script>
+    <main>
+        <h1>Welkom bij de Watersommelier Vragenlijst <span id="name"></span></h1>
+        <form action="/send-data" method="post">
+            <input type="hidden" name="username" id="username">
+
+
+            <!-- custom form -->
+            <div class="form-group">
+                <label id="vraag-naam" for="naam">Wat is je naam?</label>
+                <input type="text" name="naam" id="naam" required>
+            </div>
+            <!-- custom form -->
+
+            <div class="form-group">
+                <button type="submit">Verzend</button>
+            </div>
+        </form>
+    </main>
+
+    <script src="cominication.js"></script>
+    <script src="form.js"></script>
 </body>
 </html>

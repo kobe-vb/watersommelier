@@ -18,6 +18,7 @@ public:
     void draww(void) const;
 
     void save_data(std::ofstream &file);
+    std::string to_json(void) const;
 
 private:
 

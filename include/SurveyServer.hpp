@@ -16,6 +16,9 @@
 #define NOUSER
 #endif
 #include "httplib.h"
+
+#include "Player.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <thread>
@@ -31,11 +34,16 @@ private:
     
     std::string path;
 
+    std::unordered_map<std::string, Player &> &players;
+
     void setupRoutes();
+    void serveStaticFile(const std::string& route,
+                                   const std::string& file_path,
+                                   const std::string& content_type);
 
 public:
 
-    SurveyServer();
+    SurveyServer(std::unordered_map<std::string, Player &> &Players);
     ~SurveyServer();
 
     void stopServer();

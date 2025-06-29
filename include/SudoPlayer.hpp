@@ -8,7 +8,7 @@ class SudoPlayer : public Player
 {
 private:
 
-    std::unordered_map<std::string, Player &> Players;
+    std::unordered_map<std::string, Player &> players;
     SurveyServer server;
 
     void set_player_website(UI &ui);
