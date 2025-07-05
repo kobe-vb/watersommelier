@@ -117,7 +117,11 @@ void Glass::save_druple(UI &ui)
 void Glass::add_comment(UI &ui)
 {
     (void)ui;
+    _add_comment();
+}
 
+void Glass::_add_comment(void)
+{
     add_ui(std::make_unique<TextInp>(
         PEDING * 2, LINE + 300,
         rect.width - 200, 300, nullptr, "coment?"));
@@ -162,4 +166,24 @@ bool Glass::take_code(std::string &code) const
     name->set(index);
     // todo drupel saven?
     return true;
+}
+
+void Glass::generate_random_data(bool full)
+{
+    for (int i = 0; i < 10; i++)
+    {
+        int a = std::rand() % 5 + 1;
+        Element &elm = data.get_element(data.names[std::rand() % data.names.size()]);
+
+        save_ion(elm.anion, a);
+        save_ion(elm.kation, a);
+
+        ph += elm.ph * a;
+        mol += elm.mol * a;
+    }
+    if (!full)
+        return;
+    _add_comment();
+    const char* texts[] = {"woow", "cool", "very cool"};
+    ((TextInp *)get_ui_at(3))->set_text(texts[std::rand() % 3]);
 }

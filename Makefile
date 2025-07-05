@@ -9,7 +9,7 @@ endif
 CXX = clang++
 
 # Algemene settings
-INCLUDES = -I include -I include/sim -I my_lib/include
+INCLUDES = -I include -I include/sim -I include/players -I my_lib/include
 
 # Debug flags
 CXXFLAGS = -g -Wall -Wextra -Werror -std=c++20 $(INCLUDES)
@@ -99,17 +99,23 @@ fclean: clean
 
 re: fclean all
 
-# Release target
+RELEASE_DLLS = \
+    /mingw64/bin/libraylib.dll \
+    /mingw64/bin/glfw3.dll \
+    /mingw64/bin/libwinpthread-1.dll \
+    /mingw64/bin/libgcc_s_seh-1.dll \
+    /mingw64/bin/libstdc++-6.dll
+
 release: $(RELEASE_OUT)
 	rm -rf $(RELEASE_DIR)
 	mkdir -p $(RELEASE_DIR)
 	cp $(RELEASE_OUT) $(RELEASE_DIR)/water_woeter.exe
 	cp -r data $(RELEASE_DIR)/
-
 ifeq ($(OS_TYPE), windows)
-	cp /mingw64/bin/libraylib.dll $(RELEASE_DIR)/
-	cp /mingw64/bin/glfw3.dll $(RELEASE_DIR)/
-	cp /mingw64/bin/libwinpthread-1.dll $(RELEASE_DIR)/
+	cp $(RELEASE_DLLS) $(RELEASE_DIR)/
 endif
+
+zip: release
+	zip -r release.zip $(RELEASE_DIR)
 
 .PHONY: all run clean fclean re release

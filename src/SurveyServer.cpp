@@ -45,27 +45,59 @@ void SurveyServer::setupRoutes()
 {
 
     server.Get("/get-data", [this](const httplib::Request &req, httplib::Response &res)
-               {
-    auto it = req.params.find("username");
-    if (it != req.params.end()) {
-        try {
-            // Use at() instead of operator[] - this throws if key doesn't exist
-            res.set_content(players.at(it->second).to_json().c_str(), "application/json");
-            res.status = 200;
-        } catch (const std::out_of_range&) {
+    {
+        auto it = req.params.find("username");
+        auto player_it = players.find(it->second);
+        if (player_it != players.end())
+        {
+                res.set_content(player_it->second.to_json().c_str(), "application/json");
+                res.status = 200;
+        }
+        else
+        {
             res.status = 404;
             res.set_content("Gebruiker niet gevonden", "text/plain");
         }
+    });
+
+server.Post("/send-data", [this](const httplib::Request &req, httplib::Response &res)
+{
+    if (req.has_header("Content-Type") &&
+        req.get_header_value("Content-Type") == "application/x-www-form-urlencoded") {
+
+        httplib::Params params;
+        httplib::detail::parse_query_text(req.body, params);
+
+        auto username_it = params.find("username");
+        if (username_it != params.end()) {
+            auto player_it = players.find(username_it->second);
+            if (player_it != players.end()) {
+                Player& player = player_it->second;
+
+                player.set_website_data(req.body);
+                std::string file = loadFile("./data/www/thx.html");
+                if (!file.empty())
+                {
+                    res.set_content(file, "text/html");
+                    res.status = 200;
+                }
+                else
+                {
+                    res.status = 404;
+                    res.set_content("Bestand niet gevonden", "text/plain");
+                }
+                return;
+            }
+        }
+
+        res.status = 404;
+        res.set_content("Gebruiker niet gevonden of ongeldige data", "text/plain");
     } else {
         res.status = 400;
-        res.set_content("Username parameter ontbreekt", "text/plain");
-    } });
+        res.set_content("Ongeldig content-type", "text/plain");
+    }
+});
 
-    server.Post("/send-data", [](const httplib::Request &req, httplib::Response &res)
-    {
-        std::cout << req.body << std::endl;
-        (void)res;
-    });
 
     // Pre-routing handler for CORS
     server.set_pre_routing_handler([](const httplib::Request &req, httplib::Response &res)

@@ -25,17 +25,18 @@
 
 class Player: public Win
 {
-private:
+protected:
     const std::string name;
-
     Glass glass;
     History history;
+private:
     Rectangle rect;
 
     std::string code;
 
     std::optional<qrcodegen::QrCode> qr;
     std::string website;
+    std::string website_data;
 
     void draw_qr(void) const;
     
@@ -56,11 +57,14 @@ public:
     void draw(void) const override;
 
     void set_website(std::string website);
+    void set_website_data(std::string website_data);
 
     const std::string &get_name(void) const { return (name); }
     
     void save_data(std::ofstream &file, size_t &counter);
     std::string to_json(void) const;
+
+    void demo(void);
 };
 
 

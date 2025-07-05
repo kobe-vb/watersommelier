@@ -16,6 +16,7 @@
 #include "Game.hpp"
 #include "Settings.hpp"
 #include "SudoPlayer.hpp"
+#include <WebsitePlayer.hpp>
 
 static void saveCounter(size_t counter, const std::string& filename)
 {
@@ -87,9 +88,17 @@ void Game::create_new_player(UI &ui)
         pl_ptr = pl.get();
         win.add_ui(std::move(pl));
     }
+    else if (t.get_text() == "web")
+    {
+        auto pl = std::make_unique<WebPlayer>(t.get_text(), data, sim, players);
+        pl_ptr = pl.get();
+        win.add_ui(std::move(pl));
+    }
     else
     {
         auto pl = std::make_unique<Player>(t.get_text(), data, sim);
+        if (t.get_text() == "demo")
+            pl->demo();
         pl_ptr = pl.get();
         win.add_ui(std::move(pl));
     }

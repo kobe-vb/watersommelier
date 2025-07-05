@@ -19,6 +19,18 @@ Player::Player(std::string &name, GameData &data, Sim &sim) : name(name),
 {
 }
 
+void Player::demo(void)
+{
+    int max = std::rand() % 10 + 1;
+    for (int i = 0; i < max; i++)
+    {
+        glass.generate_random_data();
+        history.saveGlass(glass);
+        glass.reset();
+    }
+    glass.generate_random_data(false);
+}
+
 void Player::save_data(std::ofstream &file, size_t &counter)
 {
     if (history.get_num_of_elements() == 0)
@@ -99,6 +111,11 @@ void Player::set_website(std::string website)
     this->qr = qrcodegen::QrCode::encodeText(website.c_str(), qrcodegen::QrCode::Ecc::LOW);
 }
 
+void Player::set_website_data(std::string website_data)
+{
+    this->website_data = website_data;
+}
+
 void Player::draw_qr(void) const
 {
 
@@ -137,6 +154,12 @@ void Player::draw(void) const
 
     DrawRectangleRounded(rect, ROUNDED, 10, COL_1);
     DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
+
+    if (!website_data.empty())
+    {
+        DrawText(("Website data: " + website_data).c_str(), 50, rect.y + 300, 30, BLACK);
+        return;
+    }
 
     if (!website.empty())
     {

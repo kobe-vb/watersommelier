@@ -41,15 +41,20 @@ Player(name, data, sim), server(players)
                                          { set_player_website(uii); }));
         i++;
     }
+    players.insert({this->get_name(), *this});
     add_ui(std::make_unique<Tokel>(1300 + (i % 5) * 120, 100 + (i / 5) * 100, 110, 60, this->get_name(),
                                                  [this](UI &uii)
                                          { set_player_website(uii); }));
 }
 
-void SudoPlayer::set_player_website(UI &ui)
+void SudoPlayer::start_server(void)
 {
     server.startServer(getLocalIP(), 8080);
+}
 
+void SudoPlayer::set_player_website(UI &ui)
+{
+    this->start_server();
     Tokel &tokel = dynamic_cast<Tokel &>(ui);
     Player &player = players.at(tokel.get_text());
     std::cout << server.getPath(tokel.get_text()) << std::endl;

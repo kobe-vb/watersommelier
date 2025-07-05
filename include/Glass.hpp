@@ -20,6 +20,7 @@ private:
     std::function<void(UI &)> next_glas_func;
 
     void save_ion(Ion &ion, int amount);
+    void _add_comment(void);
 
 public:
     Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim, Rectangle &rect);
@@ -41,4 +42,6 @@ public:
     StackedBar  bar;
     float       ph = 0;
     float       mol = 0;
+
+    void generate_random_data(bool full = true);
 };
