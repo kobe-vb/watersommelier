@@ -66,7 +66,6 @@ void SudoPlayer::update(void)
     if (!_is_active)
         return;
     Player::update();
-    Win::update();
 }
 
 void SudoPlayer::draw(void) const
@@ -74,7 +73,6 @@ void SudoPlayer::draw(void) const
     if (!_is_visible)
         return;
     Player::draw();
-    Win::draw();
 
     DrawText("Role: Sudo", 300, 170, 80, BLACK);
 }

@@ -23,7 +23,8 @@ ifeq ($(OS_TYPE), windows)
     LDFLAGS = -L /mingw64/lib -lgdi32 -luser32 -lraylib -lws2_32
 
     RELEASE_CXXFLAGS += -I /mingw64/include -DPLATFORM_WINDOWS
-    RELEASE_LDFLAGS = $(LDFLAGS) -mwindows -static-libstdc++
+    # Voeg flags toe om duplicate section warnings te verminderen
+    RELEASE_LDFLAGS = $(LDFLAGS) -mwindows -static-libstdc++ -Wl,--allow-multiple-definition
 else
     CXXFLAGS += -I $(HOME)/raylib/include
     LDFLAGS = -L $(HOME)/raylib/lib -lraylib -lm -ldl -lpthread -lX11 -Lmy_lib/lib -lmy_lib
@@ -116,6 +117,7 @@ ifeq ($(OS_TYPE), windows)
 endif
 
 zip: release
+	@which zip > /dev/null 2>&1 || (echo "zip not found. Install with: pacman -S zip" && exit 1)
 	zip -r release.zip $(RELEASE_DIR)
 
-.PHONY: all run clean fclean re release
+.PHONY: all run clean fclean re release zip

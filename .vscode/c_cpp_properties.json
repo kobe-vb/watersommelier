@@ -4,19 +4,19 @@
       "name": "Win32",
       "includePath": [
         "${workspaceFolder}/**",
-        "C:/msys64/mingw64/include",
-        "${HOME}/raylib/include"
-
+        "${workspaceFolder}/include/**",
+        "${workspaceFolder}/my_lib/include/**",
+        "C:/msys64/mingw64/include/**"
       ],
       "defines": [
         "_DEBUG",
-        "UNICODE"
+        "UNICODE",
+        "PLATFORM_WINDOWS"
       ],
-      "windowsSdkVersion": "10.0.19041.0", // Je kan deze aanpassen aan je systeem
-      "compilerPath": "C:/msys64/ucrt64/bin/g++.exe", // Of waar jouw g++ zich bevindt
-      "cStandard": "c11",
-      "cppStandard": "c++17",
-      "intelliSenseMode": "windows-gcc-x64"
+      "compilerPath": "C:/msys64/mingw64/bin/clang++.exe",
+      "cStandard": "c17",
+      "cppStandard": "c++20",
+      "intelliSenseMode": "windows-clang-x64"
     }
   ],
   "version": 4

@@ -13,6 +13,8 @@
 #include "Player.hpp"
 #include "Settings.hpp"
 
+#include <thread>
+
 Player::Player(std::string &name, GameData &data, Sim &sim) : name(name),
                                                               glass(Glass(data, [this](UI &ui)
                                                                           { next_glass(ui); }, sim, rect))
@@ -48,14 +50,15 @@ std::string Player::to_json() const
     json << "  \"name\": \"" << name << "\",\n";
     json << "  \"code\": \"" << code << "\",\n";
     json << "  \"history\": [\n";
-    
+
     for (int i = 0; i < history.get_num_of_elements(); i++)
     {
-        if (i > 0) json << ",\n";
-        const HistoryGlass& glass = dynamic_cast<const HistoryGlass&>(*history.get_ui_at(i));
+        if (i > 0)
+            json << ",\n";
+        const HistoryGlass &glass = dynamic_cast<const HistoryGlass &>(*history.get_ui_at(i));
         json << glass.to_json();
     }
-    
+
     json << "\n  ]\n}";
     return json.str();
 }
@@ -101,6 +104,8 @@ void Player::update(void)
     if (!_is_active)
         return;
 
+    Win::update();
+
     history.update();
     glass.update();
 }
@@ -109,11 +114,24 @@ void Player::set_website(std::string website)
 {
     this->website = website;
     this->qr = qrcodegen::QrCode::encodeText(website.c_str(), qrcodegen::QrCode::Ecc::LOW);
+
+    this->add_ui(std::make_unique<Button>(
+        rect.x + 50, rect.y + 500, 200, 50, "Go to website",
+        [url = this->website](UI& ui)
+        {
+            (void)ui;
+            std::thread([url]()
+            {
+                std::string command = "start \"\" \"" + url + "\"";
+                system(command.c_str());
+            }).detach();
+        }));
 }
 
 void Player::set_website_data(std::string website_data)
 {
     this->website_data = website_data;
+    this->pop_ui_back();
 }
 
 void Player::draw_qr(void) const
@@ -158,13 +176,16 @@ void Player::draw(void) const
     if (!website_data.empty())
     {
         DrawText(("Website data: " + website_data).c_str(), 50, rect.y + 300, 30, BLACK);
+        Win::draw();
         return;
     }
 
     if (!website.empty())
     {
         draw_qr();
+        Win::draw();
         return;
     }
     glass.draw();
+    Win::draw();
 }
