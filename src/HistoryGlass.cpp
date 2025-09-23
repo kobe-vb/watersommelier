@@ -59,8 +59,9 @@ void HistoryGlass::save_data(std::ofstream &file, GameData &data)
                 break;
             }
         }
-        file << val << ";";
-        // % ?
+        file << (val / bar.get_total_volume()) * 100 << ";"; // % --> todo .f2
+        file << val << ";"; // mol
+        file << val * data.get_ion_data(ion.first).atoomMasa << ";"; // mg ?
     }
     
     file << hastags.size() << ";";

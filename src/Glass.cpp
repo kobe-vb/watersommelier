@@ -34,7 +34,7 @@ Glass::Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim, Rec
     add_ui(std::make_unique<Dropdown>(
         PEDING * 2, LINE + 200,
         rect.width - 200, 60,
-        data.names, "lol"));
+        data.names, "lol", [this](UI &ui) { _set_warning(ui); }));
 
     add_ui(std::make_unique<TextInp>(
         PEDING * 2 + (rect.width - 170), LINE + 200,
@@ -67,6 +67,12 @@ void Glass::reset(void)
     hastags.clear();
 }
 
+void Glass::_set_warning(UI &ui)
+{
+    (void)ui;
+    warning = "homo " + ((Dropdown &)(ui)).get_selected_text();
+}
+
 void Glass::reset_sim(void)
 {
     this->sim.reset();
@@ -89,29 +95,16 @@ void Glass::save_ion(Ion &ion, int amount, float M)
 
     bar.add_value(ion.name, col, molarity);
     sim.addParticles(int(amount * 3 * ion.Nat), col);
+}
 
+void Glass::_save_druple(int number_of_druplets, Element *elm)
+{
+    volume += number_of_druplets * 0.055;
+    osmo += number_of_druplets * 40 * elm->dosdr;
+    // osmo += number_of_druplets * 40 * (elm->anion.Nat + elm->kation.Nat) * elm->M;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // std::string &ion_name = ion.ion;
-    // Color col = data.get_color(ion.ion);
-    // float mol = ion.mol * amount;
-    // bar.add_value(ion_name, col, mol);
-    // sim.addParticles(int(mol * 20), col);
-
-    // float masa = molMasa * ion.molFactor * concentration * volumePipet * droplets;
+    save_ion(elm->anion, number_of_druplets, elm->M);
+    save_ion(elm->kation, number_of_druplets, elm->M); 
 }
 
 void Glass::save_druple(UI &ui)
@@ -131,27 +124,7 @@ void Glass::save_druple(UI &ui)
         return;
     }
 
-    volume += number_of_druplets * 0.055;
-    osmo += number_of_druplets * elm->M;
-
-
-    save_ion(elm->anion, number_of_druplets, elm->M);
-    save_ion(elm->kation, number_of_druplets, elm->M); 
-
-
-
-
-
-
-
-
-
-    // save_ion(elm->anion, droplet);  // --> (masa / volume) * i *  = osmaFraction
-    // save_ion(elm->kation, droplet); // --> (masa / volume) * i = osmaFraction
-
-    // operOsmo += anion(osmaFraction) + katon(osmaFraction)
-
-    // mol += (elm->mol * droplet * concentration); // osmo
+    _save_druple(number_of_druplets, elm);
 
     name->reset();
     amount->reset();
@@ -256,7 +229,8 @@ void Glass::draw(void) const
 {
     if (!_is_visible)
         return;
-    draw_my_text("mol: %.2f", osmo, PEDING * 3 + 200, LINE + 130);
+    draw_my_text("mol: %.2f", osmo, PEDING * 3 + 50, LINE + 130);
+    DrawText(warning.c_str(), PEDING * 3 + 200, LINE + 130, 30, RED);
     bar.draw(this->get_mouse_pos());
     Win::draw();
 }
@@ -280,15 +254,14 @@ void Glass::generate_random_data(bool full)
         int a = std::rand() % 5 + 1;
         Element &elm = data.get_element(data.names[std::rand() % data.names.size()]);
 
-        save_ion(elm.anion, a, elm.M);
-        save_ion(elm.kation, a, elm.M);
-
-        // ph += elm.ph * a;
-        // mol += elm.mol * a;
+        _save_druple(a, &elm);
     }
     if (!full)
         return;
     _add_comment();
     const char *texts[] = {"woow #sick #leker", "cool #ba", "very cool #nice_waterrr"};
     ((TextInp *)get_ui_at(3))->set_text(texts[std::rand() % 3]);
+    _add_score();
+    for (auto &tag : hastags)
+        tag.second = std::rand() % 5 + 1;
 }

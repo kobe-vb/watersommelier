@@ -38,6 +38,8 @@ static void store_element(GameData &data, std::vector<std::string> row)
     {
         if (row.size() >= 8) ///////////////////
         {
+            if (to_float(row[2]) > 1)
+                throw std::invalid_argument("M > 1");
             Ion anion(to_lowercase(row[5]), to_float(row[4]));
             Ion kation(to_lowercase(row[7]), to_float(row[6]));
             Element element(anion, kation, to_float(row[3]), to_float(row[2]));
@@ -47,8 +49,8 @@ static void store_element(GameData &data, std::vector<std::string> row)
     }
     catch (const std::exception &e)
     {
-        std::cerr << e.what() << std::endl;
-        std::cout << "row: " << std::endl;
+        std::cerr << e.what();
+        std::cout << "row: ";
         for (size_t i = 0; i < row.size(); i++)
             std::cout << row[i] << " ";
         std::cout << std::endl;

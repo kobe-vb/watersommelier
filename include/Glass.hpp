@@ -23,12 +23,16 @@ private:
     GameData    &data;
     Sim         &sim;
 
+    std::string warning;
+
     std::function<void(UI &)> next_glas_func;
 
     void save_ion(Ion &ion, int amount, float M);
     void _add_comment(void);
     void _add_score(void);
     void _next_glass(UI &ui);
+    void _set_warning(UI &ui);
+    void _save_druple(int number_of_druplets, Element *elm);
 
 public:
     Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim, Rectangle &rect);

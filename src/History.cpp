@@ -28,7 +28,7 @@ void History::save_data(std::ofstream &file, size_t &counter, const std::string 
         file << counter << ";"
         << datum << ";"
         << name << ";"
-        << "SsC zout; SsC zoet; SsC zuur; SsC msg;";
+        << "SsC zout; SsC zoet; SsC zuur; SsC msg; SsC bitter;"; 
         counter++;
         dynamic_cast<HistoryGlass &>(*get_ui_at(i)).save_data(file, data);
     }

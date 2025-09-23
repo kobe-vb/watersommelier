@@ -12,6 +12,7 @@
 
 #include <fstream>
 #include <cstdint>
+#include <filesystem>
 
 #include "Game.hpp"
 #include "Settings.hpp"
@@ -61,9 +62,19 @@ Game::~Game()
 void Game::save_data(void)
 {
     size_t counter = loadCounter("data/output/counter.bin");
+
+    bool file_exists = std::filesystem::exists("data/output/data.csv");
     std::ofstream file("data/output/data.csv", std::ios::app);
     if (file.is_open())
     {
+        if (!file_exists)
+        {
+            file << "i;datum;name;SsC zout; SsC zoet; SsC zuur; SsC MSG; SsC bitter;comment;end comment;osmo;Tot volume(ml);";
+            for (auto &ion : data.ions)
+                file << ion.first << " %" << ";" << ion.first << " mol" << ";"<< ion.first << " mg" << ";";
+            file << "hastags;" << std::endl;
+        }
+
         for (auto &player : players)
         {
             if (player.player->get_name().starts_with("demo") || player.player->get_name().starts_with("web"))

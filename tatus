@@ -1,0 +1,216 @@
+[33mcommit d80d9fcf6a2c635fd31a38476245954973e01356[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Tue Sep 23 19:13:44 2025 +0200
+
+    add save
+
+[33mcommit 71bfa5f6c6dca2c933f7261c95b966b11a9f8244[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Tue Sep 23 14:41:45 2025 +0200
+
+    add score system hastags
+
+[33mcommit fa6c86fb00dbaf6ccfe77e887528dd0792d82b1b[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Tue Sep 23 12:55:39 2025 +0200
+
+    demo data dont save
+
+[33mcommit a7438f920696c762491b388d2fba60a4260b6c76[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Tue Sep 23 12:08:14 2025 +0200
+
+    nowp
+
+[33mcommit e7ee3afe0dc2221ffbd64e30d6b44191a49ef661[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Sun Jul 6 14:03:55 2025 +0200
+
+    eu
+
+[33mcommit 6ca88ecec1a27efd148aa185bbb5095f6b8411a8[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Sat Jul 5 23:36:40 2025 +0200
+
+    add demo en web pl
+
+[33mcommit 842063a7aa0ec8cf51a21d217a86070db75b583c[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Sun Jun 29 21:38:41 2025 +0200
+
+    fiks website
+
+[33mcommit b3938507d46d52d3a83c1afae477c23176daf40e[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Fri Jun 27 23:38:02 2025 +0200
+
+    add #suport
+
+[33mcommit 6bee42c11ccbe1bf01e06002c04ff695c02afa22[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Fri Jun 27 23:16:08 2025 +0200
+
+    ?
+
+[33mcommit e1f9ef81047a13423b2fddb95f6c203bb4efb0d2[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Thu Jun 26 10:42:20 2025 +0200
+
+    add qr code qnd server
+
+[33mcommit fa4f480f53f2c44a0a3a727255571110aac2db0b[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Sun Jun 22 14:46:50 2025 +0200
+
+    add save funct
+
+[33mcommit 45237e10c652a619f300e91b930580ea860119a0[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Sun Jun 22 13:41:03 2025 +0200
+
+    update name input
+
+[33mcommit c519c9eb2929fb541526af1b72b0c288c6917aff[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Sun Jun 1 14:35:31 2025 +0200
+
+    add sroll to history
+
+[33mcommit 8bd78f47714f0dc57649c2f14c84e8fa98cb8455[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Sun Jun 1 13:24:57 2025 +0200
+
+    geen iedee
+
+[33mcommit 875a756ec4bccc8ff704c662eec2e33cd6b267b7[m
+Author: root <root@LAPTOP-O0SMM46Q.localdomain>
+Date:   Sat May 24 20:19:27 2025 +0200
+
+    lol
+
+[33mcommit c608ef7bc22e129121524562399a8e6cb14ad046[m
+Author: Kobe Vanden Begin <kvanden-@a2-r3-p9.s19.be>
+Date:   Tue May 20 22:09:40 2025 +0200
+
+    sim v0
+
+[33mcommit c5df6599658b688eee050159a8f22ea172d4c108[m
+Author: Kobe Vanden Begin <kvanden-@a2-r3-p9.s19.be>
+Date:   Mon May 19 12:34:25 2025 +0200
+
+    begin glass hisory
+
+[33mcommit 6cc1b089a7c7f9dc6ac671e4d3708e679d3e46c3[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Sun May 18 22:12:50 2025 +0200
+
+    beginsel
+
+[33mcommit 6e0faf55b1b948e695241bc04d3e6ba317da3bd2[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Sun May 18 12:22:45 2025 +0200
+
+    v0
+
+[33mcommit a8d18fd8b1900071f7873d1c13addf1b6be66a29[m
+Author: Kobe Vanden Begin <kvanden-@a1-r2-p10.s19.be>
+Date:   Fri May 16 16:04:23 2025 +0200
+
+    add fs file
+
+[33mcommit 9fff23f030533136dd41d84091705cbc584a4d03[m
+Author: Kobe Vanden Begin <kvanden-@a2-r3-p9.s19.be>
+Date:   Thu May 15 18:53:11 2025 +0200
+
+    add begin sim
+
+[33mcommit 8fd06f1ea62699823e018fb4dc5748ca37f99978[m
+Author: Kobe Vanden Begin <kvanden-@a2-r3-p9.s19.be>
+Date:   Thu May 15 16:31:41 2025 +0200
+
+    add barcode
+
+[33mcommit 0646b73fa9635edee362ad7b6858aa8ec63837dd[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Wed May 14 21:57:35 2025 +0200
+
+    begin barcode
+
+[33mcommit 97548b40cead21e83960cf0bff23aae99524b6f6[m
+Author: Kobe Vanden Begin <kvanden-@a2-r3-p9.s19.be>
+Date:   Wed May 14 17:24:49 2025 +0200
+
+    fiks scrolbar
+
+[33mcommit 18e2869b6526431786fa47d6872929e11bd00668[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Tue May 13 23:12:51 2025 +0200
+
+    fiks scroll bar
+
+[33mcommit 26416ad92faa22b46430e44abe19140472ba262d[m
+Author: Kobe Vanden Begin <kvanden-@a2-r3-p9.s19.be>
+Date:   Tue May 13 18:28:57 2025 +0200
+
+    add begin scrolbar
+
+[33mcommit 2daa2a6769bb30e230462fa7016af9e09641220f[m
+Author: Kobe Vanden Begin <kvanden-@a2-r3-p9.s19.be>
+Date:   Tue May 6 19:05:29 2025 +0200
+
+    geen iedee
+
+[33mcommit c06c38a02bbcab7546063094940b6b3702747e8b[m
+Merge: 27976f4 1f4efa4
+Author: Kobe Vanden Begin <kvanden-@a2-r3-p9.s19.be>
+Date:   Wed Apr 30 18:18:49 2025 +0200
+
+    Merge branch 'main' of github.com:kobe-vb/tiboon
+
+[33mcommit 27976f40bf731632cf7784033ac9c32a560ea633[m
+Author: Kobe Vanden Begin <kvanden-@a2-r3-p9.s19.be>
+Date:   Wed Apr 30 18:14:31 2025 +0200
+
+    WIP: lokale aanpassingen aan Makefile
+
+[33mcommit 1f4efa4d7a8af5c6f097441372d8bf26d04b39da[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Tue Apr 29 18:01:43 2025 +0200
+
+    add multi glass
+
+[33mcommit 9c0dd2b959b4c107a74f0b96c4a78de53c61e5ef[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Wed Apr 16 23:08:41 2025 +0200
+
+    add progres bar
+
+[33mcommit 558af531f7ecf15ca5b6c1b3a6858dbaf0887f18[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Wed Apr 16 17:17:57 2025 +0200
+
+    add dropdown
+
+[33mcommit ad8946e208f0f9bce431d7b69d412b602575a2fe[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Tue Apr 15 21:30:21 2025 +0200
+
+    fiks tab by win
+
+[33mcommit 668332a096fb853bbb4ea6a7d5e13961363c2582[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Sat Apr 12 15:52:56 2025 +0200
+
+    fiks make file win
+
+[33mcommit 5e527d42c322760ad677d000f8f8294cc06ccdaf[m
+Author: kobe214 <79920347+kobe214@users.noreply.github.com>
+Date:   Mon Apr 7 20:28:57 2025 +0200
+
+    Normalize line endings to LF
+
+[33mcommit 055b66470aaa7f3a53cf320babb422e188df0726[m
+Author: kobe-vb <112876913+kobe-vb@users.noreply.github.com>
+Date:   Fri Apr 4 15:55:19 2025 +0200
+
+    Initial commit
