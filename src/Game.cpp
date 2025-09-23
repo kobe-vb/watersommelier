@@ -65,8 +65,12 @@ void Game::save_data(void)
     if (file.is_open())
     {
         for (auto &player : players)
+        {
+            if (player.player->get_name().starts_with("demo") || player.player->get_name().starts_with("web"))
+                continue;
             player.player->save_data(file, counter);
-        file.close();
+        }
+            file.close();
     }
     saveCounter(counter, "data/output/counter.bin");
 }
