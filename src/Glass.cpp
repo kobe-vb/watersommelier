@@ -34,7 +34,8 @@ Glass::Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim, Rec
     add_ui(std::make_unique<Dropdown>(
         PEDING * 2, LINE + 200,
         rect.width - 200, 60,
-        data.names, "lol", [this](UI &ui) { _set_warning(ui); }));
+        data.names, "lol", [this](UI &ui)
+        { _set_warning(ui); }));
 
     add_ui(std::make_unique<TextInp>(
         PEDING * 2 + (rect.width - 170), LINE + 200,
@@ -69,8 +70,33 @@ void Glass::reset(void)
 
 void Glass::_set_warning(UI &ui)
 {
-    (void)ui;
-    warning = "homo " + ((Dropdown &)(ui)).get_selected_text();
+    std::string name = ((Dropdown &)(ui)).get_selected_text();
+    auto elm = data.get_element(name);
+    auto elements = bar.get_data();
+
+    auto &ion = data.get_ion_data(elm.anion.name);
+    auto &kion = data.get_ion_data(elm.kation.name);
+
+    float ion_val = 0;
+    float kion_val = 0;
+    for (auto &element : elements)
+    {
+        if (element.name == elm.anion.name)
+            ion_val = element.val;
+        if (element.name == elm.kation.name)
+            kion_val = element.val;
+    }
+
+    // float delta_ion = ion.maxGlass - ion_val;
+    // float delta_kion = kion.maxGlass - kion_val;
+
+    // float masa_drupel_ion = ion.atoomMasa * elm.anion.Nat * elm.M * 0.000055;
+
+    (void)ion_val;
+    (void)kion_val;
+    (void)ion;
+    (void)kion;
+    warning = "nog max ";
 }
 
 void Glass::reset_sim(void)
@@ -104,7 +130,7 @@ void Glass::_save_druple(int number_of_druplets, Element *elm)
     // osmo += number_of_druplets * 40 * (elm->anion.Nat + elm->kation.Nat) * elm->M;
 
     save_ion(elm->anion, number_of_druplets, elm->M);
-    save_ion(elm->kation, number_of_druplets, elm->M); 
+    save_ion(elm->kation, number_of_druplets, elm->M);
 }
 
 void Glass::save_druple(UI &ui)
@@ -205,6 +231,7 @@ void Glass::_next_glass(UI &ui)
             valid = false;
         }
         text->set_bg_color(valid ? GREEN : RED);
+        text->set_on_focus_clear(true);
         is_valid &= valid;
     }
     if (!is_valid)
@@ -249,9 +276,9 @@ bool Glass::take_code(std::string &code) const
 
 void Glass::generate_random_data(bool full)
 {
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 8; i++)
     {
-        int a = std::rand() % 5 + 1;
+        int a = std::rand() % 15 + 10;
         Element &elm = data.get_element(data.names[std::rand() % data.names.size()]);
 
         _save_druple(a, &elm);
@@ -259,8 +286,23 @@ void Glass::generate_random_data(bool full)
     if (!full)
         return;
     _add_comment();
-    const char *texts[] = {"woow #sick #leker", "cool #ba", "very cool #nice_waterrr"};
-    ((TextInp *)get_ui_at(3))->set_text(texts[std::rand() % 3]);
+
+    std::string comment;
+    std::vector<std::string> opties = {"woow wat cool", "woow", "cool", "wat to frick dit is echt", 
+                                       "ja dit is echt", "wajo dit is koe", "lol"};
+
+    int max = std::rand() % 6 + 4;
+    for (int i = 0; i < max; i++)
+    {
+        if (std::rand() % 10 < 8)
+        {
+            comment += opties[std::rand() % opties.size()];
+            comment += " ";
+        }
+        int number = std::rand() % 10;
+        comment += "#" + std::to_string(number) + " ";
+    }
+    ((TextInp *)get_ui_at(3))->set_text(comment);
     _add_score();
     for (auto &tag : hastags)
         tag.second = std::rand() % 5 + 1;

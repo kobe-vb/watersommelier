@@ -15,6 +15,8 @@ void TextInp::update(void)
     if ((is_hover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) || (is_tabt && IsKeyPressed(KEY_ENTER) && !is_active))
     {
         is_active = !is_active;
+        if (is_active && on_focus_clear)
+            text.clear();
         return ;
     }
     if (is_active)

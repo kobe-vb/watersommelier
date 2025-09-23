@@ -59,14 +59,14 @@ void HistoryGlass::save_data(std::ofstream &file, GameData &data)
                 break;
             }
         }
-        file << (val / bar.get_total_volume()) * 100 << ";"; // % --> todo .f2
-        file << val << ";"; // mol
+        file << (val / bar.get_total_volume()) * 100 << ";";         // % --> todo .f2
+        file << val << ";";                                          // mol
         file << val * data.get_ion_data(ion.first).atoomMasa << ";"; // mg ?
     }
-    
+
     file << hastags.size() << ";";
     for (auto &tags : hastags)
-        file << tags.first << ";" << tags.second << ";";  
+        file << tags.first << ";" << tags.second << ";";
 
     file << std::endl;
 }
@@ -74,13 +74,23 @@ void HistoryGlass::save_data(std::ofstream &file, GameData &data)
 std::string HistoryGlass::to_json() const
 {
     std::stringstream json;
-    // json << "    {\n";
-    // json << "      \"ph\": " << ph << ",\n";
-    // json << "      \"mol\": " << mol << ",\n";
-    // json << "      \"comment\": \"" << comment << "\",\n";
-    // json << "      \"keywords\": \"" << keyWords << "\"\n";
-    // json << "    }";
-    // TODO: save elements
+    json << "    {\n";
+    json << "      \"comment\": \"" << comment << "\",\n";
+    json << "      \"hashtags\": [\n";
+
+    size_t i = 0;
+    for (auto it = hastags.begin(); it != hastags.end(); ++it, ++i)
+    {
+        if (i > 0)
+            json << ",\n";
+        json << "        {\n";
+        json << "          \"name\": \"" << it->first << "\",\n";
+        json << "          \"value\": " << it->second << "\n";
+        json << "        }";
+    }
+
+    json << "\n      ]\n";
+    json << "    }";
     return json.str();
 }
 

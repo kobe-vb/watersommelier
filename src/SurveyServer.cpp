@@ -48,8 +48,8 @@ void SurveyServer::setupRoutes()
     {
         auto it = req.params.find("username");
         auto player_it = players.find(it->second);
-        for (auto &player : players)
-            std::cout << player.first << " " << player.second.to_json() << std::endl;
+        // for (auto &player : players)
+        //     std::cout << player.first << " " << player.second.to_json() << std::endl;
         if (player_it != players.end())
         {
                 res.set_content(player_it->second.to_json().c_str(), "application/json");

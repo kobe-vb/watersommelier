@@ -23,7 +23,7 @@ Player::Player(std::string &name, GameData &data, Sim &sim) : name(name),
 
 void Player::demo(void)
 {
-    int max = std::rand() % 10 + 1;
+    int max = std::rand() % 6 + 4;
     for (int i = 0; i < max; i++)
     {
         glass.generate_random_data();
@@ -46,8 +46,7 @@ std::string Player::to_json() const
     std::stringstream json;
     json << "{\n";
     json << "  \"name\": \"" << name << "\",\n";
-    json << "  \"code\": \"" << code << "\",\n";
-    json << "  \"history\": [\n";
+    json << "  \"glasses\": [\n";
 
     for (int i = 0; i < history.get_num_of_elements(); i++)
     {

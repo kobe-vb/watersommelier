@@ -14,6 +14,7 @@ private:
     std::string text;
     const std::string tmp;
     Color bg_color = GRAY;
+    bool on_focus_clear = false;
 
 public:
     TextInp(float x, float y, float w, float h, std::function<void(UI &)> callback = nullptr, const std::string &tmp = "");
@@ -25,6 +26,7 @@ public:
     void move(int x, int y);
     void reset(void);
     void set_text(const std::string &text);
+    void set_on_focus_clear(bool value) { on_focus_clear = value; }
 
     void remove_active(void);
 
