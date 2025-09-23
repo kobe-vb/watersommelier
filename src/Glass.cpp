@@ -80,22 +80,24 @@ std::string Glass::get_comment(void) const
 
 void Glass::save_ion(Ion &ion, int amount)
 {
-
     std::string &ion_name = ion.ion;
     Color col = data.get_color(ion.ion);
     float mol = ion.mol * amount;
     bar.add_value(ion_name, col, mol);
     sim.addParticles(int(mol * 20), col);
+    
+    // float masa = molMasa * ion.molFactor * concentration * volumePipet * droplets;
 }
 
 void Glass::save_druple(UI &ui)
 {
     (void)ui;
-    int a;
+    int droplet = 0;
+    float concentration = 1; // TODO
     Element *elm;
     try
     {
-        a = std::stoi(amount->get_text());
+        droplet = std::stoi(amount->get_text());
         elm = &data.get_element(name->get_selected_text());
     }
     catch (const std::exception &e)
@@ -104,11 +106,15 @@ void Glass::save_druple(UI &ui)
         return;
     }
 
-    save_ion(elm->anion, a);
-    save_ion(elm->kation, a);
 
-    ph += elm->ph * a;
-    mol += elm->mol * a;
+    // volume += (droplet * volumePipet)
+    
+    save_ion(elm->anion, droplet); // --> (masa / volume) * i *  = osmaFraction
+    save_ion(elm->kation, droplet); // --> (masa / volume) * i = osmaFraction
+
+    // operOsmo += anion(osmaFraction) + katon(osmaFraction)
+
+    mol += (elm->mol * droplet * concentration);// osmo
 
     name->reset();
     amount->reset();
@@ -184,6 +190,6 @@ void Glass::generate_random_data(bool full)
     if (!full)
         return;
     _add_comment();
-    const char* texts[] = {"woow", "cool", "very cool"};
+    const char* texts[] = {"woow #sick #leker", "cool #ba", "very cool #nice_waterrr"};
     ((TextInp *)get_ui_at(3))->set_text(texts[std::rand() % 3]);
 }

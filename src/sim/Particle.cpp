@@ -46,49 +46,64 @@ void Particle::interact(Particle& other)
     float dx = other.pos.x - pos.x;
     float dy = other.pos.y - pos.y;
     float dist2 = dx * dx + dy * dy;
-    float minDist = (radius + other.radius) * 2.0f; // Iets meer ruimte tussen deeltjes
+    // float minDist = (radius + other.radius) * 2.0f; // Iets meer ruimte tussen deeltjes
 
-    if (dist2 < minDist * minDist && dist2 > 0.01f)
+    // if (dist2 < minDist * minDist && dist2 > 0.01f)
+    // {
+    //     // Afstoting bij botsing
+    //     float dist = sqrtf(dist2);
+    //     float overlap = minDist - dist;
+        
+    //     // Normaal vector
+    //     float nx = dx / dist;
+    //     float ny = dy / dist;
+        
+    //     // Corrigeer posities om overlap te voorkomen
+    //     float correction = overlap * 0.5f;
+    //     pos.x -= nx * correction;
+    //     pos.y -= ny * correction;
+    //     other.pos.x += nx * correction;
+    //     other.pos.y += ny * correction;
+        
+    //     // Botsingskracht toepassen
+    //     float strength = 0.3f * overlap; // Zachte afstoting voor vloeistofgedrag
+    //     Vector2 force = { nx * strength, ny * strength };
+        
+    //     applyForce({ -force.x, -force.y });
+    //     other.applyForce(force);
+        
+    //     // Energieverlies bij botsing
+    //     vel.x *= 0.98f;
+    //     vel.y *= 0.98f;
+    //     other.vel.x *= 0.98f;
+    //     other.vel.y *= 0.98f;
+    // }
+    if (col.r == other.col.r && col.g == other.col.g && col.b == other.col.b)
     {
-        // Afstoting bij botsing
         float dist = sqrtf(dist2);
-        float overlap = minDist - dist;
         
-        // Normaal vector
-        float nx = dx / dist;
-        float ny = dy / dist;
-        
-        // Corrigeer posities om overlap te voorkomen
-        float correction = overlap * 0.5f;
-        pos.x -= nx * correction;
-        pos.y -= ny * correction;
-        other.pos.x += nx * correction;
-        other.pos.y += ny * correction;
-        
-        // Botsingskracht toepassen
-        float strength = 0.3f * overlap; // Zachte afstoting voor vloeistofgedrag
-        Vector2 force = { nx * strength, ny * strength };
-        
-        applyForce({ -force.x, -force.y });
-        other.applyForce(force);
-        
-        // Energieverlies bij botsing
-        vel.x *= 0.98f;
-        vel.y *= 0.98f;
-        other.vel.x *= 0.98f;
-        other.vel.y *= 0.98f;
-    }
-    else if (col.r == other.col.r && col.g == other.col.g && col.b == other.col.b)
-    {
-        // Cohesie tussen deeltjes van dezelfde kleur
-        float dist = sqrtf(dist2);
-        if (dist < 200.0f && dist > minDist) // Kleinere invloedsafstand
-        {
-            float strength = 5.0f * (1.0f - dist / 50.0f); // Zwakker naarmate afstand groter wordt
-            Vector2 attract = { (dx / dist) * strength, (dy / dist) * strength };
-            applyForce(attract);
-            other.applyForce({ -attract.x, -attract.y });
+        // Alignment - match velocity van neighbors
+        if (dist < 50.0f) {
+            Vector2 alignment = { other.vel.x - vel.x, other.vel.y - vel.y };
+            applyForce({ alignment.x * 0.01f, alignment.y * 0.01f });
         }
+        
+        // Cohesion - trek naar center van groep
+        if (dist < 100.0f) {
+            Vector2 cohesion = { (dx / dist) * 0.02f, (dy / dist) * 0.02f };
+            applyForce(cohesion);
+        }
+        
+        // Turbulence - willekeurige beweging
+        float turbulence = 10.0f;
+        applyForce({ 
+            (rand() / (float)RAND_MAX - 0.5f) * turbulence,
+            (rand() / (float)RAND_MAX - 0.5f) * turbulence 
+        });
+    }
+    else
+    {
+        
     }
 }
 
@@ -110,7 +125,7 @@ void Particle::applyForce(Vector2 force)
 void Particle::update(float dt)
 {
     // Verminderde zwaartekracht voor rustigere beweging
-    vel.y += 520.0f * dt;
+    vel.y += 10.0f * dt;
     
     // Viscositeit simuleren (weerstand in vloeistof)
     vel.x *= 0.999f;

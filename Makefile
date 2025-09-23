@@ -24,7 +24,8 @@ ifeq ($(OS_TYPE), windows)
 
     RELEASE_CXXFLAGS += -I /mingw64/include -DPLATFORM_WINDOWS
     # Voeg flags toe om duplicate section warnings te verminderen
-    RELEASE_LDFLAGS = $(LDFLAGS) -mwindows -static-libstdc++ -Wl,--allow-multiple-definition
+    # RELEASE_LDFLAGS = $(LDFLAGS) -mwindows -static-libstdc++ -Wl,--allow-multiple-definition
+    RELEASE_LDFLAGS = $(LDFLAGS) -static-libstdc++ -Wl,--allow-multiple-definition
 else
     CXXFLAGS += -I $(HOME)/raylib/include
     LDFLAGS = -L $(HOME)/raylib/lib -lraylib -lm -ldl -lpthread -lX11 -Lmy_lib/lib -lmy_lib
@@ -43,7 +44,7 @@ RELEASE_OBJ := $(patsubst src/%.cpp,release_obj/%.o,$(SRC))
 RELEASE_MY_LIB_OBJ := $(patsubst my_lib/src/%.cpp,release_obj/my_lib_%.o,$(MY_LIB_SRC))
 
 # Outputs
-OUT = bin/water_woeter.exe
+OUT = bin/pompion.exe
 RELEASE_OUT = bin/game_release.exe
 LIB_NAME = my_lib/lib/libmy_lib.a
 RELEASE_DIR = release
@@ -110,7 +111,7 @@ RELEASE_DLLS = \
 release: $(RELEASE_OUT)
 	rm -rf $(RELEASE_DIR)
 	mkdir -p $(RELEASE_DIR)
-	cp $(RELEASE_OUT) $(RELEASE_DIR)/water_woeter.exe
+	cp $(RELEASE_OUT) $(RELEASE_DIR)/pompion.exe
 	cp -r data $(RELEASE_DIR)/
 ifeq ($(OS_TYPE), windows)
 	cp $(RELEASE_DLLS) $(RELEASE_DIR)/

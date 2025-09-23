@@ -31,16 +31,14 @@ void Player::demo(void)
         glass.reset();
     }
     glass.generate_random_data(false);
+    glass.reset_sim();
 }
 
 void Player::save_data(std::ofstream &file, size_t &counter)
 {
     if (history.get_num_of_elements() == 0)
         return;
-    size_t beginCounter = counter;
     history.save_data(file, counter, name);
-    file << name << " " << beginCounter << "-" << counter - 1
-         << ",datum," << name << ", end?" << std::endl;
 }
 
 std::string Player::to_json() const
@@ -114,6 +112,7 @@ void Player::set_website(std::string website)
 {
     this->website = website;
     this->qr = qrcodegen::QrCode::encodeText(website.c_str(), qrcodegen::QrCode::Ecc::LOW);
+    // this->qr = qrcodegen::QrCode::encodeText("WIFI:T:WPA;S:yourAP;P:yourPassword;;", qrcodegen::QrCode::Ecc::LOW);
 
     this->add_ui(std::make_unique<Button>(
         rect.x + 50, rect.y + 500, 200, 50, "Go to website",

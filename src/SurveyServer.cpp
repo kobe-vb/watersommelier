@@ -48,6 +48,8 @@ void SurveyServer::setupRoutes()
     {
         auto it = req.params.find("username");
         auto player_it = players.find(it->second);
+        for (auto &player : players)
+            std::cout << player.first << " " << player.second.to_json() << std::endl;
         if (player_it != players.end())
         {
                 res.set_content(player_it->second.to_json().c_str(), "application/json");
@@ -63,11 +65,14 @@ void SurveyServer::setupRoutes()
 server.Post("/send-data", [this](const httplib::Request &req, httplib::Response &res)
 {
     if (req.has_header("Content-Type") &&
-        req.get_header_value("Content-Type") == "application/x-www-form-urlencoded") {
+        req.get_header_value("Content-Type") == "application/x-www-form-urlencoded")
+        {
 
         httplib::Params params;
         httplib::detail::parse_query_text(req.body, params);
-
+        
+        std::cout << req.body << std::endl;
+        
         auto username_it = params.find("username");
         if (username_it != params.end()) {
             auto player_it = players.find(username_it->second);
@@ -112,6 +117,7 @@ server.Post("/send-data", [this](const httplib::Request &req, httplib::Response 
     serveStaticFile("/", "./data/www/form.html", "text/html");
     serveStaticFile("/form.css", "./data/www/form.css", "text/css");
     serveStaticFile("/form.js", "./data/www/form.js", "application/javascript");
+    serveStaticFile("/formHelper.js", "./data/www/formHelper.js", "application/javascript");
     serveStaticFile("/cominication.js", "./data/www/cominication.js", "application/javascript");
 }
 

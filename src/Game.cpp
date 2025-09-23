@@ -74,6 +74,8 @@ void Game::save_data(void)
 void Game::create_new_player(UI &ui)
 {
     sim.set_rect(); // //////////////////////
+    sim.reset();
+
     TextInp &t = dynamic_cast<TextInp &>(ui);
 
     auto tokel = std::make_unique<Tokel>(t.get_rect().x, t.get_rect().y, 110, 60, t.get_text(),
@@ -111,7 +113,6 @@ void Game::create_new_player(UI &ui)
     t.get_text().clear();
     t.move(125, 0);
     tokel_ptr->set_tokel(true);
-    sim.reset();
 
     if (players.size() == 9 )
     {
@@ -178,7 +179,6 @@ void Game::handleCode()
     if (this->activePlayer && this->activePlayer->take_code(this->code))
         return;
 }
-
 
 void Game::update()
 {
