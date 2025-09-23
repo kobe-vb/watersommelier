@@ -20,11 +20,12 @@ class Button : public UI
 private:
     bool is_hover;
     const Rectangle bounds;
-    const std::string text;
+    std::string text;
 
 public:
     Button(float x, float y, float w, float h, const std::string &text, std::function<void(UI &)> callback = nullptr);
     ~Button(void);
     void draw(void) const override;
     void update(void) override;
+    void set_text(const std::string &text);
 };

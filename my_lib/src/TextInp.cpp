@@ -2,7 +2,10 @@
 #include <iostream>
 
 TextInp::TextInp(float x, float y, float w, float h, std::function<void(UI&)> callback, const std::string &tmp)
-    : UI(callback), is_hover(false), bounds{x, y, w, h}, text(""), tmp(tmp){}
+    : UI(callback), is_hover(false), bounds{x, y, w, h}, text(""), tmp(tmp)
+    {
+
+    }
 
 void TextInp::update(void)
 {
@@ -44,7 +47,7 @@ bool TextInp::capture_tab(void)
 
 void TextInp::draw(void) const
 {
-    DrawRectangleRec(bounds, (is_hover || is_tabt) ? LIGHTGRAY : GRAY);
+    DrawRectangleRec(bounds, (is_hover || is_tabt) ? LIGHTGRAY : bg_color);
 
     const std::string &display_text = (text.empty() && !is_active) ? tmp : text;
     Color text_color = (text.empty() && !is_active) ? RED : BLACK;
@@ -128,4 +131,9 @@ void TextInp::remove_active(void)
 void TextInp::set_text(const std::string &text)
 {
     this->text = text;
+}
+
+void TextInp::set_bg_color(const Color &color)
+{
+    bg_color = color;
 }

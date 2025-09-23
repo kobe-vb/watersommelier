@@ -1,5 +1,8 @@
 # pragma once
 
+#include <map>
+#include <string>
+
 #include "Win.hpp"
 #include "Button.hpp"
 #include "TextInp.hpp"
@@ -8,7 +11,10 @@
 #include "StackedBar.hpp"
 #include "Sim.hpp"
 
-class Glass: public Win
+class   
+    
+    
+Glass: public Win
 {
 private:
     Rectangle &rect;
@@ -16,11 +22,14 @@ private:
     TextInp        *amount;
     GameData    &data;
     Sim         &sim;
+    std::map<std::string, int> hastags;
 
     std::function<void(UI &)> next_glas_func;
 
     void save_ion(Ion &ion, int amount);
     void _add_comment(void);
+    void _add_score(void);
+    void _next_glass(UI &ui);
 
 public:
     Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim, Rectangle &rect);

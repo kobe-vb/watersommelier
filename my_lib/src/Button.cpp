@@ -29,3 +29,7 @@ void Button::update(void) {
     if ((is_hover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) || (is_tabt && IsKeyPressed(KEY_ENTER)))
         run_callback();
 }
+
+void Button::set_text(const std::string &text) {
+    this->text = text;
+}

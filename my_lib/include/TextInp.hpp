@@ -13,6 +13,7 @@ private:
     Rectangle bounds;
     std::string text;
     const std::string tmp;
+    Color bg_color = GRAY;
 
 public:
     TextInp(float x, float y, float w, float h, std::function<void(UI &)> callback = nullptr, const std::string &tmp = "");
@@ -26,4 +27,6 @@ public:
     void set_text(const std::string &text);
 
     void remove_active(void);
+
+    void set_bg_color(const Color &color);
 };

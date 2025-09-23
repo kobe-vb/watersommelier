@@ -12,6 +12,7 @@
 
 #include "Glass.hpp"
 #include "Settings.hpp"
+#include <regex>
 
 static void draw_my_text(const char *name, float val, int x, int y)
 {
@@ -20,8 +21,7 @@ static void draw_my_text(const char *name, float val, int x, int y)
     DrawText(buffer, x, y, 30, DARKBLUE);
 }
 
-Glass::Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim, Rectangle &rect) : 
-rect(rect), data(data), sim(sim), next_glas_func(close_glas)
+Glass::Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim, Rectangle &rect) : rect(rect), data(data), sim(sim), next_glas_func(close_glas)
 {
 
     rect.height = GetScreenHeight() - LINE - PEDING;
@@ -45,7 +45,7 @@ rect(rect), data(data), sim(sim), next_glas_func(close_glas)
     add_ui(std::make_unique<Button>(
         PEDING * 2 + (rect.width - 170), LINE + 120,
         150, 60,
-        "save?",
+        "ik drink",
         [this](UI &ui)
         { add_comment(ui); }));
     // add_ui(std::make_unique<Button>(1400, 10, 100, 50, "gek", close_glas));
@@ -61,6 +61,10 @@ void Glass::reset(void)
     this->pop_ui_back();
     this->pop_ui_back();
     this->sim.reset();
+
+    for (size_t i = 0; i < hastags.size() - 1; ++i)
+        pop_ui_back();
+    hastags.clear();
 }
 
 void Glass::reset_sim(void)
@@ -76,7 +80,7 @@ void Glass::reset_sim(void)
 std::string Glass::get_comment(void) const
 {
     return ((TextInp *)get_ui_at(3))->get_text();
-} 
+}
 
 void Glass::save_ion(Ion &ion, int amount)
 {
@@ -85,7 +89,7 @@ void Glass::save_ion(Ion &ion, int amount)
     float mol = ion.mol * amount;
     bar.add_value(ion_name, col, mol);
     sim.addParticles(int(mol * 20), col);
-    
+
     // float masa = molMasa * ion.molFactor * concentration * volumePipet * droplets;
 }
 
@@ -106,15 +110,14 @@ void Glass::save_druple(UI &ui)
         return;
     }
 
-
     // volume += (droplet * volumePipet)
-    
-    save_ion(elm->anion, droplet); // --> (masa / volume) * i *  = osmaFraction
+
+    save_ion(elm->anion, droplet);  // --> (masa / volume) * i *  = osmaFraction
     save_ion(elm->kation, droplet); // --> (masa / volume) * i = osmaFraction
 
     // operOsmo += anion(osmaFraction) + katon(osmaFraction)
 
-    mol += (elm->mol * droplet * concentration);// osmo
+    mol += (elm->mol * droplet * concentration); // osmo
 
     name->reset();
     amount->reset();
@@ -131,13 +134,75 @@ void Glass::_add_comment(void)
     add_ui(std::make_unique<TextInp>(
         PEDING * 2, LINE + 300,
         rect.width - 200, 300, nullptr, "coment?"));
+    // test
+    dynamic_cast<TextInp &>(*get_ui_at(get_num_of_elements() - 1)).set_text("vdf #one #two #three");
 
     add_ui(std::make_unique<Button>(
         PEDING * 2 + (rect.width - 170), LINE + 300,
         150, 300,
-        "save?", next_glas_func));
+        "score #", [this](UI &ui)
+        { (void)ui; _add_score(); }));
 }
 
+void Glass::_add_score(void)
+{
+    std::string comment = get_comment();
+    std::regex hashtagRegex("#\\w+");
+
+    auto it = std::sregex_iterator(comment.begin(), comment.end(), hashtagRegex);
+    auto end = std::sregex_iterator();
+
+    for (; it != end; ++it)
+        hastags[it->str()] = 0;
+
+    this->pop_ui_back();
+    this->pop_ui_back();
+
+    add_ui(std::make_unique<Button>(
+        PEDING * 2 + (rect.width - 170), LINE + 300,
+        150, 300,
+        "save glass", [this](UI &ui)
+        { (void)ui; _next_glass(ui); }));
+
+    int index = 0;
+    for (auto &tag : hastags)
+    {
+        add_ui(std::make_unique<TextInp>(
+            PEDING * 2,
+            LINE + 300 + index * 60,
+            rect.width - 200,
+            30,
+            nullptr,
+            tag.first));
+        index++;
+    }
+}
+
+void Glass::_next_glass(UI &ui)
+{
+    bool is_valid = true;
+    int i = get_num_of_elements() - hastags.size();
+    for (auto &tag : hastags)
+    {
+        bool valid = true;
+        TextInp *text = (TextInp *)get_ui_at(i++);
+        try
+        {
+            tag.second = std::stoi(text->get_text());
+            if (tag.second <= 0 || tag.second > 5)
+                valid = false;
+        }
+        catch (...)
+        {
+            valid = false;
+        }
+        text->set_bg_color(valid ? GREEN : RED);
+        is_valid &= valid;
+    }
+    if (!is_valid)
+        return;
+    next_glas_func(ui);
+}
 // void Glass::draww(void) const
 // {
 //     BeginTextureMode(this->win);
@@ -190,6 +255,6 @@ void Glass::generate_random_data(bool full)
     if (!full)
         return;
     _add_comment();
-    const char* texts[] = {"woow #sick #leker", "cool #ba", "very cool #nice_waterrr"};
+    const char *texts[] = {"woow #sick #leker", "cool #ba", "very cool #nice_waterrr"};
     ((TextInp *)get_ui_at(3))->set_text(texts[std::rand() % 3]);
 }
