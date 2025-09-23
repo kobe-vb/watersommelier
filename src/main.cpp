@@ -14,6 +14,14 @@
 
 int main(void)
 {
-    Game().run();
+    try
+    {
+        Game().run();
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    
     return 0;
 }

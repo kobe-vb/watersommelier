@@ -61,7 +61,7 @@ public:
 
     const std::string &get_name(void) const { return (name); }
     
-    void save_data(std::ofstream &file, size_t &counter);
+    void save_data(std::ofstream &file, size_t &counter, GameData &data);
     std::string to_json(void) const;
 
     void demo(void);

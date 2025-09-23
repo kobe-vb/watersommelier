@@ -68,7 +68,7 @@ void Game::save_data(void)
         {
             if (player.player->get_name().starts_with("demo") || player.player->get_name().starts_with("web"))
                 continue;
-            player.player->save_data(file, counter);
+            player.player->save_data(file, counter, data);
         }
             file.close();
     }

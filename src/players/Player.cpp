@@ -34,11 +34,11 @@ void Player::demo(void)
     glass.reset_sim();
 }
 
-void Player::save_data(std::ofstream &file, size_t &counter)
+void Player::save_data(std::ofstream &file, size_t &counter, GameData &data)
 {
     if (history.get_num_of_elements() == 0)
         return;
-    history.save_data(file, counter, name);
+    history.save_data(file, counter, name, data);
 }
 
 std::string Player::to_json() const

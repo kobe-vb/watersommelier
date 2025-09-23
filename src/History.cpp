@@ -1,4 +1,5 @@
-
+#include <chrono>
+#include <format>
 
 #include "History.hpp"
 #include "Settings.hpp"
@@ -11,16 +12,25 @@ History::History(void) : scrollOffset(0), maxScrollOffset(0)
     rect.y = LINE;
 }
 
-void History::save_data(std::ofstream &file, size_t &counter, const std::string &name)
+void History::save_data(std::ofstream &file, size_t &counter, const std::string &name, GameData &data)
 {
+    auto now = std::chrono::system_clock::now();
+    std::time_t t = std::chrono::system_clock::to_time_t(now);
+    std::tm tm = *std::localtime(&t);
+
+    std::string datum = std::format("{:02d}-{:02d}-{:04d}",
+                                    tm.tm_mday,
+                                    tm.tm_mon + 1,
+                                    tm.tm_year + 1900);
+
     for (int i = 0; i < get_num_of_elements(); i++)
     {
-        file << counter << ","
-        << "datum" << ","
-        << name << ","
-        << "SsC zout, SsC zoet, SsC zuur, SsC msg,";
+        file << counter << ";"
+        << datum << ";"
+        << name << ";"
+        << "SsC zout; SsC zoet; SsC zuur; SsC msg;";
         counter++;
-        dynamic_cast<HistoryGlass &>(*get_ui_at(i)).save_data(file);
+        dynamic_cast<HistoryGlass &>(*get_ui_at(i)).save_data(file, data);
     }
 }
 

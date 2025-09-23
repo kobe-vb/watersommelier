@@ -1,4 +1,13 @@
 #include "GameData.hpp"
+#include <algorithm>
+
+static float to_float(const std::string &str)
+{
+    std::string value = str;
+    std::replace(value.begin(), value.end(), ',', '.'); // vervang ',' door '.'
+    return std::stof(value);
+    ;
+}
 
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::vector<T> &vec)
@@ -14,15 +23,53 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &vec)
     return os;
 }
 
+static std::string to_lowercase(const std::string &input)
+{
+    std::string result = input;
+    std::transform(result.begin(), result.end(), result.begin(),
+                   [](unsigned char c)
+                   { return std::tolower(c); });
+    return result;
+}
+
 static void store_element(GameData &data, std::vector<std::string> row)
 {
-    if (row.size() >= 8) ///////////////////
+    try
     {
-        Ion anion(row[5], std::stof(row[6]));
-        Ion kation(row[7], std::stof(row[8]));
-        Element element(anion, kation, 1, 1);
-        data.add_element(row[0], row[3], element);
-        // std::cout << anion.ion << " : " << anion.mol << std::endl;
+        if (row.size() >= 8) ///////////////////
+        {
+            Ion anion(to_lowercase(row[5]), to_float(row[4]));
+            Ion kation(to_lowercase(row[7]), to_float(row[6]));
+            Element element(anion, kation, to_float(row[3]), to_float(row[2]));
+            data.add_element(row[0], row[1], element);
+            // std::cout << anion.ion << " : " << anion.mol << std::endl;
+        }
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << std::endl;
+        std::cout << "row: " << std::endl;
+        for (size_t i = 0; i < row.size(); i++)
+            std::cout << row[i] << " ";
+        std::cout << std::endl;
+    }
+}
+
+static void store_ion(GameData &data, std::vector<std::string> row)
+{
+    if (row.size() >= 5)
+    {
+        int r = std::stoi(row[1]);
+        int g = std::stoi(row[2]);
+        int b = std::stoi(row[3]);
+        Color col = {
+            static_cast<unsigned char>(r),
+            static_cast<unsigned char>(g),
+            static_cast<unsigned char>(b),
+            255};
+
+        IonData ion(col, to_float(row[4]), to_float(row[5]));
+        data.ions.insert_or_assign(to_lowercase(row[0]), ion);
     }
 }
 
@@ -44,7 +91,7 @@ static bool load_elements(GameData &data)
         std::string cell;
         std::vector<std::string> row;
 
-        while (std::getline(ss, cell, ','))
+        while (std::getline(ss, cell, ';'))
             row.push_back(cell);
         store_element(data, row);
     }
@@ -52,16 +99,17 @@ static bool load_elements(GameData &data)
     return true;
 }
 
-static bool load_colors(GameData &data)
+static bool load_ions(GameData &data)
 {
-    std::ifstream file("data/input/colors.csv");
+    std::ifstream file("data/input/ions.csv");
     if (!file.is_open())
     {
-        std::cerr << "Error opening colors.csv file" << std::endl;
+        std::cerr << "Error opening ions.csv file" << std::endl;
         return false;
     }
 
     std::string line;
+    std::getline(file, line);
 
     while (std::getline(file, line))
     {
@@ -69,36 +117,26 @@ static bool load_colors(GameData &data)
         std::string cell;
         std::vector<std::string> row;
 
-        while (std::getline(ss, cell, ','))
-        {
-            cell.erase(0, cell.find_first_not_of(" \t"));
-            cell.erase(cell.find_last_not_of(" \t") + 1);
+        while (std::getline(ss, cell, ';'))
             row.push_back(cell);
-        }
-
-        if (row.size() == 5)
-        {
-            const std::string &ion = row[0];
-            int r = std::stoi(row[1]);
-            int g = std::stoi(row[2]);
-            int b = std::stoi(row[3]);
-            int a = std::stoi(row[4]);
-            data.ion_color_map[ion] = {
-                static_cast<unsigned char>(r),
-                static_cast<unsigned char>(g),
-                static_cast<unsigned char>(b),
-                static_cast<unsigned char>(a)};
-        }
-        else
-            std::cerr << "Invalid color row: " << line << std::endl;
+        store_ion(data, row);
     }
+
     file.close();
     return true;
 }
 
 bool load_data(GameData &data)
 {
-    if (!load_elements(data))
+    try
+    {
+        if (!load_elements(data))
+            return false;
+        return (load_ions(data));
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << std::endl;
         return false;
-    return (load_colors(data));
+    }
 }

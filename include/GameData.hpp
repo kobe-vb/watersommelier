@@ -11,20 +11,29 @@
 
 struct Ion
 {
-    std::string ion;
-    float mol;
-    Ion(const std::string &i, float m) : ion(i), mol(m) {}
+    std::string name;
+    int Nat;
+    Ion(const std::string &i, int m) : name(i), Nat(m) {}
 };
 
-struct Element
+struct Element // zout
 {
     Ion anion;
     Ion kation;
-    float mol;
-    float ph;
+    double M;
+    double dosdr;
 
-    Element(const Ion &a, const Ion &k, float m, float p)
-        : anion(a), kation(k), mol(m), ph(p) {}
+    Element(const Ion &a, const Ion &k, double m, double d)
+        : anion(a), kation(k), M(m), dosdr(d) {}
+};
+
+struct IonData
+{
+    Color color;
+    float atoomMasa;
+    float maxGlass;
+
+    IonData(Color c, float a, float m) : color(c), atoomMasa(a), maxGlass(m) {}
 };
 
 struct GameData
@@ -32,17 +41,16 @@ struct GameData
     std::vector<std::string> names;
     std::vector<std::string> codes;
     std::vector<Element> elements;
-    std::unordered_map<std::string, Color> ion_color_map;
-    std::unordered_map<std::string, size_t> name_to_element_map;
+    std::unordered_map<std::string, IonData> ions;
 
-    Color get_color(const std::string &ion) const
+    std::unordered_map<std::string, int> name_to_element_map;
+
+    const IonData &get_ion_data(const std::string &ion) const
     {
-        auto it = ion_color_map.find(ion);
-        if (it != ion_color_map.end())
-        {
+        auto it = ions.find(ion);
+        if (it != ions.end())
             return it->second;
-        }
-        return RED;
+        throw std::invalid_argument("Ion not found");        
     }
 
     Element &get_element(const std::string &name)

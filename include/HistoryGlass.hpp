@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include <map>
+
+#include "GameData.hpp"
 #include "BufferedWin.hpp"
 #include "Glass.hpp"
 #include "raylib.h"
@@ -17,7 +20,7 @@ public:
     void draw(void) const override;
     void draww(void) const;
 
-    void save_data(std::ofstream &file);
+    void save_data(std::ofstream &file, GameData &data);
     std::string to_json(void) const;
 
 private:
@@ -27,7 +30,7 @@ private:
     int i;
     StackedBar bar;
     std::string comment;
-    std::string keyWords;
-    float ph = 0;
-    float mol = 0;
+    std::map<std::string, int> hastags;
+    float osmo = 0;
+    float volume = 0;
 };

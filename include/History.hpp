@@ -2,6 +2,7 @@
 
 # pragma once
 
+#include "GameData.hpp"
 #include "Win.hpp"
 #include "Glass.hpp"
 #include "HistoryGlass.hpp"
@@ -27,6 +28,6 @@ public:
     void update(void) override;
     void draw(void) const override;
 
-    void save_data(std::ofstream &file, size_t &counter, const std::string &name);
+    void save_data(std::ofstream &file, size_t &counter, const std::string &name, GameData &data);
 };
 
