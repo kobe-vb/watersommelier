@@ -15,6 +15,7 @@
 
 
 #include <iostream>
+#include <UI.hpp>
 
 Sim::Sim(void)
 {
@@ -203,7 +204,7 @@ void Sim::relaxFluid()
 
 void Sim::draw() const
 {
-    DrawRectangleRounded(rect, ROUNDED, 10, COL_1);
+    DrawRectangleRounded(rect, ROUNDED, 10, UI::get_dcolor(UiColors::FIRST));
     DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
     
     BeginTextureMode(this->win);

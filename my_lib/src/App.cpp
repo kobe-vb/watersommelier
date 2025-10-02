@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "App.hpp"
+#include "Mouse.hpp"
 
 App::App(std::string title, int w, int h, int fps)
     : is_running(true)
@@ -38,7 +39,10 @@ void App::run()
     {
         if (IsKeyPressed(KEY_F11))
             ToggleFullscreen();
+        
+        Mouse::update_cursor(MOUSE_CURSOR_DEFAULT);
         update();
+        Mouse::set_cursor();
         BeginDrawing();
         draw();
         EndDrawing();

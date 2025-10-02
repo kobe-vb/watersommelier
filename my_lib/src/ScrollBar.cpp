@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ScrollBar.hpp"
+#include "Mouse.hpp"
 
 ScrollBar::ScrollBar(Rectangle bouns, float winheight, float scrollheight, std::function<void(float)> callback)
 {
@@ -83,8 +84,6 @@ void ScrollBar::scroll(float height)
 
 void ScrollBar::update(void)
 {
-    
-    
     if (IsMouseOver() && GetMouseWheelMove() != 0)
     {
         scroll(-GetMouseWheelMove() * 20);

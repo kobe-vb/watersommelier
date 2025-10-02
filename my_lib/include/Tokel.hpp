@@ -21,6 +21,7 @@ private:
     bool active;
     bool is_hover;
     const Rectangle bounds;
+    std::string text;
     std::string display_text;
 
     float textX;

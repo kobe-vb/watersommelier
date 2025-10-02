@@ -1,4 +1,5 @@
 #include "TextInp.hpp"
+#include "Mouse.hpp"
 #include <iostream>
 
 TextInp::TextInp(float x, float y, float w, float h, std::function<void(UI&)> callback, const std::string &tmp)
@@ -10,6 +11,18 @@ TextInp::TextInp(float x, float y, float w, float h, std::function<void(UI&)> ca
 void TextInp::update(void)
 {
     is_hover = CheckCollisionPointRec(this->get_mouse_pos(), bounds);
+
+    if (_is_locked)
+    {
+        if (is_hover)
+            Mouse::update_cursor(MOUSE_CURSOR_NOT_ALLOWED);
+        is_hover = false;
+        return;
+    }
+
+    if (is_hover)
+        Mouse::update_cursor(MOUSE_CURSOR_IBEAM);
+
     if (is_active && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         is_active = false;
     if ((is_hover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) || (is_tabt && IsKeyPressed(KEY_ENTER) && !is_active))
@@ -49,25 +62,29 @@ bool TextInp::capture_tab(void)
 
 void TextInp::draw(void) const
 {
-    DrawRectangleRec(bounds, (is_hover || is_tabt) ? LIGHTGRAY : bg_color);
+    // Achtergrond met afgeronde hoeken
+    DrawRectangleRounded(bounds, 0.2f, 8, (is_hover || is_tabt) ? LIGHTGRAY : bg_color);
+
+    // Border
+    DrawRectangleRoundedLines(bounds, 0.2f, 8, DARKGRAY);
 
     const std::string &display_text = (text.empty() && !is_active) ? tmp : text;
     Color text_color = (text.empty() && !is_active) ? RED : BLACK;
 
-    float x = bounds.x + 10;
-    float y = bounds.y + 10;
-    float max_width = bounds.width - 20;
     int font_size = 20;
+    float max_width = bounds.width - 20;
 
-    std::string line;
-    std::string word;
+    // ----------------------
+    // 1. Tekst opdelen in regels (zonder tekenen)
+    // ----------------------
+    std::vector<std::string> lines;
+    std::string line, word;
 
     for (size_t i = 0; i < display_text.length(); ++i)
     {
         char c = display_text[i];
         word += c;
 
-        // Check of dit het einde van een "woord" is (ruimte, tab of einde string)
         if (c == ' ' || c == '\t' || i == display_text.length() - 1)
         {
             std::string test_line = line + word;
@@ -75,32 +92,45 @@ void TextInp::draw(void) const
 
             if (test_width > max_width && !line.empty())
             {
-                // Huidige regel past niet met extra woord, dus eerst de lijn tekenen
-                DrawText(line.c_str(), x, y, font_size, text_color);
-                y += font_size + 2;
-                line = word; // Nieuwe regel begint met huidig woord
+                lines.push_back(line);
+                line = word;
             }
             else
             {
-                line = test_line; // Voeg toe aan huidige regel
+                line = test_line;
             }
-
-            word.clear(); // Klaar met woord
+            word.clear();
         }
     }
-
-    // Laatste regel tekenen (als iets overblijft)
     if (!line.empty())
-        DrawText(line.c_str(), x, y, font_size, text_color);
+        lines.push_back(line);
 
-    // Cursor (blinkt als actief)
-    if (is_active && (static_cast<int>(GetTime() * 2) % 2 == 0))
+    // ----------------------
+    // 2. Verticale offset berekenen
+    // ----------------------
+    float total_height = lines.size() * (font_size + 2);
+    float y = bounds.y + (bounds.height - total_height) / 2;
+
+    // ----------------------
+    // 3. Regels tekenen gecentreerd
+    // ----------------------
+    for (size_t i = 0; i < lines.size(); i++)
     {
-        int cursor_x = x + MeasureText(line.c_str(), font_size);
-        DrawLine(cursor_x, y, cursor_x, y + font_size, BLACK);
+        int line_width = MeasureText(lines[i].c_str(), font_size);
+        float x = bounds.x + (bounds.width - line_width) / 2;
+
+        DrawText(lines[i].c_str(), x, y, font_size, text_color);
+
+        // Cursor op laatste regel
+        if (is_active && i == lines.size() - 1 && (static_cast<int>(GetTime() * 2) % 2 == 0))
+        {
+            int cursor_x = x + line_width;
+            DrawLine(cursor_x, y, cursor_x, y + font_size, BLACK);
+        }
+
+        y += font_size + 2;
     }
 }
-
 
 std::string &TextInp::get_text(void)
 {

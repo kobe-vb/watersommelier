@@ -4,6 +4,7 @@
 
 #include <map>
 
+#include "WebsiteData.hpp"
 #include "GameData.hpp"
 #include "BufferedWin.hpp"
 #include "Glass.hpp"
@@ -20,7 +21,7 @@ public:
     void draw(void) const override;
     void draww(void) const;
 
-    void save_data(std::ofstream &file, GameData &data);
+    void save_data(std::ofstream &file, GameData &data, WebsiteData &websiteData);
     std::string to_json(void) const;
 
 private:

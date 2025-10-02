@@ -12,6 +12,7 @@
 
 #include "Player.hpp"
 #include "Settings.hpp"
+#include "WebsiteData.hpp"
 
 #include <thread>
 
@@ -38,7 +39,7 @@ void Player::save_data(std::ofstream &file, size_t &counter, GameData &data)
 {
     if (history.get_num_of_elements() == 0)
         return;
-    history.save_data(file, counter, name, data);
+    history.save_data(file, counter, name, data, website_data);
 }
 
 std::string Player::to_json() const
@@ -128,7 +129,7 @@ void Player::set_website(std::string website)
 
 void Player::set_website_data(std::string website_data)
 {
-    this->website_data = website_data;
+    this->website_data = WebsiteData(website_data);
     this->pop_ui_back();
 }
 
@@ -168,12 +169,12 @@ void Player::draw(void) const
 
     history.draw();
 
-    DrawRectangleRounded(rect, ROUNDED, 10, COL_1);
+    DrawRectangleRounded(rect, ROUNDED, 10, get_color(UiColors::FIRST));
     DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
 
     if (!website_data.empty())
     {
-        DrawText(("Website data: " + website_data).c_str(), 50, rect.y + 300, 30, BLACK);
+        DrawText("nice i got the data", 50, rect.y + 300, 30, BLACK);
         Win::draw();
         return;
     }

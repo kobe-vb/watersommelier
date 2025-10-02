@@ -20,8 +20,10 @@
 #include "Sim.hpp"
 # include "Tokel.hpp"
 #include "qrcodegen.hpp"
+#include "WebsiteData.hpp"
 
 #include <optional>
+
 
 class Player: public Win
 {
@@ -36,7 +38,7 @@ private:
 
     std::optional<qrcodegen::QrCode> qr;
     std::string website;
-    std::string website_data;
+    WebsiteData website_data;
 
     void draw_qr(void) const;
     

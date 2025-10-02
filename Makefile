@@ -12,7 +12,7 @@ CXX = clang++
 INCLUDES = -I include -I include/sim -I include/players -I my_lib/include
 
 # Debug flags
-CXXFLAGS = -g -Wall -Wextra -Werror -std=c++20 $(INCLUDES)
+CXXFLAGS = -g -Wall -Wextra -Werror -DDEBUG=1 -std=c++20 $(INCLUDES)
 
 # Release flags
 RELEASE_CXXFLAGS = -O2 -Wall -Wextra -Werror -std=c++20 $(INCLUDES)
@@ -24,8 +24,8 @@ ifeq ($(OS_TYPE), windows)
 
     RELEASE_CXXFLAGS += -I /mingw64/include -DPLATFORM_WINDOWS
     # Voeg flags toe om duplicate section warnings te verminderen
-    # RELEASE_LDFLAGS = $(LDFLAGS) -mwindows -static-libstdc++ -Wl,--allow-multiple-definition
-    RELEASE_LDFLAGS = $(LDFLAGS) -static-libstdc++ -Wl,--allow-multiple-definition
+    RELEASE_LDFLAGS = $(LDFLAGS) -mwindows -static-libstdc++ -Wl,--allow-multiple-definition
+#     RELEASE_LDFLAGS = $(LDFLAGS) -static-libstdc++ -Wl,--allow-multiple-definition
 else
     CXXFLAGS += -I $(HOME)/raylib/include
     LDFLAGS = -L $(HOME)/raylib/lib -lraylib -lm -ldl -lpthread -lX11 -Lmy_lib/lib -lmy_lib

@@ -7,6 +7,7 @@
 #include "Glass.hpp"
 #include "HistoryGlass.hpp"
 #include "raylib.h"
+#include "WebsiteData.hpp"
 
 class History: public Win
 {
@@ -28,6 +29,6 @@ public:
     void update(void) override;
     void draw(void) const override;
 
-    void save_data(std::ofstream &file, size_t &counter, const std::string &name, GameData &data);
+    void save_data(std::ofstream &file, size_t &counter, const std::string &name, GameData &data, WebsiteData &websiteData);
 };
 

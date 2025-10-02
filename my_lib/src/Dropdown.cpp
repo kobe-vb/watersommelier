@@ -2,6 +2,8 @@
 #include <raylib.h>
 #include <algorithm>
 
+#include "Mouse.hpp"
+
 Dropdown::Dropdown(float x, float y, float w, float h, const std::vector<std::string> &opts, const std::string &ph, std::function<void(UI &)> cb)
     : UI(cb), bounds{x, y, w, h}, options(opts), is_open(false), placeholder(ph)
 {
@@ -53,6 +55,17 @@ void Dropdown::update()
 {
     Vector2 mouse = this->get_mouse_pos();
     hover = CheckCollisionPointRec(mouse, bounds);
+
+    if (_is_locked)
+    {
+        if (hover)
+            Mouse::update_cursor(MOUSE_CURSOR_NOT_ALLOWED);
+        hover = false;
+        return;
+    }
+
+    if (hover)
+        Mouse::update_cursor(MOUSE_CURSOR_IBEAM);
 
     if ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && hover) ||
         ((IsKeyPressed(KEY_ENTER)) && is_tabt && !is_open))

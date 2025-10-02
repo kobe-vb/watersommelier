@@ -42,9 +42,9 @@ HistoryGlass::HistoryGlass(int i, Glass &glass) : BufferedWin((GetScreenWidth() 
     rect = {((float)GetScreenWidth() * 1 / 3) + PEDING, LINE + PEDING * 4, (float)win.texture.width, (float)win.texture.height};
 };
 
-void HistoryGlass::save_data(std::ofstream &file, GameData &data)
+void HistoryGlass::save_data(std::ofstream &file, GameData &data, WebsiteData &websiteData)
 {
-    file << comment << "; final comment i" << ";" << osmo << ";" << volume << ";";
+    file << comment << ";" << websiteData.get("final comment") << ";" << osmo << ";" << volume << ";";
 
     auto elements = bar.get_data();
 
@@ -61,14 +61,13 @@ void HistoryGlass::save_data(std::ofstream &file, GameData &data)
         }
         file << (val / bar.get_total_volume()) * 100 << ";";         // % --> todo .f2
         file << val << ";";                                          // mol
-        file << val * data.get_ion_data(ion.first).atoomMasa << ";"; // mg ?
+        file << val * data.get_ion_data(ion.first).atoomMasa << ";"; // mg
     }
 
-    file << hastags.size() << ";";
+    file << hastags.size() * 2 << ";";
     for (auto &tags : hastags)
         file << tags.first << ";" << tags.second << ";";
 
-    file << std::endl;
 }
 
 std::string HistoryGlass::to_json() const
@@ -122,7 +121,7 @@ void HistoryGlass::draw(void) const
     if (!_is_visible)
         return;
 
-    DrawRectangleRounded(rect, ROUNDED, 10, COL_1);
+    DrawRectangleRounded(rect, ROUNDED, 10, get_dcolor(UiColors::FIRST));
     DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
 
     DrawTextureRec(

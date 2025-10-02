@@ -67,11 +67,9 @@ void Win::update()
     if (!_is_active)
         return;
     if (current_tab >= 0 && (GetMouseDelta().x > 0 || GetMouseDelta().y > 0 || IsKeyPressed(KEY_ESCAPE)))
-        remove_tab();
+        remove_tab();        
     for (size_t i = 0; i < ui_elements.size(); ++i)
-    {
         ui_elements[i]->update();
-    }
 }
 
 void Win::set_current_tab(int i)

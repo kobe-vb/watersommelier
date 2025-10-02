@@ -1,8 +1,8 @@
 # pragma once 
 
-#define COL_BG  CLITERAL(Color){ 50, 50, 50, 255 }
-#define COL_1  CLITERAL(Color){ 70, 70, 70, 255 }
-#define COL_2  CLITERAL(Color){ 90, 90, 90, 255 }
+#ifndef DEBUG
+#define DEBUG 0
+#endif // DEBUG
 
 #define LINE 300
 #define PEDING 10

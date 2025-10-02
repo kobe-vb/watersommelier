@@ -60,12 +60,28 @@ void Glass::reset(void)
     volume = 25;
     bar.reset();
     this->pop_ui_back();
-    this->pop_ui_back();
     this->sim.reset();
 
-    for (size_t i = 0; i < hastags.size() - 1; ++i)
-        pop_ui_back();
+    if (!hastags.empty())
+        for (size_t i = 0; i < hastags.size(); ++i)
+            pop_ui_back();
     hastags.clear();
+    _set_lock(false);
+}
+
+void Glass::reset_sim(void)
+{
+    this->sim.reset();
+
+    for (auto &ion : bar.get_data())
+    {
+        sim.addParticles((int)(ion.val * 20), ion.col);
+    }
+}
+
+std::string Glass::get_comment(void) const
+{
+    return ((TextInp *)get_ui_at(3))->get_text();
 }
 
 void Glass::_set_warning(UI &ui)
@@ -87,31 +103,18 @@ void Glass::_set_warning(UI &ui)
             kion_val = element.val;
     }
 
-    // float delta_ion = ion.maxGlass - ion_val;
-    // float delta_kion = kion.maxGlass - kion_val;
+    float delta_ion = ion.maxGlass - (ion_val * ion.atoomMasa);
+    float delta_kion = kion.maxGlass - (kion_val * kion.atoomMasa);
 
-    // float masa_drupel_ion = ion.atoomMasa * elm.anion.Nat * elm.M * 0.000055;
+    float massa_one_druple_i = elm.M * elm.anion.Nat * ion.atoomMasa;
+    float massa_one_druple_k = elm.M * elm.kation.Nat * kion.atoomMasa;
 
-    (void)ion_val;
-    (void)kion_val;
-    (void)ion;
-    (void)kion;
-    warning = "nog max ";
-}
+    float max_drupel_ion = delta_ion / massa_one_druple_i;
+    float max_drupel_kion = delta_kion / massa_one_druple_k;
 
-void Glass::reset_sim(void)
-{
-    this->sim.reset();
+    float max = std::min(max_drupel_ion, max_drupel_kion);
 
-    for (auto &ion : bar.get_data())
-    {
-        sim.addParticles((int)(ion.val * 20), ion.col);
-    }
-}
-
-std::string Glass::get_comment(void) const
-{
-    return ((TextInp *)get_ui_at(3))->get_text();
+    warning = "nog max " + std::to_string((int)max) + " drupels";
 }
 
 void Glass::save_ion(Ion &ion, int amount, float M)
@@ -131,6 +134,7 @@ void Glass::_save_druple(int number_of_druplets, Element *elm)
 
     save_ion(elm->anion, number_of_druplets, elm->M);
     save_ion(elm->kation, number_of_druplets, elm->M);
+
 }
 
 void Glass::save_druple(UI &ui)
@@ -162,13 +166,21 @@ void Glass::add_comment(UI &ui)
     _add_comment();
 }
 
+void Glass::_set_lock(bool lock)
+{
+    for (int i = 0; i < get_num_of_elements(); ++i)
+        get_ui_at(i)->set_lock(lock);
+}
+
 void Glass::_add_comment(void)
 {
+    _set_lock(true);
     add_ui(std::make_unique<TextInp>(
         PEDING * 2, LINE + 300,
         rect.width - 200, 300, nullptr, "coment?"));
-    // test
-    dynamic_cast<TextInp &>(*get_ui_at(get_num_of_elements() - 1)).set_text("vdf #one #two #three");
+    
+    if (DEBUG)
+        dynamic_cast<TextInp &>(*get_ui_at(get_num_of_elements() - 1)).set_text("vdf #one #two #three");
 
     add_ui(std::make_unique<Button>(
         PEDING * 2 + (rect.width - 170), LINE + 300,
@@ -207,7 +219,8 @@ void Glass::_add_score(void)
             30,
             nullptr,
             tag.first));
-        ((TextInp *)(get_ui_at(get_num_of_elements() - 1)))->set_text("5"); /////////////
+        if (DEBUG)
+            ((TextInp *)(get_ui_at(get_num_of_elements() - 1)))->set_text("5");
         index++;
     }
 }

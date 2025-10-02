@@ -12,7 +12,7 @@ History::History(void) : scrollOffset(0), maxScrollOffset(0)
     rect.y = LINE;
 }
 
-void History::save_data(std::ofstream &file, size_t &counter, const std::string &name, GameData &data)
+void History::save_data(std::ofstream &file, size_t &counter, const std::string &name, GameData &data, WebsiteData &websiteData)
 {
     auto now = std::chrono::system_clock::now();
     std::time_t t = std::chrono::system_clock::to_time_t(now);
@@ -25,12 +25,19 @@ void History::save_data(std::ofstream &file, size_t &counter, const std::string 
 
     for (int i = 0; i < get_num_of_elements(); i++)
     {
-        file << counter << ";"
+        file << counter++ << ";"
         << datum << ";"
         << name << ";"
-        << "SsC zout; SsC zoet; SsC zuur; SsC msg; SsC bitter;"; 
-        counter++;
-        dynamic_cast<HistoryGlass &>(*get_ui_at(i)).save_data(file, data);
+        << websiteData.get("SsC zout") << ";"
+        << websiteData.get("SsC zoet") << ";"
+        << websiteData.get("SsC zuur") << ";"
+        << websiteData.get("SsC msg") << ";"
+        << websiteData.get("SsC bitter") << ";";
+
+        dynamic_cast<HistoryGlass &>(*get_ui_at(i)).save_data(file, data, websiteData);
+        
+        file << websiteData.get_end_data()
+        << std::endl;
     }
 }
 
@@ -85,7 +92,7 @@ void History::draw(void) const
 
     for (int i = 0; i < get_num_of_elements(); i++)
         dynamic_cast<HistoryGlass &>(*get_ui_at(i)).draww();
-    DrawRectangleRounded(rect, ROUNDED, 10, COL_1);
+    DrawRectangleRounded(rect, ROUNDED, 10, UI::get_dcolor(UiColors::FIRST));
 
     BeginScissorMode(rect.x, rect.y, rect.width, rect.height);
     Win::draw();

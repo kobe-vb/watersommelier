@@ -34,6 +34,8 @@ private:
     void _set_warning(UI &ui);
     void _save_druple(int number_of_druplets, Element *elm);
 
+    void _set_lock(bool lock);
+    
 public:
     Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim, Rectangle &rect);
     ~Glass() = default;

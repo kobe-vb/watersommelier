@@ -10,8 +10,38 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "UI.hpp"
+#include "UI.hpp"
 #include "BufferedWin.hpp"
+
+std::array<Color, static_cast<size_t>(UiColors::Count)> UI::default_colors = {
+    Color{50, 50, 50, 255},     // bg
+    Color{70, 70, 70, 255},     // first
+    Color{90, 90, 90, 255},     // second
+    Color{110, 110, 110, 255},  // third
+    Color{255, 255, 255, 30},   // hover
+    Color{40, 180, 99, 255},    // ON  
+    Color{52, 73, 94, 255},      // OFF
+    Color{236, 240, 241, 255},  // BORDER
+};
+
+Color UI::get_color(UiColors color) const
+{
+    auto idx = static_cast<size_t>(color);
+
+    if (custom_colors[idx].has_value())
+        return custom_colors[idx].value();
+    return default_colors[idx];
+}
+
+Color UI::get_dcolor(UiColors color)
+{
+    return default_colors[static_cast<size_t>(color)];
+}
+
+void UI::set_color(UiColors color, Color value)
+{
+    custom_colors[static_cast<size_t>(color)] = value;
+}
 
 bool UI::capture_tab(void)
 {
@@ -31,7 +61,7 @@ void UI::remove_tab(void)
     is_tabt = false;
 }
 
-void UI::set_callback(std::function<void(UI&)> new_callback)
+void UI::set_callback(std::function<void(UI &)> new_callback)
 {
     callback = new_callback;
 }

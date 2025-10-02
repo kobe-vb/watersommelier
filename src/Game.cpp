@@ -39,7 +39,7 @@ static size_t loadCounter(const std::string& filename)
     return counter;
 }
 
-Game::Game() : App("tiboon", 0, 0, 60)
+Game::Game() : App("pompion", 0, 0, 60)
 {
 while (!IsWindowReady()) {
 }
@@ -172,8 +172,8 @@ void Game::switch_players(UI &ui)
 
 void Game::draw() const
 {
-    ClearBackground(COL_BG);
-    DrawRectangleRounded(rect, 0.2, 8, COL_1);
+    ClearBackground(UI::get_dcolor(UiColors::BG));
+    DrawRectangleRounded(rect, 0.2, 8, UI::get_dcolor(UiColors::FIRST));
     DrawRectangleRoundedLinesEx(rect, 0.2, 8, 6.0f, BLACK);
     sim.draw();
     win.draw();
