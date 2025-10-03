@@ -23,7 +23,7 @@ class Win : public UI
 {
 private:
     std::vector<std::unique_ptr<UI>> ui_elements;
-    bool next_tab(bool round);
+    bool next_tab(int direction, bool round);
     void remove_tab(void) override;
     int current_tab = -1;
 
@@ -31,11 +31,11 @@ public:
     Win() = default;
     ~Win() = default;
     virtual void add_ui(std::unique_ptr<UI> element);
-    void update() override;
+    bool update() override;
     void draw() const override;
 
     void update_tabs(void);
-    bool capture_tab(void) override;
+    bool capture_tab(int direction) override;
     UI *get_ui_at(int i) const;
     int get_num_of_elements() const;
     void set_current_tab(int i);

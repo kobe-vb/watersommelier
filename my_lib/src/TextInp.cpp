@@ -8,7 +8,7 @@ TextInp::TextInp(float x, float y, float w, float h, std::function<void(UI&)> ca
 
     }
 
-void TextInp::update(void)
+bool TextInp::update(void)
 {
     is_hover = CheckCollisionPointRec(this->get_mouse_pos(), bounds);
 
@@ -17,7 +17,7 @@ void TextInp::update(void)
         if (is_hover)
             Mouse::update_cursor(MOUSE_CURSOR_NOT_ALLOWED);
         is_hover = false;
-        return;
+        return false;
     }
 
     if (is_hover)
@@ -30,7 +30,7 @@ void TextInp::update(void)
         is_active = !is_active;
         if (is_active && on_focus_clear)
             text.clear();
-        return ;
+        return true;
     }
     if (is_active)
     {
@@ -48,15 +48,16 @@ void TextInp::update(void)
         if (IsKeyPressed(KEY_ESCAPE))
             is_active = false;
     }
+    return (false);
 }
 
-bool TextInp::capture_tab(void)
+bool TextInp::capture_tab(int direction)
 {
-    if (!_is_active)
-        return (false);
-    is_tabt = !is_tabt;
+    UI::capture_tab(direction);
     if (!is_tabt)
         is_active = false;
+    else
+        is_active = true;
     return (is_tabt);
 }
 

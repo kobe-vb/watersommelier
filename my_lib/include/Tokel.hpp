@@ -31,7 +31,7 @@ public:
     Tokel(float x, float y, float w, float h, const std::string &text, std::function<void(UI&)> callback = nullptr);
     ~Tokel(void);
     void draw(void) const override;
-    void update(void) override;
+    bool update(void) override;
 
     void set_tokel(bool value);
     const std::string &get_text(void);

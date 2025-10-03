@@ -43,9 +43,17 @@ void UI::set_color(UiColors color, Color value)
     custom_colors[static_cast<size_t>(color)] = value;
 }
 
-bool UI::capture_tab(void)
+void UI::set_lock(bool value)
 {
-    if (!_is_active)
+    _is_locked = value;
+    if (value)
+        remove_tab();
+}
+
+bool UI::capture_tab(int direction)
+{
+    (void)direction;
+    if (!_is_active || _is_locked)
         return (false);
     is_tabt = !is_tabt;
     return (is_tabt);

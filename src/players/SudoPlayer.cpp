@@ -61,11 +61,13 @@ void SudoPlayer::set_player_website(UI &ui)
     player.set_website(server.getPath(tokel.get_text()));
 }
 
-void SudoPlayer::update(void)
+bool SudoPlayer::update(void)
 {
     if (!_is_active)
-        return;
+        return false;
     Player::update();
+
+    return false;
 }
 
 void SudoPlayer::draw(void) const

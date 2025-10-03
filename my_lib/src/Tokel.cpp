@@ -36,7 +36,7 @@ Tokel::Tokel(float x, float y, float w, float h, const std::string &text, std::f
 
 Tokel::~Tokel(void) {}
 
-void Tokel::update(void)
+bool Tokel::update(void)
 {
     is_hover = CheckCollisionPointRec(this->get_mouse_pos(), bounds);
     if (is_hover)
@@ -47,9 +47,10 @@ void Tokel::update(void)
     else if (IsKeyPressed(KEY_ENTER) && is_tabt)
         active = !active;
     else
-        return ;
+        return false;
     if (active)
         run_callback();
+    return (false);
 }
 
 void Tokel::draw(void) const

@@ -46,7 +46,7 @@ public:
     Player(std::string &name, GameData &data, Sim &sim);
     ~Player() = default;
 
-    bool capture_tab(void) override;
+    bool capture_tab(int direction) override;
 
     void next_glass(UI &ui);
 
@@ -55,7 +55,7 @@ public:
     bool take_code(std::string &code);
     bool is_my_code(std::string &code) const;
 
-    void update(void) override;
+    bool update(void) override;
     void draw(void) const override;
 
     void set_website(std::string website);

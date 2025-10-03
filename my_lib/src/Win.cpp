@@ -22,16 +22,16 @@ void Win::remove_tab(void)
     if (current_tab == -1)
         return;
     ui_elements[current_tab]->remove_tab();
-    current_tab = -1;
+    // current_tab = -1;
 }
-bool Win::next_tab(bool round)
+bool Win::next_tab(int direction, bool round)
 {
     int size = (int)ui_elements.size();
     if (size == 0)
         return (false);
 
     if (current_tab == -1)
-        current_tab = 0;
+        current_tab = direction > 0 ? 0 : size - 1;
 
     int start = current_tab;
     int i = start;
@@ -40,36 +40,44 @@ bool Win::next_tab(bool round)
         return (false);
     do
     {
-        if (ui_elements[i]->capture_tab())
+        if (ui_elements[i]->capture_tab(direction))
         {
             current_tab = i;
             return (true);
         }
-        i++;
+        i += direction;
         if (round)
-            i %= size;
+            i = (i % size + size) % size;
+        if (i < 0)
+            return (false);
+        std::cout << i << std::endl;
     } while (round ? i != start : (i != size));
     return (false);
 }
 
-bool Win::capture_tab(void)
+bool Win::capture_tab(int direction)
 {
     if (!_is_active)
         return (false);
 
-    if (!next_tab(false))
+    if (!next_tab(direction, false))
         current_tab = -1;
     return (current_tab != -1);
 }
 
-void Win::update()
+bool Win::update()
 {
     if (!_is_active)
-        return;
-    if (current_tab >= 0 && (GetMouseDelta().x > 0 || GetMouseDelta().y > 0 || IsKeyPressed(KEY_ESCAPE)))
+        return false;
+    int temp = current_tab;
+    if (current_tab >= 0 && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ESCAPE)))
         remove_tab();        
     for (size_t i = 0; i < ui_elements.size(); ++i)
-        ui_elements[i]->update();
+    {
+        if (ui_elements[i]->update())
+            current_tab = i;
+    }
+    return (temp != current_tab);
 }
 
 void Win::set_current_tab(int i)
@@ -84,8 +92,10 @@ void Win::update_tabs(void)
 {
     if (!_is_active)
         return;
-    if (IsKeyPressed(KEY_TAB))
-        next_tab(true);
+    if (IsKeyDown(KEY_LEFT_SHIFT) &&IsKeyPressed(KEY_TAB))
+        next_tab(-1, true);
+    else if (IsKeyPressed(KEY_TAB))
+        next_tab(1, true);
 }
 
 void Win::draw() const
@@ -117,6 +127,7 @@ void Win::pop_ui_back()
     this->remove_tab();
     if (!ui_elements.empty())
         ui_elements.pop_back();
+    current_tab = std::min(current_tab, (int)ui_elements.size() - 1);
 }
 
 void Win::pop_ui_front()

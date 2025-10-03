@@ -23,7 +23,7 @@ private:
 public:
     Dropdown(float x, float y, float w, float h, const std::vector<std::string>& opts, const std::string& ph = "", std::function<void(UI&)> cb = nullptr);
 
-    void update() override;
+    bool update() override;
     void draw() const override;
     std::string get_selected_text() const;
     int get_selected_ind() const;
@@ -34,5 +34,5 @@ public:
 private:
     void filter_options();
     void handle_text();
-    bool capture_tab(void) override;
+    bool capture_tab(int direction) override;
 };

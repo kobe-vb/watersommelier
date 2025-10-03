@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Watersommelier vragenlijst — Demo</title>
+  <style>
+    :root{
+      --ink:#0b1220; --muted:#5b6b7c; --line:#CED7E1; --bg:#F7FAFC; --card:#FFFFFF; --accent:#0EA5E9;
+    }
+    *{ box-sizing: border-box }
+    body{ margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:var(--bg); color:var(--ink) }
+    main{ max-width: 980px; margin: clamp(12px,3vw,32px) auto; padding: clamp(12px,3vw,24px) }
+    h1{ margin:0 0 8px; font-size: clamp(22px,5vw,34px) }
+
+    form.card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding: clamp(14px,3vw,24px);
+      box-shadow:0 10px 30px rgba(2,8,23,0.04) }
+
+    .form-group{ margin: 14px 0 }
+    input[type="text"], textarea{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:#fff }
+    textarea{ min-height: 200px }
+
+    /* Compact tabel */
+    .sens-table{ width:100%; border-collapse: collapse; margin-top: 8px; }
+    .sens-table th, .sens-table td{ border:1px solid var(--line); padding:10px; text-align:center }
+    .sens-table th{ background:#f0f5fa; font-weight:800 }
+    .sens-table input[type="number"]{ width: 110px; padding:8px 10px; border-radius:8px; border:1px solid var(--line) }
+    @media (max-width:720px){
+      .sens-table thead{ display:none }
+      .sens-table, .sens-table tbody, .sens-table tr, .sens-table td{ display:block; width:100% }
+      .sens-table tr{ border:1px solid var(--line); border-radius:12px; padding:8px; margin-bottom:10px; background:#fff }
+      .sens-table td{ border:0; display:flex; justify-content:space-between; align-items:center }
+      .sens-table td::before{ content: attr(data-label); font-weight:800; margin-right:10px }
+      .sens-table input[type="number"]{ width: 120px }
+    }
+
+    /* Type 2 comparisons */
+    fieldset{ border:1px solid var(--line); border-radius:12px; padding:12px; }
+    legend{ padding:0 8px; font-weight:800 }
+    .set-title{ font-weight:900; text-align:center; font-size: clamp(18px,4.2vw,28px); margin: 8px 0 14px }
+    .cmp-set{ margin: 10px 0 18px }
+    .cmp-row{ display:grid; grid-template-columns: 1fr auto 1fr; align-items:center; gap:12px }
+    .cmp-glass{ padding: 8px 12px; border:1px solid var(--line); border-radius:10px; text-align:center; background:#fff; font-weight:700 }
+    .cmp-ops{ display:flex; gap:10px; align-items:center; justify-content:center }
+    .cmp-ops input[type="radio"]{ display:none }
+    .cmp-ops label{ display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border:1px solid var(--line); border-radius:12px; font-size:22px; cursor:pointer; background:#fff }
+    .cmp-ops input[type="radio"]:checked + label{ border-color:var(--accent); box-shadow: inset 0 0 0 2px var(--accent) }
+    .cmp-extra{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; justify-content:center }
+    .cmp-cert{ display:inline-flex; gap:6px }
+    .cmp-cert input[type="radio"]{ display:none }
+    .cmp-cert label{ padding:6px 10px; border:1px solid var(--line); border-radius:999px; cursor:pointer; font-weight:700; background:#fff }
+    .cmp-cert input[type="radio"]:checked + label{ border-color:var(--accent); box-shadow: inset 0 0 0 2px var(--accent) }
+
+    .controls{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button{ appearance:none; border:1px solid var(--line); background:#fff; border-radius:12px; padding:10px 14px; cursor:pointer; font-weight:700 }
+    button.primary{ background:var(--accent); color:#fff; border-color:var(--accent) }
+    pre#out{ background:#0b1220; color:#e2e8f0; padding:10px; border-radius:10px; overflow:auto; max-height:40vh }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Watersommelier vragenlijst — Demo</h1>
+
+    <form id="demoForm" class="card" action="/send-data" method="post">
+      <input type="hidden" name="username" id="username" />
+
+      <!-- Type 1: Compacte tabel (namen blijven identiek) -->
+      <fieldset class="form-group">
+        <legend>sensitiviteit test aantal druppels per smaak.</legend>
+        <table class="sens-table" aria-label="Aantal druppels per smaak">
+          <thead>
+            <tr>
+              <th scope="col">Zoet</th>
+              <th scope="col">Zout</th>
+              <th scope="col">Zuur</th>
+              <th scope="col">Bitter</th>
+              <th scope="col">Umami</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Zoet">
+                <input type="number" name="zoet" id="zoet" min="0" step="1" inputmode="numeric" required>
+              </td>
+              <td data-label="Zout">
+                <input type="number" name="zout" id="zout" min="0" step="1" inputmode="numeric" required>
+              </td>
+              <td data-label="Zuur">
+                <input type="number" name="zuur" id="zuur" min="0" step="1" inputmode="numeric" required>
+              </td>
+              <td data-label="Bitter">
+                <input type="number" name="bitter" id="bitter" min="0" step="1" inputmode="numeric" required>
+              </td>
+              <td data-label="Umami">
+                <input type="number" name="umami" id="umami" min="0" step="1" inputmode="numeric" required>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </fieldset>
+
+      <!-- Water-voorkeur (NL + merken) -->
+      <fieldset class="form-group">
+        <legend>Welk water drink je het liefst?</legend>
+        <div class="form-group">
+          <label><input type="radio" name="water_preference" value="Spa" required> Spa</label>
+        </div>
+        <div class="form-group">
+          <label><input type="radio" name="water_preference" value="Chaudfontaine"> Chaudfontaine</label>
+        </div>
+        <div class="form-group">
+          <label><input type="radio" name="water_preference" value="Evian"> Evian</label>
+        </div>
+        <div class="form-group">
+          <label><input type="radio" name="water_preference" value="Boni water"> Boni water</label>
+        </div>
+      </fieldset>
+
+      <!-- Type 2: Vergelijkingen -->
+      <fieldset class="form-group" id="comparisons-block">
+        <legend>Welk glas vond je het best in zaken …</legend>
+        <div id="comparisons"></div>
+      </fieldset>
+
+      <!-- Type 3: Final Comment -->
+      <fieldset class="form-group">
+        <legend>Final Comment</legend>
+        <textarea name="finaal comment" id="final_comment" placeholder="Vermeld vooral de namen van de glazen die je hebt getest, en vergelijk ze gerust met elkaar. Wat sprong er voor jou echt uit? Welke verschillen vielen je op? Laat je indrukken de vrije loop!"></textarea>
+      </fieldset>
+
+      <div class="controls">
+        <button type="button" id="btnDump" class="primary">Toon demo‑payload</button>
+        <button type="reset">Reset</button>
+        <button type="submit">Verzend</button>
+      </div>
+      <pre id="out" hidden></pre>
+    </form>
+  </main>
+
+  <script>
+    // ===== DEMO DATA =====
+    const GLASSES = [
+      { id: "G1", naam: "Glas I",   tags: ["zuur","zout","umami"] },
+      { id: "G2", naam: "Glas E",   tags: ["zuur","bitter"] },
+      { id: "G3", naam: "Glas A",   tags: ["zout","zoet"] },
+      { id: "G4", naam: "Glas O",   tags: ["umami","bitter","zout"] },
+    ];
+
+    // Lees 'username' uit de URL
+    (function syncUsername(){
+      const params = new URLSearchParams(location.search);
+      const u = params.get('username');
+      if (u) document.getElementById('username').value = u;
+    })();
+
+    // ===== Type 2 generator (tag‑key eindigt op '#'; alleen #tag groot/centraal) =====
+    function renderComparisons(glasses){
+      const host = document.getElementById("comparisons");
+      host.innerHTML = "";
+
+      const byTag = new Map();
+      (glasses || []).forEach(g => (g.tags || g.hashtags || g.labels || []).forEach(t => {
+        const tag = String(t||"").trim().toLowerCase(); if(!tag) return;
+        if(!byTag.has(tag)) byTag.set(tag, []);
+        byTag.get(tag).push(g);
+      }));
+
+      let idx = 0;
+      for (const [tag, arr] of byTag.entries()){
+        if (arr.length < 2) continue;
+
+        const set = document.createElement("div");
+        set.className = "cmp-set";
+
+        // Tag, groot en gecentreerd
+        const title = document.createElement("div");
+        title.className = "set-title";
+        title.textContent = `#${tag}`;
+        set.appendChild(title);
+
+        for (let i=0;i<arr.length;i++){
+          for (let j=i+1;j<arr.length;j++){
+            const A = arr[i], B = arr[j];
+            const aName = A.naam || A.name || A.id || `G${i+1}`;
+            const bName = B.naam || B.name || B.id || `G${j+1}`;
+            const base = `cmp_${idx}`;
+
+            // Verborgen context (tag-key eindigt met '#')
+            set.appendChild(hidden(`cmp[${idx}][tag#]`, tag));
+            set.appendChild(hidden(`cmp[${idx}][glass_a]`, A.id || aName));
+            set.appendChild(hidden(`cmp[${idx}][glass_b]`, B.id || bName));
+
+            const row = document.createElement("div");
+            row.className = "cmp-row";
+
+            const left = document.createElement("div");
+            left.className = "cmp-glass";
+            left.textContent = aName;
+
+            const ops = document.createElement("div");
+            ops.className = "cmp-ops";
+            ops.appendChild(radio(`cmp[${idx}][rel]`, `${base}_gt`, "A_gt", ">", true));
+            ops.appendChild(radio(`cmp[${idx}][rel]`, `${base}_eq`, "eq", "=", false));
+            ops.appendChild(radio(`cmp[${idx}][rel]`, `${base}_lt`, "B_gt", "<", false));
+
+            const right = document.createElement("div");
+            right.className = "cmp-glass";
+            right.textContent = bName;
+
+            row.appendChild(left); row.appendChild(ops); row.appendChild(right);
+            set.appendChild(row);
+
+            const extra = document.createElement("div");
+            extra.className = "cmp-extra";
+            extra.insertAdjacentHTML('beforeend','<span>Zekerheid:</span>');
+            extra.appendChild(certRadio(`cmp[${idx}][zekerheid]`, `${base}_c1`, "1", "1"));
+            extra.appendChild(certRadio(`cmp[${idx}][zekerheid]`, `${base}_c2`, "2", "2"));
+            extra.appendChild(certRadio(`cmp[${idx}][zekerheid]`, `${base}_c3`, "3", "3"));
+            set.appendChild(extra);
+
+            host.appendChild(set);
+            idx++;
+          }
+        }
+      }
+    }
+
+    function hidden(name, value){ const h=document.createElement("input"); h.type="hidden"; h.name=name; h.value=value; return h; }
+    function radio(name, id, value, symbol, required){
+      const wrap=document.createElement("div");
+      const r=document.createElement("input"); r.type="radio"; r.name=name; r.id=id; r.value=value; if(required) r.required=true;
+      const l=document.createElement("label"); l.setAttribute("for", id); l.textContent = symbol;
+      wrap.appendChild(r); wrap.appendChild(l); return wrap;
+    }
+    function certRadio(name, id, value, text){
+      const wrap=document.createElement("div");
+      const r=document.createElement("input"); r.type="radio"; r.name=name; r.id=id; r.value=value; r.required=true;
+      const l=document.createElement("label"); l.setAttribute("for", id); l.textContent = text;
+      wrap.appendChild(r); wrap.appendChild(l); return wrap;
+    }
+
+    // ===== Payload dumper =====
+    const btnDump = document.getElementById("btnDump");
+    const out = document.getElementById("out");
+    const form = document.getElementById("demoForm");
+    btnDump.addEventListener("click", () => {
+      const data = formPayload(form);
+      out.hidden = false;
+      out.textContent = JSON.stringify(data, null, 2);
+      console.log("DEMO PAYLOAD →", data);
+    });
+
+    function formPayload(form){
+      const fd = new FormData(form);
+      const obj = {};
+      for (const [k,v] of fd.entries()){
+        setDeep(obj, k, v);
+      }
+      return obj;
+    }
+    function setDeep(obj, path, value){
+      const parts = [];
+      path.replace(/\[|\]/g, ".").split(".").forEach(p => { if (p) parts.push(p); });
+      let cur = obj;
+      for (let i=0;i<parts.length;i++){
+        const key = parts[i];
+        const last = i === parts.length-1;
+        if (last){ cur[key] = value; }
+        else {
+          if (!cur[key]) cur[key] = (/^\d+$/.test(parts[i+1]) ? [] : {});
+          cur = cur[key];
+        }
+      }
+    }
+
+    // Start
+    renderComparisons(GLASSES);
+  </script>
+</body>
+</html>

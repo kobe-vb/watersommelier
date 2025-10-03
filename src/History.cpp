@@ -75,7 +75,7 @@ bool History::updateScroll()
     return (false);
 }
 
-void History::update()
+bool History::update()
 {
     if (updateScroll())
     {
@@ -85,6 +85,7 @@ void History::update()
             glass.set_pos(get_num_of_elements() - i - 1, scrollOffset);
         }
     }
+    return (false);
 }
 
 void History::draw(void) const

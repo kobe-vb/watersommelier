@@ -53,11 +53,11 @@ private:
     virtual ~UI() = default;
 
     virtual void draw(void) const = 0;
-    virtual void update(void) = 0;
+    virtual bool update(void) = 0;
     
     void set_tab(bool value);
     
-    virtual bool capture_tab(void);
+    virtual bool capture_tab(int direction = 1);
     virtual void remove_tab(void);
     
     void set_callback(std::function<void(UI &)> new_callback);
@@ -68,7 +68,7 @@ private:
     void disable(void);
     void activate(void);
 
-    void set_lock(bool value) { _is_locked = value; }
+    void set_lock(bool value);
     
     void set_parent(BufferedWin *parent);
     BufferedWin *get_parent(void) const;

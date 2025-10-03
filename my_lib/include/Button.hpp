@@ -26,6 +26,6 @@ public:
     Button(float x, float y, float w, float h, const std::string &text, std::function<void(UI &)> callback = nullptr);
     ~Button(void);
     void draw(void) const override;
-    void update(void) override;
+    bool update(void) override;
     void set_text(const std::string &text);
 };

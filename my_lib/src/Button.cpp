@@ -43,7 +43,7 @@ void Button::draw(void) const
     DrawRectangleRoundedLinesEx(bounds, 0.3f, 10, 4.0f, BLACK);
 }
 
-void Button::update(void)
+bool Button::update(void)
 {
     is_hover = CheckCollisionPointRec(this->get_mouse_pos(), bounds);
 
@@ -52,13 +52,14 @@ void Button::update(void)
         if (is_hover)
             Mouse::update_cursor(MOUSE_CURSOR_NOT_ALLOWED);
         is_hover = false;
-        return;
+        return false;
     }
 
     if (is_hover)
         Mouse::update_cursor(MOUSE_CURSOR_POINTING_HAND);
     if ((is_hover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) || (is_tabt && IsKeyPressed(KEY_ENTER)))
         run_callback();
+    return (false);
 }
 
 void Button::set_text(const std::string &text)

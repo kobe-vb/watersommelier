@@ -51,7 +51,7 @@ void Dropdown::handle_text(void)
         current_ind = 0;
     }
 }
-void Dropdown::update()
+bool Dropdown::update()
 {
     Vector2 mouse = this->get_mouse_pos();
     hover = CheckCollisionPointRec(mouse, bounds);
@@ -61,7 +61,7 @@ void Dropdown::update()
         if (hover)
             Mouse::update_cursor(MOUSE_CURSOR_NOT_ALLOWED);
         hover = false;
-        return;
+        return false;
     }
 
     if (hover)
@@ -74,7 +74,7 @@ void Dropdown::update()
         filter_options();
         ind = 0;
         current_ind = 0;
-        return;
+        return false;
     }
 
     if (IsKeyPressed(KEY_ESCAPE))
@@ -127,6 +127,8 @@ void Dropdown::update()
             }
         }
     }
+
+    return false;
 }
 
 void Dropdown::draw() const
@@ -170,11 +172,9 @@ void Dropdown::set_max_opt(int i)
     max_opt = i;
 }
 
-bool Dropdown::capture_tab(void)
+bool Dropdown::capture_tab(int direction)
 {
-    if (!_is_active)
-        return (false);
-    is_tabt = !is_tabt;
+    UI::capture_tab(direction);
     if (!is_tabt)
         is_open = false;
     return (is_tabt);

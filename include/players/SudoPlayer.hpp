@@ -19,7 +19,7 @@ public:
     SudoPlayer(std::string &name, GameData &data, Sim &sim, std::vector<Player_data> &players);
     ~SudoPlayer() = default;
 
-    void update(void) override;
+    bool update(void) override;
     void draw(void) const override;
 };
 

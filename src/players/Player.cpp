@@ -66,11 +66,11 @@ void Player::fiks_sim(void)
     glass.reset_sim();
 }
 
-bool Player::capture_tab(void)
+bool Player::capture_tab(int direction)
 {
     if (!_is_active)
         return (false);
-    return (glass.capture_tab());
+    return (glass.capture_tab(direction));
 }
 
 void Player::next_glass(UI &ui)
@@ -97,15 +97,16 @@ bool Player::take_code(std::string &new_code)
     return (g.take_code(new_code));
 }
 
-void Player::update(void)
+bool Player::update(void)
 {
     if (!_is_active)
-        return;
+        return (false);
 
     Win::update();
 
     history.update();
-    glass.update();
+
+    return (glass.update());
 }
 
 void Player::set_website(std::string website)
