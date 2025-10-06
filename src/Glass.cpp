@@ -103,11 +103,11 @@ void Glass::_set_warning(UI &ui)
             kion_val = element.val;
     }
 
-    float delta_ion = ion.maxGlass - (ion_val * ion.atoomMasa);
-    float delta_kion = kion.maxGlass - (kion_val * kion.atoomMasa);
+    float delta_ion = ion.maxGlass - (ion_val * ion.atoomMasa * 1000);
+    float delta_kion = kion.maxGlass - (kion_val * kion.atoomMasa * 1000);
 
-    float massa_one_druple_i = elm.M * elm.anion.Nat * ion.atoomMasa;
-    float massa_one_druple_k = elm.M * elm.kation.Nat * kion.atoomMasa;
+    float massa_one_druple_i = (elm.M * 1 * 0.000055 * elm.anion.Nat) * ion.atoomMasa * 1000;
+    float massa_one_druple_k = (elm.M * 1 * 0.000055 * elm.kation.Nat) * kion.atoomMasa * 1000;
 
     float max_drupel_ion = delta_ion / massa_one_druple_i;
     float max_drupel_kion = delta_kion / massa_one_druple_k;

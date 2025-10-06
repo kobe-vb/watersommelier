@@ -1,18 +1,28 @@
 #include "SudoPlayer.hpp"
 
 #include <iostream>
-#include <winsock2.h>
-#include <ws2tcpip.h>
+
+#ifdef _WIN32
+    #include <winsock2.h>
+    #include <ws2tcpip.h>
+    #pragma comment(lib, "ws2_32.lib")
+#else
+    #include <arpa/inet.h>
+    #include <netinet/in.h>
+    #include <sys/socket.h>
+    #include <unistd.h>
+#endif
 
 std::string getLocalIP() {
+#ifdef _WIN32
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
 
     SOCKET sock = socket(AF_INET, SOCK_DGRAM, 0);
     sockaddr_in remoteAddr;
     remoteAddr.sin_family = AF_INET;
-    remoteAddr.sin_port = htons(80); // willekeurige poort
-    inet_pton(AF_INET, "8.8.8.8", &remoteAddr.sin_addr); // Google DNS
+    remoteAddr.sin_port = htons(80);
+    inet_pton(AF_INET, "8.8.8.8", &remoteAddr.sin_addr);
 
     connect(sock, (sockaddr*)&remoteAddr, sizeof(remoteAddr));
 
@@ -25,9 +35,28 @@ std::string getLocalIP() {
 
     closesocket(sock);
     WSACleanup();
+#else
+    int sock = socket(AF_INET, SOCK_DGRAM, 0);
+    sockaddr_in remoteAddr{};
+    remoteAddr.sin_family = AF_INET;
+    remoteAddr.sin_port = htons(80);
+    inet_pton(AF_INET, "8.8.8.8", &remoteAddr.sin_addr);
+
+    connect(sock, (sockaddr*)&remoteAddr, sizeof(remoteAddr));
+
+    sockaddr_in localAddr{};
+    socklen_t addrLen = sizeof(localAddr);
+    getsockname(sock, (sockaddr*)&localAddr, &addrLen);
+
+    char ipStr[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &localAddr.sin_addr, ipStr, sizeof(ipStr));
+
+    close(sock);
+#endif
 
     return std::string(ipStr);
 }
+
 
 SudoPlayer::SudoPlayer(std::string &name, GameData &data, Sim &sim, std::vector<Player_data> &raw_players) :
 Player(name, data, sim), server(players)
