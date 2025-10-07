@@ -33,6 +33,11 @@ Color UI::get_color(UiColors color) const
     return default_colors[idx];
 }
 
+void UI::clear_color(UiColors color)
+{
+    custom_colors[static_cast<size_t>(color)] = std::nullopt;
+}
+
 Color UI::get_dcolor(UiColors color)
 {
     return default_colors[static_cast<size_t>(color)];

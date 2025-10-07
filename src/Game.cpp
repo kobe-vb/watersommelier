@@ -69,7 +69,7 @@ void Game::save_data(void)
     {
         if (!file_exists)
         {
-            file << "i;datum;name;SsC zout; SsC zoet; SsC zuur; SsC MSG; SsC bitter;comment;end comment;osmo;Tot volume(ml);";
+            file << "i;datum;name;SsC Zoet; SsC Zout; SsC zuur; SsC Bitter; SsC Umami;comment;end comment;osmo;Tot volume(ml);";
             for (auto &ion : data.ions)
                 file << ion.first << " %" << ";" << ion.first << " mol" << ";"<< ion.first << " mg" << ";";
             file << "hastags;" << std::endl;
@@ -77,7 +77,7 @@ void Game::save_data(void)
 
         for (auto &player : players)
         {
-            if (player.player->get_name().starts_with("demo") || player.player->get_name().starts_with("web"))
+            if (!DEBUG && (player.player->get_name().starts_with("demo") || player.player->get_name().starts_with("web")))
                 continue;
             player.player->save_data(file, counter, data);
         }
@@ -88,15 +88,25 @@ void Game::save_data(void)
 
 void Game::create_new_player(UI &ui)
 {
+
+    TextInp &t = dynamic_cast<TextInp &>(ui);
+
+    if (name_is_taken(t.get_text()) || (t.get_text().empty() && !DEBUG))
+    {
+        t.set_color(UiColors::BG, RED);
+        return;
+    }
+    t.clear_color(UiColors::BG);
+
     sim.set_rect(); // //////////////////////
     sim.reset();
 
-    TextInp &t = dynamic_cast<TextInp &>(ui);
 
     auto tokel = std::make_unique<Tokel>(t.get_rect().x, t.get_rect().y, 110, 60, t.get_text(),
                                          [this](UI &uii)
                                          { switch_players(uii); });
     Tokel *tokel_ptr = tokel.get();
+    win.add_ui(std::move(tokel));
 
     Player *pl_ptr = nullptr;
     if (t.get_text() == "tiboon")
@@ -120,8 +130,6 @@ void Game::create_new_player(UI &ui)
         win.add_ui(std::move(pl));
     }
     activePlayer = pl_ptr;
-
-    win.add_ui(std::move(tokel));
 
     players.push_back({tokel_ptr, pl_ptr});
 

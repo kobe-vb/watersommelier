@@ -50,7 +50,6 @@ bool Win::next_tab(int direction, bool round)
             i = (i % size + size) % size;
         if (i < 0)
             return (false);
-        std::cout << i << std::endl;
     } while (round ? i != start : (i != size));
     return (false);
 }

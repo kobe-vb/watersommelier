@@ -2,11 +2,10 @@
 #include "Mouse.hpp"
 #include <iostream>
 
-TextInp::TextInp(float x, float y, float w, float h, std::function<void(UI&)> callback, const std::string &tmp)
+TextInp::TextInp(float x, float y, float w, float h, std::function<void(UI &)> callback, const std::string &tmp)
     : UI(callback), is_hover(false), bounds{x, y, w, h}, text(""), tmp(tmp)
-    {
-
-    }
+{
+}
 
 bool TextInp::update(void)
 {
@@ -47,6 +46,13 @@ bool TextInp::update(void)
             run_callback();
         if (IsKeyPressed(KEY_ESCAPE))
             is_active = false;
+        // CTRL+V voor plakken
+        if ((IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)) && IsKeyPressed(KEY_V))
+        {
+            const char *clip = GetClipboardText();
+            if (clip)
+                text += clip;
+        }
     }
     return (false);
 }
@@ -64,7 +70,9 @@ bool TextInp::capture_tab(int direction)
 void TextInp::draw(void) const
 {
     // Achtergrond met afgeronde hoeken
-    DrawRectangleRounded(bounds, 0.2f, 8, (is_hover || is_tabt) ? LIGHTGRAY : bg_color);
+    DrawRectangleRounded(bounds, 0.2f, 8, get_color(UiColors::BG));
+    if (is_hover || is_tabt)
+        DrawRectangleRounded(bounds, 0.2f, 8, get_dcolor(UiColors::HOVER));
 
     // Border
     DrawRectangleRoundedLines(bounds, 0.2f, 8, DARKGRAY);
@@ -131,12 +139,18 @@ void TextInp::draw(void) const
 
         y += font_size + 2;
     }
+    if (is_active && lines.size() == 0 && (static_cast<int>(GetTime() * 2) % 2 == 0))
+    {
+        int x = bounds.x + (bounds.width - font_size) / 2;
+        int y = bounds.y + (bounds.height - font_size) / 2;
+        DrawLine(x, y, x, y + font_size, BLACK);
+    }
 }
 
 std::string &TextInp::get_text(void)
 {
     return (text);
-} 
+}
 
 const Rectangle &TextInp::get_rect(void)
 {
@@ -164,9 +178,4 @@ void TextInp::remove_active(void)
 void TextInp::set_text(const std::string &text)
 {
     this->text = text;
-}
-
-void TextInp::set_bg_color(const Color &color)
-{
-    bg_color = color;
 }

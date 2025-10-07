@@ -12,28 +12,28 @@
 struct Ion
 {
     std::string name;
-    int Nat;
-    Ion(const std::string &i, int m) : name(i), Nat(m) {}
+    int n;
+    Ion(const std::string &i, int m) : name(i), n(m) {}
 };
 
 struct Element // zout
 {
     Ion anion;
     Ion kation;
-    double M;
+    double Mol_per_liter_per_zout;
     double dosdr;
 
     Element(const Ion &a, const Ion &k, double m, double d)
-        : anion(a), kation(k), M(m), dosdr(d) {}
+        : anion(a), kation(k), Mol_per_liter_per_zout(m), dosdr(d) {}
 };
 
 struct IonData
 {
     Color color;
-    float atoomMasa;
-    float maxGlass;
+    float gram_per_mol;
+    float max_glass_mg;
 
-    IonData(Color c, float a, float m) : color(c), atoomMasa(a), maxGlass(m) {}
+    IonData(Color c, float a, float m) : color(c), gram_per_mol(a), max_glass_mg(m) {}
 };
 
 struct GameData

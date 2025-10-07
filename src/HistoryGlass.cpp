@@ -44,7 +44,7 @@ HistoryGlass::HistoryGlass(int i, Glass &glass) : BufferedWin((GetScreenWidth() 
 
 void HistoryGlass::save_data(std::ofstream &file, GameData &data, WebsiteData &websiteData)
 {
-    file << comment << ";" << websiteData.get("final comment") << ";" << osmo << ";" << volume << ";";
+    file << comment << ";" << websiteData.get("final_comment") << ";" << osmo << ";" << volume << ";";
 
     auto elements = bar.get_data();
 
@@ -61,7 +61,7 @@ void HistoryGlass::save_data(std::ofstream &file, GameData &data, WebsiteData &w
         }
         file << (val / bar.get_total_volume()) * 100 << ";";         // % --> todo .f2
         file << val << ";";                                          // mol
-        file << val * data.get_ion_data(ion.first).atoomMasa << ";"; // mg
+        file << val * data.get_ion_data(ion.first).gram_per_mol << ";"; // mg
     }
 
     file << hastags.size() * 2 << ";";
@@ -74,18 +74,15 @@ std::string HistoryGlass::to_json() const
 {
     std::stringstream json;
     json << "    {\n";
-    json << "      \"comment\": \"" << comment << "\",\n";
-    json << "      \"hashtags\": [\n";
+    json << "      \"id\": \"" << i + 1 << "\",\n";
+    json << "      \"tags\": [\n";
 
     size_t i = 0;
     for (auto it = hastags.begin(); it != hastags.end(); ++it, ++i)
     {
         if (i > 0)
-            json << ",\n";
-        json << "        {\n";
-        json << "          \"name\": \"" << it->first << "\",\n";
-        json << "          \"value\": " << it->second << "\n";
-        json << "        }";
+            json << ",";
+        json << "\"" << it->first << "\"";
     }
 
     json << "\n      ]\n";
@@ -112,8 +109,6 @@ void HistoryGlass::set_pos(int i, float scrollOffset)
     {
         this->_is_visible = true;
     }
-
-    this->i++; // compiler
 }
 
 void HistoryGlass::draw(void) const

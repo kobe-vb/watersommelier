@@ -12,27 +12,69 @@
         <form action="/send-data" method="post">
             <input type="hidden" name="username" id="username">
 
+            <!-- Type 1: Compacte tabel (vaste velden zonder prefix) -->
+            <fieldset class="form-group">
+                <legend>Sensitiviteit test aantal druppels per smaak.</legend>
+                <table class="sens-table" aria-label="Aantal druppels per smaak">
+                    <thead>
+                        <tr>
+                            <th scope="col">Zoet</th>
+                            <th scope="col">Zout</th>
+                            <th scope="col">Zuur</th>
+                            <th scope="col">Bitter</th>
+                            <th scope="col">Umami</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Zoet">
+                                <input type="number" name="zoet" id="zoet" min="0" step="1" inputmode="numeric" required>
+                            </td>
+                            <td data-label="Zout">
+                                <input type="number" name="zout" id="zout" min="0" step="1" inputmode="numeric" required>
+                            </td>
+                            <td data-label="Zuur">
+                                <input type="number" name="zuur" id="zuur" min="0" step="1" inputmode="numeric" required>
+                            </td>
+                            <td data-label="Bitter">
+                                <input type="number" name="bitter" id="bitter" min="0" step="1" inputmode="numeric" required>
+                            </td>
+                            <td data-label="Umami">
+                                <input type="number" name="umami" id="umami" min="0" step="1" inputmode="numeric" required>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
 
-            <!-- custom form -->
-            <div class="form-group">
-                <label for="z">zuur?</label>
-                <input type="number" name="SsC zuur" id="z" required>
-            </div>
-            <div class="form-group">
-                <label for="b">biter?</label>
-                <input type="number" name="SsC bitter" id="b" required>
-            </div>           
-            <div class="form-group">
-                <label for="com">coment?</label>
-                <input type="text" name="final comment" id="com" required>
-            </div>
+            <!-- Water-voorkeur (vast veld zonder prefix) -->
+            <fieldset class="form-group">
+                <legend>Welk water drink je het liefst?</legend>
+                <div class="form-group">
+                    <label><input type="radio" name="water_preference" value="Spa" required> Spa</label>
+                </div>
+                <div class="form-group">
+                    <label><input type="radio" name="water_preference" value="Chaudfontaine"> Chaudfontaine</label>
+                </div>
+                <div class="form-group">
+                    <label><input type="radio" name="water_preference" value="Evian"> Evian</label>
+                </div>
+                <div class="form-group">
+                    <label><input type="radio" name="water_preference" value="Boni water"> Boni water</label>
+                </div>
+            </fieldset>
 
-            <div class="form-group">
-                <label for="leker">vindge lekereddr</label>
-                <input type="text" name="_leker" id="leker" required>
-            </div>
-            
-            <!-- custom form -->
+            <!-- Type 2: Vergelijkingen (dynamisch gegenereerd met _ prefix) -->
+            <fieldset class="form-group" id="comparisons-block">
+                <legend>Welk glas vond je het best in zaken …</legend>
+                <div id="comparisons"></div>
+            </fieldset>
+
+            <!-- Type 3: Final Comment (vast veld zonder prefix) -->
+            <fieldset class="form-group">
+                <legend>Final Comment</legend>
+                <textarea name="final_comment" id="final_comment" placeholder="Vermeld vooral de namen van de glazen die je hebt getest, en vergelijk ze gerust met elkaar. Wat sprong er voor jou echt uit? Welke verschillen vielen je op? Laat je indrukken de vrije loop!"></textarea>
+            </fieldset>
 
             <div class="form-group">
                 <button type="submit">Verzend</button>

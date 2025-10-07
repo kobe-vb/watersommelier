@@ -93,7 +93,7 @@ void Glass::_set_warning(UI &ui)
     auto &ion = data.get_ion_data(elm.anion.name);
     auto &kion = data.get_ion_data(elm.kation.name);
 
-    float ion_val = 0;
+    float ion_val = 0; //  som van (M * amount * 0.000055 * ion.n) // mol
     float kion_val = 0;
     for (auto &element : elements)
     {
@@ -103,27 +103,27 @@ void Glass::_set_warning(UI &ui)
             kion_val = element.val;
     }
 
-    float delta_ion = ion.maxGlass - (ion_val * ion.atoomMasa);
-    float delta_kion = kion.maxGlass - (kion_val * kion.atoomMasa);
+    float delta_ion = ion.max_glass_mg - ((ion_val * ion.gram_per_mol) * 1000);
+    float delta_kion = kion.max_glass_mg - ((kion_val * kion.gram_per_mol) * 1000); // dt mg
 
-    float massa_one_druple_i = elm.M * elm.anion.Nat * ion.atoomMasa;
-    float massa_one_druple_k = elm.M * elm.kation.Nat * kion.atoomMasa;
+    float massa_one_druple_i = (elm.Mol_per_liter_per_zout * elm.anion.n * ion.gram_per_mol); // mg
+    float massa_one_druple_k = (elm.Mol_per_liter_per_zout * elm.kation.n * kion.gram_per_mol);
 
-    float max_drupel_ion = delta_ion / massa_one_druple_i;
-    float max_drupel_kion = delta_kion / massa_one_druple_k;
+    float max_drupel_ion = (delta_ion * 1) / (massa_one_druple_i * 10);
+    float max_drupel_kion = (delta_kion * 1) / (massa_one_druple_k * 10);
 
-    float max = std::min(max_drupel_ion, max_drupel_kion);
+    float min = std::min(max_drupel_ion, max_drupel_kion);
 
-    warning = "nog max " + std::to_string((int)max) + " drupels";
+    warning = "nog max " + std::to_string((int)min) + " drupels";
 }
 
 void Glass::save_ion(Ion &ion, int amount, float M)
 {
-    float molarity = M * amount * 0.000055 * ion.Nat;
+    float molarity = M * amount * 0.000055 * ion.n;
     Color col = data.get_ion_data(ion.name).color;
 
     bar.add_value(ion.name, col, molarity);
-    sim.addParticles(int(amount * 3 * ion.Nat), col);
+    sim.addParticles(int(amount * 3 * ion.n), col);
 }
 
 void Glass::_save_druple(int number_of_druplets, Element *elm)
@@ -132,8 +132,8 @@ void Glass::_save_druple(int number_of_druplets, Element *elm)
     osmo += number_of_druplets * 40 * elm->dosdr;
     // osmo += number_of_druplets * 40 * (elm->anion.Nat + elm->kation.Nat) * elm->M;
 
-    save_ion(elm->anion, number_of_druplets, elm->M);
-    save_ion(elm->kation, number_of_druplets, elm->M);
+    save_ion(elm->anion, number_of_druplets, elm->Mol_per_liter_per_zout);
+    save_ion(elm->kation, number_of_druplets, elm->Mol_per_liter_per_zout);
 
 }
 
@@ -146,13 +146,26 @@ void Glass::save_druple(UI &ui)
     try
     {
         number_of_druplets = std::stoi(amount->get_text());
+    }
+    catch (const std::exception &e)
+    {
+        amount->set_color(UiColors::BG, RED);
+        std::cerr << e.what() << '\n';
+        return;
+    }
+    amount->clear_color(UiColors::BG);
+
+    try
+    {
         elm = &data.get_element(name->get_selected_text());
     }
     catch (const std::exception &e)
     {
+        name->set_color(UiColors::BG, RED);
         std::cerr << e.what() << '\n';
         return;
     }
+    name->clear_color(UiColors::BG);
 
     _save_druple(number_of_druplets, elm);
 
@@ -203,12 +216,6 @@ void Glass::_add_score(void)
     this->pop_ui_back();
     this->pop_ui_back();
 
-    add_ui(std::make_unique<Button>(
-        PEDING * 2 + (rect.width - 170), LINE + 300,
-        150, 300,
-        "save glass", [this](UI &ui)
-        { (void)ui; _next_glass(ui); }));
-
     int index = 0;
     for (auto &tag : hastags)
     {
@@ -223,12 +230,19 @@ void Glass::_add_score(void)
             ((TextInp *)(get_ui_at(get_num_of_elements() - 1)))->set_text("5");
         index++;
     }
+
+    add_ui(std::make_unique<Button>(
+        PEDING * 2 + (rect.width - 170), LINE + 300,
+        150, 300,
+        "save glass", [this](UI &ui)
+        { (void)ui; _next_glass(ui); }));
+
 }
 
 void Glass::_next_glass(UI &ui)
 {
     bool is_valid = true;
-    int i = get_num_of_elements() - hastags.size();
+    int i = get_num_of_elements() - hastags.size() - 1;
     for (auto &tag : hastags)
     {
         bool valid = true;
@@ -243,7 +257,7 @@ void Glass::_next_glass(UI &ui)
         {
             valid = false;
         }
-        text->set_bg_color(valid ? GREEN : RED);
+        text->set_color(UiColors::BG, valid ? GREEN : RED);
         text->set_on_focus_clear(true);
         is_valid &= valid;
     }
@@ -301,20 +315,12 @@ void Glass::generate_random_data(bool full)
     _add_comment();
 
     std::string comment;
-    std::vector<std::string> opties = {"woow wat cool", "woow", "cool", "wat to frick dit is echt", 
-                                       "ja dit is echt", "wajo dit is koe", "lol"};
+    std::vector<std::string> opties = {"#flats", "#bitter", "#salty"};
 
-    int max = std::rand() % 6 + 4;
+    int max = std::rand() % 2 + 1;
     for (int i = 0; i < max; i++)
-    {
-        if (std::rand() % 10 < 8)
-        {
-            comment += opties[std::rand() % opties.size()];
-            comment += " ";
-        }
-        int number = std::rand() % 10;
-        comment += "#" + std::to_string(number) + " ";
-    }
+        comment += opties[std::rand() % opties.size()] + " ";
+
     ((TextInp *)get_ui_at(3))->set_text(comment);
     _add_score();
     for (auto &tag : hastags)

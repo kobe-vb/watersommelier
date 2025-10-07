@@ -78,4 +78,5 @@ private:
     Color get_color(UiColors color) const;
     static Color get_dcolor(UiColors color);
     void set_color(UiColors color, Color value);
+    void clear_color(UiColors color);
 };

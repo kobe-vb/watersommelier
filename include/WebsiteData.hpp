@@ -13,6 +13,7 @@ class WebsiteData
         WebsiteData() = default;
         WebsiteData(std::string &string);
         std::string get(std::string key);
-        std::string get_end_data();
+        const std::string &get_end_data() const;
         bool empty() const { return !this->innit; }
+        void set_begin_index(int begin_index);
 };

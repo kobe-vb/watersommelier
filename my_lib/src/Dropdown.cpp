@@ -103,6 +103,7 @@ bool Dropdown::update()
             if (filtered.size() == 1)
             {
                 is_open = false;
+                clear_color(UiColors::BG);
                 run_callback();
             }
             input_text = filtered[current_ind + ind];
@@ -123,10 +124,13 @@ bool Dropdown::update()
                 filter_options();
                 is_open = false;
                 run_callback();
-                break;
+                clear_color(UiColors::BG);
+                return false;
             }
         }
     }
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        is_open = false;
 
     return false;
 }
@@ -135,7 +139,9 @@ void Dropdown::draw() const
 {
     Vector2 mouse = this->get_mouse_pos();
 
-    DrawRectangleRec(bounds, hover || is_tabt ? LIGHTGRAY : GRAY);
+    DrawRectangleRec(bounds, get_color(UiColors::BG));
+    if (hover || is_tabt)
+        DrawRectangleRec(bounds, get_dcolor(UiColors::HOVER));
     DrawText(input_text.empty() ? placeholder.c_str() : input_text.c_str(), bounds.x + 10, bounds.y + 10, 20, input_text.empty() ? DARKGRAY : BLACK);
 
     if (is_open)

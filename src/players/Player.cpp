@@ -122,7 +122,8 @@ void Player::set_website(std::string website)
             (void)ui;
             std::thread([url]()
             {
-                std::string command = "start \"\" \"" + url + "\"";
+                // std::string command = "start \"\" \"" + url + "\"";
+                std::string command = "start " + url;
                 system(command.c_str());
             }).detach();
         }));

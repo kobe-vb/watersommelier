@@ -1,5 +1,7 @@
 #include "WebsiteData.hpp"
 #include <sstream>
+#include <iostream>
+#include <regex>
 
 static std::string urlDecode(const std::string &src)
 {
@@ -47,8 +49,9 @@ WebsiteData::WebsiteData(std::string &string)
         }
         this->data[key] = value;
     }
-    i /= 3;
+    i /= 5;
     custemData = std::to_string(i) + ";" + custemData;
+    std::cout << custemData << std::endl;
 }
 
 std::string WebsiteData::get(std::string key)
@@ -59,7 +62,31 @@ std::string WebsiteData::get(std::string key)
     return it->second;
 }
 
-std::string WebsiteData::get_end_data()
+void WebsiteData::set_begin_index(int begin_index)
+{
+    // "2;#bitter;glass 1;glass 3;A_gt;2;#salty;glass 4;glass 5;B_gt;1;"
+
+    std::regex glass_pattern(R"(glass\s+(\d+))");
+    std::smatch match;
+    std::string result;
+    std::string::const_iterator searchStart(custemData.cbegin());
+
+    while (std::regex_search(searchStart, custemData.cend(), match, glass_pattern))
+    {
+        result.append(match.prefix().first, match.prefix().second);
+
+        int original_num = std::stoi(match[1]);
+        int new_num = original_num + begin_index - 1;
+        result += "glass " + std::to_string(new_num);
+
+        searchStart = match.suffix().first;
+    }
+    result.append(searchStart, custemData.cend());
+
+    this->custemData = result;
+}
+
+const std::string &WebsiteData::get_end_data() const
 {
     return this->custemData;
 }

@@ -23,16 +23,17 @@ void History::save_data(std::ofstream &file, size_t &counter, const std::string 
                                     tm.tm_mon + 1,
                                     tm.tm_year + 1900);
 
+    websiteData.set_begin_index(counter);
     for (int i = 0; i < get_num_of_elements(); i++)
     {
         file << counter++ << ";"
         << datum << ";"
         << name << ";"
-        << websiteData.get("SsC zout") << ";"
-        << websiteData.get("SsC zoet") << ";"
-        << websiteData.get("SsC zuur") << ";"
-        << websiteData.get("SsC msg") << ";"
-        << websiteData.get("SsC bitter") << ";";
+        << websiteData.get("zoet") << ";"
+        << websiteData.get("zout") << ";"
+        << websiteData.get("zuur") << ";"
+        << websiteData.get("bitter") << ";"
+        << websiteData.get("umami") << ";";
 
         dynamic_cast<HistoryGlass &>(*get_ui_at(i)).save_data(file, data, websiteData);
         
