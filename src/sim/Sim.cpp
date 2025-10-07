@@ -67,8 +67,8 @@ void Sim::addParticles(float n, Color col)
     for (int i = 0; i < (int)n; i++)
     {
         // Verdeel de deeltjes over de breedte van het glas, onderaan
-        float x = glass.width * ((float)rand() / RAND_MAX) * 0.8f + glass.width * 0.1f;
-        float y = glass.height * 0.7f + (glass.height * 0.2f * ((float)rand() / RAND_MAX));
+        float x = glass.width * ((float)rand() / (float)RAND_MAX) * 0.8f + glass.width * 0.1f;
+        float y = glass.height * 0.7f + (glass.height * 0.2f * ((float)rand() / (float)RAND_MAX));
         
         Vector2 pos = {x, y};
         
