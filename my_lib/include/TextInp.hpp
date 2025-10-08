@@ -28,4 +28,7 @@ public:
     void set_on_focus_clear(bool value) { on_focus_clear = value; }
 
     void remove_active(void);
+
+    void set_active(bool value);
+
 };

@@ -57,6 +57,12 @@ bool TextInp::update(void)
     return (false);
 }
 
+void TextInp::set_active(bool value)
+{
+    UI::set_active(value);
+    is_active = value;
+}
+
 bool TextInp::capture_tab(int direction)
 {
     UI::capture_tab(direction);

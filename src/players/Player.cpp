@@ -15,6 +15,7 @@
 #include "WebsiteData.hpp"
 
 #include <thread>
+#include <MyDraw.hpp>
 
 Player::Player(std::string &name, GameData &data, Sim &sim) : name(name),
                                                               glass(Glass(data, [this](UI &ui)
@@ -80,21 +81,24 @@ void Player::next_glass(UI &ui)
     glass.reset();
 }
 
-bool Player::is_my_code(std::string &code) const
+bool Player::is_my_code(const std::string &code) const
 {
     return (code == this->code);
 }
 
-bool Player::take_code(std::string &new_code)
+bool Player::take_code_for_dropdown(const std::string &code)
 {
-    std::cout << "code: " << code.length() << std::endl;
+    return glass.take_code(code);
+}
+
+bool Player::set_code(const std::string &new_code)
+{
     if (code.length() == 0)
     {
         this->code = new_code;
         return true;
     }
-    Glass &g = dynamic_cast<Glass &>(*get_ui_at(0));
-    return (g.take_code(new_code));
+    return false;
 }
 
 bool Player::update(void)
@@ -166,8 +170,11 @@ void Player::draw(void) const
     if (!_is_visible)
         return;
 
-    DrawText(("Code: " + (code.length() ? code : "None")).c_str(), 50, 100, 80, BLACK);
-    DrawText(("Name: " + name).c_str(), 600, 100, 80, BLACK);
+    MyDraw::text("first", ("Code: " + (code.length() ? code : "None")).c_str(), 50, 100, 80, BLACK);
+    MyDraw::text("first", ("Name: " + name).c_str(), 600, 100, 80, BLACK);
+
+    DrawText(("Code: " + (code.length() ? code : "None")).c_str(), 50, 200, 80, BLACK);
+    DrawText(("Name: " + name).c_str(), 600, 200, 80, BLACK);
 
     history.draw();
 

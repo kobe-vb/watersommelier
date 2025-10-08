@@ -12,7 +12,7 @@
 
 #include "App.hpp"
 #include "Mouse.hpp"
-#include <Settings.hpp>
+#include "MyDraw.hpp"
 
 App::App(std::string title, int w, int h, int fps)
     : is_running(true)
@@ -46,8 +46,7 @@ void App::run()
         Mouse::set_cursor();
         BeginDrawing();
         draw();
-        if (DEBUG)
-            DrawFPS(10, 280);
         EndDrawing();
     }
+    MyDraw::destroy();
 }

@@ -18,12 +18,15 @@
 # include "TextInp.hpp"
 # include "GameData.hpp"
 # include "Sim.hpp"
+# include "BarcodeReader.hpp"
 
 # include <vector>
 
 class Game : public App
 {
     private:
+
+        BarcodeReader barcode_reader;
         std::vector<Player_data> players;
         GameData data;
         Win win;
@@ -31,11 +34,10 @@ class Game : public App
         
         Player *activePlayer = nullptr;
         
-        std::string code;
         Rectangle rect;
                 
     private:  
-        void handleCode();
+        void handleCode(const std::string &code);
         bool name_is_taken(const std::string &name);
         void save_data();
 

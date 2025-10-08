@@ -18,7 +18,7 @@ static void draw_my_text(const char *name, float val, int x, int y)
 {
     char buffer[64];
     snprintf(buffer, sizeof(buffer), name, val);
-    DrawText(buffer, x, y, 30, DARKBLUE);
+    DrawText(buffer, x, y, 30, BLACK);
 }
 
 Glass::Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim, Rectangle &rect) : rect(rect), data(data), sim(sim), next_glas_func(close_glas)
@@ -84,9 +84,8 @@ std::string Glass::get_comment(void) const
     return ((TextInp *)get_ui_at(3))->get_text();
 }
 
-void Glass::_set_warning(UI &ui)
+void Glass::_set_warning(const std::string &name)
 {
-    std::string name = ((Dropdown &)(ui)).get_selected_text();
     auto elm = data.get_element(name);
     auto elements = bar.get_data();
 
@@ -106,15 +105,21 @@ void Glass::_set_warning(UI &ui)
     float delta_ion = ion.max_glass_mg - ((ion_val * ion.gram_per_mol) * 1000);
     float delta_kion = kion.max_glass_mg - ((kion_val * kion.gram_per_mol) * 1000); // dt mg
 
-    float massa_one_druple_i = (elm.Mol_per_liter_per_zout * elm.anion.n * ion.gram_per_mol); // mg
-    float massa_one_druple_k = (elm.Mol_per_liter_per_zout * elm.kation.n * kion.gram_per_mol);
+    float massa_one_druple_i = (elm.Mol_per_liter_per_zout * elm.anion.n * ion.gram_per_mol * 0.000055 * 1000); // mg
+    float massa_one_druple_k = (elm.Mol_per_liter_per_zout * elm.kation.n * kion.gram_per_mol * 0.000055 * 1000);
 
-    float max_drupel_ion = (delta_ion * 1) / (massa_one_druple_i * 10);
-    float max_drupel_kion = (delta_kion * 1) / (massa_one_druple_k * 10);
+    float max_drupel_ion = (delta_ion) / (massa_one_druple_i);
+    float max_drupel_kion = (delta_kion) / (massa_one_druple_k);
 
     float min = std::min(max_drupel_ion, max_drupel_kion);
 
     warning = "nog max " + std::to_string((int)min) + " drupels";
+}
+
+void Glass::_set_warning(UI &ui)
+{
+    std::string name = ((Dropdown &)(ui)).get_selected_text();
+    _set_warning(name);
 }
 
 void Glass::save_ion(Ion &ion, int amount, float M)
@@ -145,7 +150,11 @@ void Glass::save_druple(UI &ui)
     Element *elm;
     try
     {
-        number_of_druplets = std::stoi(amount->get_text());
+        std::string &text = amount->get_text();
+        if (text.empty())
+            number_of_druplets = 1;
+        else
+            number_of_druplets = std::stoi(text);
     }
     catch (const std::exception &e)
     {
@@ -171,6 +180,7 @@ void Glass::save_druple(UI &ui)
 
     name->reset();
     amount->reset();
+    amount->set_active(false);
 }
 
 void Glass::add_comment(UI &ui)
@@ -284,12 +294,12 @@ void Glass::draw(void) const
     if (!_is_visible)
         return;
     draw_my_text("mol: %.2f", osmo, PEDING * 3 + 50, LINE + 130);
-    DrawText(warning.c_str(), PEDING * 3 + 200, LINE + 130, 30, RED);
+    DrawText(warning.c_str(), PEDING * 3 + 50, LINE + 170, 30, RED);
     bar.draw(this->get_mouse_pos());
     Win::draw();
 }
 
-bool Glass::take_code(std::string &code) const
+bool Glass::take_code(const std::string &code)
 {
     auto it = std::find(this->data.codes.begin(), this->data.codes.end(), code);
     if (it == this->data.codes.end())
@@ -297,6 +307,10 @@ bool Glass::take_code(std::string &code) const
 
     int index = std::distance(this->data.codes.begin(), it);
     name->set(index);
+    _set_warning(name->get_selected_text());
+    amount->set_active(true);
+    name->clear_color(UiColors::BG);
+
     // todo drupel saven?
     return true;
 }

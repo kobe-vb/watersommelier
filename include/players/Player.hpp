@@ -52,8 +52,10 @@ public:
 
     void fiks_sim(void);
 
-    bool take_code(std::string &code);
-    bool is_my_code(std::string &code) const;
+    bool set_code(const std::string &code);
+    bool take_code_for_dropdown(const std::string &code);
+
+    bool is_my_code(const std::string &code) const;
 
     bool update(void) override;
     void draw(void) const override;

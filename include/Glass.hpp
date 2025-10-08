@@ -32,6 +32,7 @@ private:
     void _add_score(void);
     void _next_glass(UI &ui);
     void _set_warning(UI &ui);
+    void _set_warning(const std::string &name);
     void _save_druple(int number_of_druplets, Element *elm);
 
     void _set_lock(bool lock);
@@ -42,7 +43,7 @@ public:
 
     void draw(void) const override;
 
-    bool take_code(std::string &code) const;
+    bool take_code(const std::string &code);
 
     void save_druple(UI &ui);
     void add_comment(UI &ui);

@@ -17,32 +17,38 @@
 #include "Game.hpp"
 #include "Settings.hpp"
 #include "SudoPlayer.hpp"
+#include "MyDraw.hpp"
 #include <WebsitePlayer.hpp>
 
-static void saveCounter(size_t counter, const std::string& filename)
+static void saveCounter(size_t counter, const std::string &filename)
 {
     std::ofstream out(filename, std::ios::binary);
-    if (!out) {
+    if (!out)
+    {
         std::cerr << "Failed to open file for writing: " << filename << std::endl;
         return;
     }
-    out.write(reinterpret_cast<const char*>(&counter), sizeof(counter));
+    out.write(reinterpret_cast<const char *>(&counter), sizeof(counter));
 }
 
-static size_t loadCounter(const std::string& filename)
+static size_t loadCounter(const std::string &filename)
 {
     std::ifstream in(filename, std::ios::binary);
-    if (!in) 
+    if (!in)
         return 1;
     size_t counter;
-    in.read(reinterpret_cast<char*>(&counter), sizeof(counter));
+    in.read(reinterpret_cast<char *>(&counter), sizeof(counter));
     return counter;
 }
 
 Game::Game() : App("pompion", 0, 0, 60)
 {
-while (!IsWindowReady()) {
-}
+    while (!IsWindowReady())
+    {
+    }
+    MyDraw::init("data/fonts/");
+
+    barcode_reader = BarcodeReader([this](const std::string &code) { handleCode(code); });
     rect.height = 80;
     rect.width = (GetScreenWidth() * 2 / 3) - 20;
     rect.x = 10;
@@ -71,7 +77,7 @@ void Game::save_data(void)
         {
             file << "i;datum;name;SsC Zoet; SsC Zout; SsC zuur; SsC Bitter; SsC Umami;comment;end comment;osmo;Tot volume(ml);";
             for (auto &ion : data.ions)
-                file << ion.first << " %" << ";" << ion.first << " mol" << ";"<< ion.first << " mg" << ";";
+                file << ion.first << " %" << ";" << ion.first << " mol" << ";" << ion.first << " mg" << ";";
             file << "hastags;" << std::endl;
         }
 
@@ -81,7 +87,7 @@ void Game::save_data(void)
                 continue;
             player.player->save_data(file, counter, data);
         }
-            file.close();
+        file.close();
     }
     saveCounter(counter, "data/output/counter.bin");
 }
@@ -91,7 +97,7 @@ void Game::create_new_player(UI &ui)
 
     TextInp &t = dynamic_cast<TextInp &>(ui);
 
-    if (name_is_taken(t.get_text()) || (t.get_text().empty() && !DEBUG))
+    if ((name_is_taken(t.get_text()) || t.get_text().empty()) && !DEBUG)
     {
         t.set_color(UiColors::BG, RED);
         return;
@@ -100,7 +106,6 @@ void Game::create_new_player(UI &ui)
 
     sim.set_rect(); // //////////////////////
     sim.reset();
-
 
     auto tokel = std::make_unique<Tokel>(t.get_rect().x, t.get_rect().y, 110, 60, t.get_text(),
                                          [this](UI &uii)
@@ -137,7 +142,7 @@ void Game::create_new_player(UI &ui)
     t.move(125, 0);
     tokel_ptr->set_tokel(true);
 
-    if (players.size() == 9 )
+    if (players.size() == 9)
     {
         t.set_text("tiboon");
         t.run_callback();
@@ -185,37 +190,48 @@ void Game::draw() const
     DrawRectangleRoundedLinesEx(rect, 0.2, 8, 6.0f, BLACK);
     sim.draw();
     win.draw();
+    if (DEBUG)
+        DrawFPS(10, 280);
 }
 
-void Game::handleCode()
+void Game::handleCode(const std::string &rawCode)
 {
-    std::cout << "code: " << this->code << std::endl;
+    // Maak een schoon exemplaar van de code
+    std::string code = rawCode;
 
-    for (auto& playerWrapper : players)
+    // Verwijder alle niet-printbare tekens (zoals STX, ETX, CR, LF)
+    code.erase(std::remove_if(code.begin(), code.end(),
+                              [](unsigned char c){ return !std::isprint(c); }),
+               code.end());
+
+    // Trim spaties aan begin en einde
+    code.erase(0, code.find_first_not_of(' '));
+    code.erase(code.find_last_not_of(' ') + 1);
+
+    std::cout << "code: \"" << code << "\"" << std::endl;
+    
+    if (this->activePlayer && this->activePlayer->take_code_for_dropdown(code))
+        return;
+    
+    for (auto &playerWrapper : players)
     {
-        if (playerWrapper.player->is_my_code(this->code))
+        if (playerWrapper.player->is_my_code(code))
         {
             playerWrapper.tokel->set_tokel(true);
             return;
         }
     }
-    if (this->activePlayer && this->activePlayer->take_code(this->code))
+    if (!this->activePlayer)
         return;
+    this->activePlayer->set_code(code);
 }
 
 void Game::update()
 {
     this->sim.update(GetFrameTime());
+    barcode_reader.update();
+    if (barcode_reader.isBuilding())
+        return;
     this->win.update();
     this->win.update_tabs();
-
-    this->code.clear();
-    int key = GetCharPressed();
-    while (key > 0)
-    {
-        this->code += (char)key;
-        key = GetCharPressed();
-    }
-    if (this->code.length() > 2)
-        this->handleCode();
 }
