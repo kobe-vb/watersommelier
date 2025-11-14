@@ -173,8 +173,8 @@ void Player::draw(void) const
     MyDraw::text("first", ("Code: " + (code.length() ? code : "None")).c_str(), 50, 100, 80, BLACK);
     MyDraw::text("first", ("Name: " + name).c_str(), 600, 100, 80, BLACK);
 
-    DrawText(("Code: " + (code.length() ? code : "None")).c_str(), 50, 200, 80, BLACK);
-    DrawText(("Name: " + name).c_str(), 600, 200, 80, BLACK);
+    // DrawText(("Code: " + (code.length() ? code : "None")).c_str(), 50, 200, 80, BLACK);
+    // DrawText(("Name: " + name).c_str(), 600, 200, 80, BLACK);
 
     history.draw();
 

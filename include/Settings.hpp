@@ -5,5 +5,5 @@
 #endif // DEBUG
 
 #define LINE 300
-#define PEDING 10
-#define ROUNDED 0.2
+#define PEDING 30
+#define ROUNDED 0.1

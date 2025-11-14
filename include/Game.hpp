@@ -35,6 +35,8 @@ class Game : public App
         Player *activePlayer = nullptr;
         
         Rectangle rect;
+
+        Music music;
                 
     private:  
         void handleCode(const std::string &code);

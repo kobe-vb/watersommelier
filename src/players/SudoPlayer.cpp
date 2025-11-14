@@ -67,13 +67,13 @@ Player(name, data, sim), server(players)
     for (auto &player : raw_players)
     {
         players.insert({player.player->get_name(), *player.player});
-        add_ui(std::make_unique<Tokel>(1300 + (i % 5) * 120, 100 + (i / 5) * 100, 110, 60, player.player->get_name(), 
+        add_ui(std::make_unique<Tokel>(1300 + (i % 5) * 117, 100 + (i / 5) * 100, 105,  60, player.player->get_name(), 
                                              [this](UI &uii)
                                          { set_player_website(uii); }));
         i++;
     }
     players.insert({this->get_name(), *this});
-    add_ui(std::make_unique<Tokel>(1300 + (i % 5) * 120, 100 + (i / 5) * 100, 110, 60, this->get_name(),
+    add_ui(std::make_unique<Tokel>(1300 + (i % 5) * 117, 100 + (i / 5) * 100, 105, 60, this->get_name(),
                                                  [this](UI &uii)
                                          { set_player_website(uii); }));
 }

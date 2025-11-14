@@ -29,8 +29,8 @@ void draw_my_text(const char *name, float val, int x, int y)
     DrawText(buffer, x, y, 30, DARKBLUE);
 }
 
-HistoryGlass::HistoryGlass(int i, Glass &glass) : BufferedWin((GetScreenWidth() * 1 / 3) + PEDING, LINE + PEDING * 4,
-                                                              (GetScreenWidth() * 1 / 3) - PEDING * 4, 120),
+HistoryGlass::HistoryGlass(int i, Glass &glass) : BufferedWin(((GetScreenWidth() - (PEDING * 4)) * 1 / 3) + PEDING * 2, LINE + PEDING * 4,
+                                                              ((GetScreenWidth() - (PEDING * 4)) * 1 / 3), 120),
                                                   i(i),
                                                   bar(glass.bar),
                                                   comment(glass.comment),

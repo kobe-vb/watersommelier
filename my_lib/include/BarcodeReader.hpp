@@ -10,7 +10,7 @@ class BarcodeReader
     double lastKeyTime = 0;
     bool building = false;
     double timeout = 0.1;         // 100ms stilte = einde barcode
-    double speedThreshold = 0.05; // <50ms tussen toetsen = scanner
+    double speedThreshold = 0.01; // <50ms tussen toetsen = scanner
 
     std::function<void(const std::string &)> callback;
 

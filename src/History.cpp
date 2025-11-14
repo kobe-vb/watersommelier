@@ -7,8 +7,8 @@
 History::History(void) : scrollOffset(0), maxScrollOffset(0)
 {
     rect.height = GetScreenHeight() - LINE - PEDING;
-    rect.width = (GetScreenWidth() * 1 / 3) - PEDING * 2;
-    rect.x = (GetScreenWidth() * 1 / 3) - PEDING;
+    rect.width = ((GetScreenWidth() - (PEDING * 4)) * 1 / 3);
+    rect.x = ((GetScreenWidth() - (PEDING * 4)) * 1 / 3) + PEDING * 2;
     rect.y = LINE;
 }
 

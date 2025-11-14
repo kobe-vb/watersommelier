@@ -28,4 +28,6 @@ class App
         void run();
         virtual void update() = 0;
         virtual void draw() const = 0;
+
+        void stop() { is_running = false; }
 };

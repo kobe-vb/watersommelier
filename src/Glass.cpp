@@ -25,7 +25,7 @@ Glass::Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim, Rec
 {
 
     rect.height = GetScreenHeight() - LINE - PEDING;
-    rect.width = (GetScreenWidth() * 1 / 3) - (PEDING * 3);
+    rect.width = ((GetScreenWidth() - (PEDING * 4)) * 1 / 3);
     rect.x = PEDING;
     rect.y = LINE;
 
@@ -102,11 +102,11 @@ void Glass::_set_warning(const std::string &name)
             kion_val = element.val;
     }
 
-    float delta_ion = ion.max_glass_mg - ((ion_val * ion.gram_per_mol) * 1000);
-    float delta_kion = kion.max_glass_mg - ((kion_val * kion.gram_per_mol) * 1000); // dt mg
+    float delta_ion = ion.max_glass_mg - ((ion_val * ion.gram_per_mol));
+    float delta_kion = kion.max_glass_mg - ((kion_val * kion.gram_per_mol)); // dt mg
 
-    float massa_one_druple_i = (elm.Mol_per_liter_per_zout * elm.anion.n * ion.gram_per_mol * 0.000055 * 1000); // mg
-    float massa_one_druple_k = (elm.Mol_per_liter_per_zout * elm.kation.n * kion.gram_per_mol * 0.000055 * 1000);
+    float massa_one_druple_i = (elm.Mol_per_liter_per_zout * elm.anion.n * ion.gram_per_mol * 0.000055); // mg
+    float massa_one_druple_k = (elm.Mol_per_liter_per_zout * elm.kation.n * kion.gram_per_mol * 0.000055);
 
     float max_drupel_ion = (delta_ion) / (massa_one_druple_i);
     float max_drupel_kion = (delta_kion) / (massa_one_druple_k);
@@ -139,7 +139,6 @@ void Glass::_save_druple(int number_of_druplets, Element *elm)
 
     save_ion(elm->anion, number_of_druplets, elm->Mol_per_liter_per_zout);
     save_ion(elm->kation, number_of_druplets, elm->Mol_per_liter_per_zout);
-
 }
 
 void Glass::save_druple(UI &ui)
@@ -181,6 +180,7 @@ void Glass::save_druple(UI &ui)
     name->reset();
     amount->reset();
     amount->set_active(false);
+    warning.clear();
 }
 
 void Glass::add_comment(UI &ui)
@@ -245,8 +245,7 @@ void Glass::_add_score(void)
         PEDING * 2 + (rect.width - 170), LINE + 300,
         150, 300,
         "save glass", [this](UI &ui)
-        { (void)ui; _next_glass(ui); }));
-
+        { _next_glass(ui); }));
 }
 
 void Glass::_next_glass(UI &ui)

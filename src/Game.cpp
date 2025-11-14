@@ -46,22 +46,27 @@ Game::Game() : App("pompion", 0, 0, 60)
     while (!IsWindowReady())
     {
     }
+    InitAudioDevice();
+    music = LoadMusicStream("data/sounds/music.mp3");
     MyDraw::init("data/fonts/");
 
-    barcode_reader = BarcodeReader([this](const std::string &code) { handleCode(code); });
+    barcode_reader = BarcodeReader([this](const std::string &code)
+                                   { handleCode(code); });
     rect.height = 80;
-    rect.width = (GetScreenWidth() * 2 / 3) - 20;
-    rect.x = 10;
-    rect.y = 10;
+    rect.width = (GetScreenWidth() - (PEDING * 4)) * 2 / 3 + PEDING;
+    rect.x = PEDING;
+    rect.y = PEDING;
     load_data(data);
     win.add_ui(std::make_unique<TextInp>(
-        PEDING * 2, PEDING * 2, 100, 60,
+        PEDING + 10 , PEDING + 10, 90, 60,
         [this](UI &ui)
         { create_new_player(ui); }, "name?"));
 }
 
 Game::~Game()
 {
+    UnloadMusicStream(music);
+    CloseAudioDevice();
     save_data();
 }
 
@@ -107,7 +112,7 @@ void Game::create_new_player(UI &ui)
     sim.set_rect(); // //////////////////////
     sim.reset();
 
-    auto tokel = std::make_unique<Tokel>(t.get_rect().x, t.get_rect().y, 110, 60, t.get_text(),
+    auto tokel = std::make_unique<Tokel>(t.get_rect().x, t.get_rect().y, 106, 60, t.get_text(),
                                          [this](UI &uii)
                                          { switch_players(uii); });
     Tokel *tokel_ptr = tokel.get();
@@ -139,7 +144,7 @@ void Game::create_new_player(UI &ui)
     players.push_back({tokel_ptr, pl_ptr});
 
     t.get_text().clear();
-    t.move(125, 0);
+    t.move(122, 0);
     tokel_ptr->set_tokel(true);
 
     if (players.size() == 9)
@@ -201,7 +206,8 @@ void Game::handleCode(const std::string &rawCode)
 
     // Verwijder alle niet-printbare tekens (zoals STX, ETX, CR, LF)
     code.erase(std::remove_if(code.begin(), code.end(),
-                              [](unsigned char c){ return !std::isprint(c); }),
+                              [](unsigned char c)
+                              { return !std::isprint(c); }),
                code.end());
 
     // Trim spaties aan begin en einde
@@ -209,10 +215,10 @@ void Game::handleCode(const std::string &rawCode)
     code.erase(code.find_last_not_of(' ') + 1);
 
     std::cout << "code: \"" << code << "\"" << std::endl;
-    
+
     if (this->activePlayer && this->activePlayer->take_code_for_dropdown(code))
         return;
-    
+
     for (auto &playerWrapper : players)
     {
         if (playerWrapper.player->is_my_code(code))
@@ -228,6 +234,21 @@ void Game::handleCode(const std::string &rawCode)
 
 void Game::update()
 {
+    if (IsKeyDown(KEY_LEFT_CONTROL))
+    {
+        if (IsKeyPressed(KEY_P))
+        {
+            if (IsMusicStreamPlaying(music))
+                PauseMusicStream(music);
+            else
+                PlayMusicStream(music);
+        }
+        if (IsKeyPressed(KEY_DELETE))
+            this->stop();
+    }
+
+    UpdateMusicStream(music);
+
     this->sim.update(GetFrameTime());
     barcode_reader.update();
     if (barcode_reader.isBuilding())

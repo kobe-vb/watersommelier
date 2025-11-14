@@ -84,7 +84,7 @@ void TextInp::draw(void) const
     DrawRectangleRoundedLines(bounds, 0.2f, 8, DARKGRAY);
 
     const std::string &display_text = (text.empty() && !is_active) ? tmp : text;
-    Color text_color = (text.empty() && !is_active) ? RED : BLACK;
+    Color text_color = (text.empty() && !is_active) ? GRAY : BLACK;
 
     int font_size = 20;
     float max_width = bounds.width - 20;

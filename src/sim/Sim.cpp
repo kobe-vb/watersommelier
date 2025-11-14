@@ -54,8 +54,8 @@ void Sim::reset(void)
 void Sim::set_rect(void)
 {    
     rect.height = GetRenderHeight() - (PEDING * 2);
-    rect.width = (GetScreenWidth() * 1 / 3) - (PEDING * 3);
-    rect.x = PEDING + (GetScreenWidth() * 2 / 3);
+    rect.width = ((GetScreenWidth() - (PEDING * 4)) * 1 / 3);
+    rect.x = ((GetScreenWidth() - (PEDING * 4)) * 2 / 3) + PEDING * 3;
     rect.y = PEDING;
 
 }

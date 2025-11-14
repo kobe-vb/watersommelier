@@ -70,8 +70,9 @@ bool Win::update()
         return false;
     int temp = current_tab;
     if (current_tab >= 0 && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ESCAPE)))
-        remove_tab();        
-    for (size_t i = 0; i < ui_elements.size(); ++i)
+        remove_tab();      
+    size_t size = ui_elements.size();  
+    for (size_t i = 0; i < size; ++i)
     {
         if (ui_elements[i]->update())
             current_tab = i;
