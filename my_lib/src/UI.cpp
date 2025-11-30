@@ -14,8 +14,8 @@
 #include "BufferedWin.hpp"
 
 std::array<Color, static_cast<size_t>(UiColors::Count)> UI::default_colors = {
-    Color{50, 50, 50, 255},     // bg
-    Color{70, 70, 70, 255},     // first
+    Color{40, 50, 55, 255},     // bg
+    Color{53, 60, 67, 255},     // first
     Color{90, 90, 90, 255},     // second
     Color{110, 110, 110, 255},  // third
     Color{255, 255, 255, 30},   // hover

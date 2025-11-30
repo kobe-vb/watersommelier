@@ -70,12 +70,17 @@ bool Win::update()
         return false;
     int temp = current_tab;
     if (current_tab >= 0 && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ESCAPE)))
-        remove_tab();      
-    size_t size = ui_elements.size();  
+        remove_tab();
+    size_t size = ui_elements.size();
     for (size_t i = 0; i < size; ++i)
     {
         if (ui_elements[i]->update())
             current_tab = i;
+        if (ui_elements_is_changed)
+        {
+            ui_elements_is_changed = false;
+            break;
+        }
     }
     return (temp != current_tab);
 }
@@ -92,7 +97,7 @@ void Win::update_tabs(void)
 {
     if (!_is_active)
         return;
-    if (IsKeyDown(KEY_LEFT_SHIFT) &&IsKeyPressed(KEY_TAB))
+    if (IsKeyDown(KEY_LEFT_SHIFT) && IsKeyPressed(KEY_TAB))
         next_tab(-1, true);
     else if (IsKeyPressed(KEY_TAB))
         next_tab(1, true);
@@ -128,6 +133,7 @@ void Win::pop_ui_back()
     if (!ui_elements.empty())
         ui_elements.pop_back();
     current_tab = std::min(current_tab, (int)ui_elements.size() - 1);
+    ui_elements_is_changed = true;
 }
 
 void Win::pop_ui_front()
@@ -135,4 +141,5 @@ void Win::pop_ui_front()
     this->remove_tab();
     if (!ui_elements.empty())
         ui_elements.erase(ui_elements.begin());
+    ui_elements_is_changed = true;
 }

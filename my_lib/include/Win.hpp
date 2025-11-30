@@ -27,6 +27,8 @@ private:
     void remove_tab(void) override;
     int current_tab = -1;
 
+    bool ui_elements_is_changed = false;
+
 public:
     Win() = default;
     ~Win() = default;

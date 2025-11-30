@@ -6,10 +6,12 @@
 
 History::History(void) : scrollOffset(0), maxScrollOffset(0)
 {
-    rect.height = GetScreenHeight() - LINE - PEDING;
-    rect.width = ((GetScreenWidth() - (PEDING * 4)) * 1 / 3);
-    rect.x = ((GetScreenWidth() - (PEDING * 4)) * 1 / 3) + PEDING * 2;
+    rect.width = ((GetScreenWidth() - (UI_BORDER * 4) - (PEDING * 2)) * 1 / 3);
+    rect.height = GetScreenHeight() - LINE - PEDING - UI_BORDER;
+
+    rect.x = UI_BORDER * 2 + rect.width + PEDING;
     rect.y = LINE;
+
 }
 
 void History::save_data(std::ofstream &file, size_t &counter, const std::string &name, GameData &data, WebsiteData &websiteData)
@@ -98,10 +100,12 @@ void History::draw(void) const
     for (int i = 0; i < get_num_of_elements(); i++)
         dynamic_cast<HistoryGlass &>(*get_ui_at(i)).draww();
     DrawRectangleRounded(rect, ROUNDED, 10, UI::get_dcolor(UiColors::FIRST));
+    if (BORDER_WIDTH > 0)
+        DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, BORDER_WIDTH, UI::get_dcolor(UiColors::BORDER));
+    
 
     BeginScissorMode(rect.x, rect.y, rect.width, rect.height);
     Win::draw();
     EndScissorMode();
 
-    DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
 }

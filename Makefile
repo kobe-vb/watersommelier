@@ -14,8 +14,18 @@ INCLUDES = -I include -I include/sim -I include/players -I my_lib/include
 # Debug flags
 CXXFLAGS = -g -Wall -Wextra -Werror -DDEBUG=1 -std=c++20 $(INCLUDES)
 
-# Release flags
-RELEASE_CXXFLAGS = -O2 -Wall -Wextra -Werror -std=c++20 $(INCLUDES)
+RELEASE_CXXFLAGS = -std=c++20 $(INCLUDES) \
+    -O3 \
+    -march=native \
+    -mtune=native \
+    -ffast-math \
+    -funroll-loops \
+    -finline-functions \
+    -fomit-frame-pointer \
+    -DNDEBUG \
+    -Wall -Wextra
+
+RELEASE_CXXFLAGS += -pthread
 
 # Platform-specifieke includes en libraries
 ifeq ($(OS_TYPE), windows)

@@ -37,9 +37,8 @@ private:
 
     static std::array<Color, static_cast<size_t>(UiColors::Count)> default_colors;
     std::array<std::optional<Color>, static_cast<size_t>(UiColors::Count)> custom_colors{};
-
     
-    protected:
+protected:
     bool _is_locked = false;
     bool _is_active = true;
     bool _is_visible = true;
@@ -48,7 +47,7 @@ private:
     
     BufferedWin *parent = nullptr;
     
-    public:
+public:
     UI(std::function<void(UI &)> callback = nullptr) : callback(callback) {}
     virtual ~UI() = default;
 

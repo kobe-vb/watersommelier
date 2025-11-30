@@ -14,6 +14,8 @@
 #include "Settings.hpp"
 #include <regex>
 
+#define SIM_FACTOR 100000000
+
 static void draw_my_text(const char *name, float val, int x, int y)
 {
     char buffer[64];
@@ -24,41 +26,47 @@ static void draw_my_text(const char *name, float val, int x, int y)
 Glass::Glass(GameData &data, std::function<void(UI &)> close_glas, Sim &sim, Rectangle &rect) : rect(rect), data(data), sim(sim), next_glas_func(close_glas)
 {
 
-    rect.height = GetScreenHeight() - LINE - PEDING;
-    rect.width = ((GetScreenWidth() - (PEDING * 4)) * 1 / 3);
-    rect.x = PEDING;
+    rect.x = UI_BORDER * 2;
     rect.y = LINE;
+    rect.width = ((GetScreenWidth() - (UI_BORDER * 4) - (PEDING * 2)) * 1 / 3);
+    rect.height = GetScreenHeight() - LINE - PEDING - UI_BORDER;
 
-    bar = StackedBar(PEDING * 2, LINE + PEDING * 4, rect.width - PEDING * 2, 60);
+    bar = StackedBar(rect.x + PEDING, rect.y + PEDING, rect.width - PEDING * 2, BUTTON_HEIGHT);
+
+    int x = rect.x + rect.width - PEDING - BUTTON_WIDTH;
+    int y = rect.y + PEDING + BUTTON_HEIGHT + PEDING;
+    add_ui(std::make_unique<Button>(
+        x, y,
+        BUTTON_WIDTH, BUTTON_HEIGHT,
+        "ik drink",
+        [this](UI &ui)
+        { add_comment(ui); }));
+    y += BUTTON_HEIGHT + PEDING;
 
     add_ui(std::make_unique<Dropdown>(
-        PEDING * 2, LINE + 200,
-        rect.width - 200, 60,
+        rect.x + PEDING, y,
+        rect.width - BUTTON_WIDTH - PEDING * 3, BUTTON_HEIGHT,
         data.names, "lol", [this](UI &ui)
         { _set_warning(ui); }));
 
     add_ui(std::make_unique<TextInp>(
-        PEDING * 2 + (rect.width - 170), LINE + 200,
-        150, 60,
+        x, y,
+        BUTTON_WIDTH, BUTTON_HEIGHT,
         [this](UI &ui)
         { save_druple(ui); }, "hoeveel?"));
 
-    add_ui(std::make_unique<Button>(
-        PEDING * 2 + (rect.width - 170), LINE + 120,
-        150, 60,
-        "ik drink",
-        [this](UI &ui)
-        { add_comment(ui); }));
     // add_ui(std::make_unique<Button>(1400, 10, 100, 50, "gek", close_glas));
-    name = (Dropdown *)get_ui_at(0);
-    amount = (TextInp *)get_ui_at(1);
+    name = (Dropdown *)get_ui_at(1);
+    amount = (TextInp *)get_ui_at(2);
 }
 
 void Glass::reset(void)
 {
+    std::cout << "reset\n";
     osmo = 0;
     volume = 25;
     bar.reset();
+    this->pop_ui_back();
     this->pop_ui_back();
     this->sim.reset();
 
@@ -74,9 +82,8 @@ void Glass::reset_sim(void)
     this->sim.reset();
 
     for (auto &ion : bar.get_data())
-    {
-        sim.addParticles((int)(ion.val * 20), ion.col);
-    }
+        sim.addParticles((int)(ion.val * SIM_FACTOR), ion.col);
+    std::cout << "reset sim with " << bar.get_data().size() << " ions\n";
 }
 
 std::string Glass::get_comment(void) const
@@ -128,7 +135,7 @@ void Glass::save_ion(Ion &ion, int amount, float M)
     Color col = data.get_ion_data(ion.name).color;
 
     bar.add_value(ion.name, col, molarity);
-    sim.addParticles(int(amount * 3 * ion.n), col);
+    sim.addParticles(int(molarity * SIM_FACTOR), col);
 }
 
 void Glass::_save_druple(int number_of_druplets, Element *elm)
@@ -198,16 +205,22 @@ void Glass::_set_lock(bool lock)
 void Glass::_add_comment(void)
 {
     _set_lock(true);
-    add_ui(std::make_unique<TextInp>(
-        PEDING * 2, LINE + 300,
-        rect.width - 200, 300, nullptr, "coment?"));
-    
-    if (DEBUG)
-        dynamic_cast<TextInp &>(*get_ui_at(get_num_of_elements() - 1)).set_text("vdf #one #two #three");
 
+    int x = rect.x + rect.width - PEDING - BUTTON_WIDTH;
+    int y = rect.y + (BUTTON_HEIGHT * 3) + (PEDING * 4);
+    int h = rect.y + rect.height - y - PEDING * 2 - BUTTON_HEIGHT;
+
+    add_ui(std::make_unique<TextInp>(
+        rect.x + PEDING, y,
+        rect.width - PEDING * 2, h, nullptr, "coment?"));
+
+    if (DEBUG)
+        dynamic_cast<TextInp &>(*get_ui_at(get_num_of_elements() - 1)).set_text("vdf #one #two cool #three, #four #five, #six #seven");
+
+    y += h + PEDING;
     add_ui(std::make_unique<Button>(
-        PEDING * 2 + (rect.width - 170), LINE + 300,
-        150, 300,
+        x, y,
+        BUTTON_WIDTH, BUTTON_HEIGHT,
         "score #", [this](UI &ui)
         { (void)ui; _add_score(); }));
 }
@@ -223,17 +236,21 @@ void Glass::_add_score(void)
     for (; it != end; ++it)
         hastags[it->str()] = 0;
 
+    this->set_current_tab(this->get_num_of_elements() - 1);
     this->pop_ui_back();
     this->pop_ui_back();
+
+    int x = rect.x + rect.width - PEDING - BUTTON_WIDTH;
+    int y = rect.y + (BUTTON_HEIGHT * 3) + (PEDING * 4);
+    int w = (rect.width - PEDING * 3) / 2;
 
     int index = 0;
     for (auto &tag : hastags)
     {
         add_ui(std::make_unique<TextInp>(
-            PEDING * 2,
-            LINE + 300 + index * 60,
-            rect.width - 200,
-            30,
+            rect.x + PEDING + (w + PEDING) * (int)(index / 4),
+            y + (index % 4) * 50,
+            w, 40,
             nullptr,
             tag.first));
         if (DEBUG)
@@ -241,17 +258,24 @@ void Glass::_add_score(void)
         index++;
     }
 
+    y += rect.y + rect.height - y - PEDING - BUTTON_HEIGHT;
     add_ui(std::make_unique<Button>(
-        PEDING * 2 + (rect.width - 170), LINE + 300,
-        150, 300,
+        x, y,
+        BUTTON_WIDTH, BUTTON_HEIGHT,
         "save glass", [this](UI &ui)
         { _next_glass(ui); }));
+
+    add_ui(std::make_unique<TextInp>(
+        rect.x + PEDING, y,
+        rect.width - BUTTON_WIDTH - PEDING * 3, BUTTON_HEIGHT,
+        [this](UI &ui){ _next_glass(ui); },
+        "code/name dief:"));
 }
 
 void Glass::_next_glass(UI &ui)
 {
     bool is_valid = true;
-    int i = get_num_of_elements() - hastags.size() - 1;
+    int i = get_num_of_elements() - hastags.size() - 2;
     for (auto &tag : hastags)
     {
         bool valid = true;
@@ -292,6 +316,7 @@ void Glass::draw(void) const
 {
     if (!_is_visible)
         return;
+
     draw_my_text("mol: %.2f", osmo, PEDING * 3 + 50, LINE + 130);
     DrawText(warning.c_str(), PEDING * 3 + 50, LINE + 170, 30, RED);
     bar.draw(this->get_mouse_pos());

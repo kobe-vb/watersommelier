@@ -52,13 +52,20 @@ Game::Game() : App("pompion", 0, 0, 60)
 
     barcode_reader = BarcodeReader([this](const std::string &code)
                                    { handleCode(code); });
-    rect.height = 80;
-    rect.width = (GetScreenWidth() - (PEDING * 4)) * 2 / 3 + PEDING;
-    rect.x = PEDING;
-    rect.y = PEDING;
+
+    screen_rect.x = UI_BORDER;
+    screen_rect.y = UI_BORDER;
+    screen_rect.width = GetScreenWidth() - (UI_BORDER * 2);
+    screen_rect.height = GetScreenHeight() - (UI_BORDER * 2);
+
+    players_rect.x = UI_BORDER * 2;
+    players_rect.y = UI_BORDER + PLAYER_HEIGHT + PEDING * 2;
+    players_rect.width = GetScreenWidth() - (UI_BORDER * 4);
+    players_rect.height = LINE - players_rect.y - PEDING;
+
     load_data(data);
     win.add_ui(std::make_unique<TextInp>(
-        PEDING + 10 , PEDING + 10, 90, 60,
+        UI_BORDER * 2, UI_BORDER + PEDING, PLAYER_WIDTH, PLAYER_HEIGHT,
         [this](UI &ui)
         { create_new_player(ui); }, "name?"));
 }
@@ -112,7 +119,7 @@ void Game::create_new_player(UI &ui)
     sim.set_rect(); // //////////////////////
     sim.reset();
 
-    auto tokel = std::make_unique<Tokel>(t.get_rect().x, t.get_rect().y, 106, 60, t.get_text(),
+    auto tokel = std::make_unique<Tokel>(t.get_rect().x, t.get_rect().y, t.get_rect().width, t.get_rect().height, t.get_text(),
                                          [this](UI &uii)
                                          { switch_players(uii); });
     Tokel *tokel_ptr = tokel.get();
@@ -144,7 +151,7 @@ void Game::create_new_player(UI &ui)
     players.push_back({tokel_ptr, pl_ptr});
 
     t.get_text().clear();
-    t.move(122, 0);
+    t.move(PLAYER_WIDTH + PLAYER_PEDING, 0);
     tokel_ptr->set_tokel(true);
 
     if (players.size() == 9)
@@ -190,13 +197,20 @@ void Game::switch_players(UI &ui)
 
 void Game::draw() const
 {
-    ClearBackground(UI::get_dcolor(UiColors::BG));
-    DrawRectangleRounded(rect, 0.2, 8, UI::get_dcolor(UiColors::FIRST));
-    DrawRectangleRoundedLinesEx(rect, 0.2, 8, 6.0f, BLACK);
+    ClearBackground(UI::get_dcolor(UiColors::FIRST));
+
+    DrawRectangleRounded(screen_rect, 0.05, 8, UI::get_dcolor(UiColors::BG));
+    if (BORDER_WIDTH > 0)
+        DrawRectangleRoundedLinesEx(screen_rect, 0.05, 8, BORDER_WIDTH, UI::get_dcolor(UiColors::BORDER));
+
+    DrawRectangleRounded(players_rect, 0.05, 8, UI::get_dcolor(UiColors::FIRST));
+    if (BORDER_WIDTH > 0)
+        DrawRectangleRoundedLinesEx(players_rect, ROUNDED, 8, BORDER_WIDTH, UI::get_dcolor(UiColors::BORDER));
+
     sim.draw();
     win.draw();
     if (DEBUG)
-        DrawFPS(10, 280);
+        DrawFPS(UI_BORDER * 2, 5);
 }
 
 void Game::handleCode(const std::string &rawCode)

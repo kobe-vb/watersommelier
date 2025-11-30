@@ -34,7 +34,8 @@ class Game : public App
         
         Player *activePlayer = nullptr;
         
-        Rectangle rect;
+        Rectangle players_rect;
+        Rectangle screen_rect;
 
         Music music;
                 

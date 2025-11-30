@@ -170,8 +170,8 @@ void Player::draw(void) const
     if (!_is_visible)
         return;
 
-    MyDraw::text("first", ("Code: " + (code.length() ? code : "None")).c_str(), 50, 100, 80, BLACK);
-    MyDraw::text("first", ("Name: " + name).c_str(), 600, 100, 80, BLACK);
+    MyDraw::text("first", ("Code: " + (code.length() ? code : "None")).c_str(), 55, 110, 80, BLACK);
+    MyDraw::text("first", ("Name: " + name).c_str(), 55, 200, 80, BLACK);
 
     // DrawText(("Code: " + (code.length() ? code : "None")).c_str(), 50, 200, 80, BLACK);
     // DrawText(("Name: " + name).c_str(), 600, 200, 80, BLACK);
@@ -179,7 +179,8 @@ void Player::draw(void) const
     history.draw();
 
     DrawRectangleRounded(rect, ROUNDED, 10, get_color(UiColors::FIRST));
-    DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
+    if (BORDER_WIDTH > 0)
+        DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, BORDER_WIDTH, get_color(UiColors::BORDER));
 
     if (!website_data.empty())
     {
