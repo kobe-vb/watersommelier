@@ -3,7 +3,7 @@
 #include "Mouse.hpp"
 #include <iostream>
 
-TextInpView::TextInpView(TextInpModel * model, float x, float y, float w, float h)
+TextInpView::TextInpView(TextInpModel *model, float x, float y, float w, float h)
     : model(model), bounds{x, y, w, h}
 {
 }
@@ -65,9 +65,9 @@ bool TextInpView::capture_tab(int direction)
 {
     UI::capture_tab(direction);
     if (!is_tabt)
-        set_active(false);
+        model->set_active(false);
     else
-        set_active(true);
+        model->set_active(true);
     return (is_tabt);
 }
 
@@ -153,7 +153,6 @@ void TextInpView::draw(void) const
     }
 }
 
-
 const Rectangle &TextInpView::get_rect(void)
 {
     return (bounds);
@@ -164,4 +163,3 @@ void TextInpView::move(int x, int y)
     bounds.x += x;
     bounds.y += y;
 }
-

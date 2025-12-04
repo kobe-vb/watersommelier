@@ -109,6 +109,8 @@ void GameView::create_new_player(void)
     model.reset_sim();
 
     int ind = model.create_player();
+    model.get_tokel(ind).set_callback([this, ind]()
+                                      { switch_players(ind); });
 
     auto pl = std::make_unique<PlayerView>(model.get_player(ind));
     if (name == "demo")
@@ -118,14 +120,13 @@ void GameView::create_new_player(void)
     auto tokel = std::make_unique<TokelView>(&model.get_tokel(ind), rect.x, rect.y, rect.width, rect.height);
 
     players.push_back({tokel.get(), pl.get()});
-    
+
     win.add_ui(std::move(tokel));
     win.add_ui(std::move(pl));
 
-
     model.get_name_input().reset();
     nameInput->move(PLAYER_WIDTH + PLAYER_PEDING, 0);
-    model.get_tokel(ind).set_tokel(true);
+    switch_players(ind);
 
     if (players.size() == 9)
     {
@@ -138,17 +139,41 @@ void GameView::create_new_player(void)
         win.pop_ui_front();
 }
 
-// void GameView::switch_players(int new_id)
-// {
-//     int id = 0;
-//     for (auto pl : players)
-//     {
-//         if (id != new_id)
-//             pl.tokel->set_tokel(false);
-//         else
-//             pl.player->activate();
-//     }
-// }
+void GameView::switch_players(int new_id)
+{
+    std::cout << "switch_players id: " << new_id << " from " <<  model.get_active_player() << std::endl;
+    
+    model.switch_players(new_id);
+    
+    for (int i = 0; i < (int)players.size(); i++)
+    {
+        if (i == new_id)
+        {
+            players[i].player->activate();
+            model.get_tokel(i).set_tokel(true);
+        }
+        else
+        {
+            model.get_tokel(i).set_tokel(false);
+            players[i].player->disable();
+        }
+    }
+
+    // if (!model.get_tokel(new_id).is_active())
+    // {
+    //     model.set_active_player(-1);
+    //     return;
+    // }
+    // if (model.get_active_player() != -1 && model.get_active_player() != new_id)
+    // {
+    //     model.get_tokel(model.get_active_player()).set_tokel(false);
+    //     players[model.get_active_player()].player->disable();
+    // }
+
+    // model.switch_players(new_id);
+
+    // players[new_id].player->activate();
+}
 
 void GameView::update()
 {

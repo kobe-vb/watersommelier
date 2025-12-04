@@ -12,46 +12,47 @@
 
 #pragma once
 
-# include "App.hpp"
-# include "Win.hpp"
-# include "PlayerModel.hpp"
-# include "GameData.hpp"
-# include "Sim.hpp"
-# include "BarcodeReader.hpp"
+#include "App.hpp"
+#include "Win.hpp"
+#include "PlayerModel.hpp"
+#include "GameData.hpp"
+#include "Sim.hpp"
+#include "BarcodeReader.hpp"
 #include "TextInpModel.hpp"
 
-# include <vector>
+#include <vector>
 
 class GameModel
 {
-    private:
+private:
+    BarcodeReader barcode_reader;
+    std::vector<std::unique_ptr<PlayerModel>> players;
+    std::vector<std::unique_ptr<TokelModel>> buttons;
+    GameData data;
+    Sim sim;
 
-        BarcodeReader barcode_reader;
-        std::vector<std::unique_ptr<PlayerModel>> players;
-        std::vector<TokelModel> buttons;
-        GameData data;
-        Sim sim;
-        
-        PlayerModel *activePlayer = nullptr;
+    int active_player = 0;
 
-        TextInpModel name_input = TextInpModel("type name", [this]() {create_player();});
-                        
-    private:  
-        void handleCode(const std::string &code);
-        
-        public:
-        GameModel();
-        ~GameModel() = default;
-        
-        bool update(void);
-        int create_player(void);
-        void switch_players(int id);
-        void save_data();
-        bool name_is_taken(const std::string &name);
-        void reset_sim(void);
-        
-        TextInpModel &get_name_input(void) { return name_input; }
-        PlayerModel *get_player(int id) { return players[id].get(); }
-        TokelModel &get_tokel(int id) { return buttons[id]; }
-    };
+    TextInpModel name_input = TextInpModel("type name", [this]()
+                                           { create_player(); });
 
+private:
+    void handleCode(const std::string &code);
+
+public:
+    GameModel();
+    ~GameModel() = default;
+
+    bool update(void);
+    int create_player(void);
+    void switch_players(int id);
+    void save_data();
+    bool name_is_taken(const std::string &name);
+    void reset_sim(void);
+
+    TextInpModel &get_name_input(void) { return name_input; }
+    PlayerModel *get_player(int id) { return players[id].get(); }
+    TokelModel &get_tokel(int id) { return *buttons[id]; }
+    int get_active_player(void);
+    void set_active_player(int id) { active_player = id; }
+};

@@ -27,7 +27,7 @@ void GlassModel::reset_sim(void)
 
     for (auto &ion : bar.get_data())
         sim.addParticles((int)(ion.val * SIM_FACTOR), ion.col);
-    std::cout << "reset sim with " << bar.get_data().size() << " ions\n";
+    // std::cout << "reset sim with " << bar.get_data().size() << " ions\n";
 }
 
 void GlassModel::set_warning(void)

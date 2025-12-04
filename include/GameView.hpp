@@ -50,6 +50,7 @@ class GameView : public App
         TextInpView *nameInput;
 
         void create_new_player(void);
+        void switch_players(int new_id);
                 
     public:
         GameView();
