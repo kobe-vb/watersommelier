@@ -4,7 +4,8 @@
 
 #include "GameData.hpp"
 #include "Win.hpp"
-#include "Glass.hpp"
+#include "GlassModel.hpp"
+#include "ScoreGlassModel.hpp"
 #include "HistoryGlass.hpp"
 #include "raylib.h"
 #include "WebsiteData.hpp"
@@ -24,7 +25,7 @@ public:
     History(void);
     ~History(void) = default;
 
-    void saveGlass(Glass &glass);
+    void saveGlass(GlassModel &glass, ScoreGlassModel &scoreGlass);
 
     bool update(void) override;
     void draw(void) const override;

@@ -43,12 +43,11 @@ protected:
     bool _is_active = true;
     bool _is_visible = true;
     bool is_tabt = false;
-    std::function<void(UI &)> callback;
     
     BufferedWin *parent = nullptr;
     
 public:
-    UI(std::function<void(UI &)> callback = nullptr) : callback(callback) {}
+    UI() = default; 
     virtual ~UI() = default;
 
     virtual void draw(void) const = 0;
@@ -58,10 +57,7 @@ public:
     
     virtual bool capture_tab(int direction = 1);
     virtual void remove_tab(void);
-    
-    void set_callback(std::function<void(UI &)> new_callback);
-    void run_callback(void);
-    
+       
     void set_active(bool value);
     void set_visible(bool value);
     void disable(void);

@@ -74,17 +74,6 @@ void UI::remove_tab(void)
     is_tabt = false;
 }
 
-void UI::set_callback(std::function<void(UI &)> new_callback)
-{
-    callback = new_callback;
-}
-
-void UI::run_callback()
-{
-    if (callback)
-        callback(*this);
-}
-
 void UI::set_active(bool value)
 {
     _is_active = value;

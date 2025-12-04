@@ -7,13 +7,16 @@
 #include "WebsiteData.hpp"
 #include "GameData.hpp"
 #include "BufferedWin.hpp"
-#include "Glass.hpp"
+#include "GlassModel.hpp"
+#include "ScoreGlassModel.hpp"
 #include "raylib.h"
+#include "StackedBarModel.hpp"
+#include "StackedBarHView.hpp"
 
 class HistoryGlass : public BufferedWin
 {
 public:
-    HistoryGlass(int i, Glass &glass);
+    HistoryGlass(int i, GlassModel &glass, ScoreGlassModel &scoreGlass);
     ~HistoryGlass() = default;
 
     void set_pos(int i, float scrollOffset);
@@ -29,7 +32,9 @@ private:
     Rectangle rect;
 
     int i;
-    StackedBar bar;
+    StackedBarModel bar;
+    StackedBarHView bar_view;
+
     std::string comment;
     std::map<std::string, int> hastags;
     float osmo = 0;

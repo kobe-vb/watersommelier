@@ -13,6 +13,8 @@ class BarcodeReader
     double speedThreshold = 0.01; // <50ms tussen toetsen = scanner
 
     std::function<void(const std::string &)> callback;
+    void cleanBuffer(void);
+    void runCallback(void);
 
     public:
 

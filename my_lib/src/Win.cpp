@@ -122,6 +122,11 @@ UI *Win::get_ui_at(int i) const
     return (ui_elements[i].get());
 }
 
+UI *Win::get_last_ui() const
+{
+    return (ui_elements.back().get());
+}
+
 int Win::get_num_of_elements() const
 {
     return (ui_elements.size());

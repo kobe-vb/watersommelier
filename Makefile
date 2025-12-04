@@ -5,11 +5,13 @@ else
     OS_TYPE = unix
 endif
 
+# TODO refacotr, maar vooral mijn my_lib idepandedn maken
+
 # Compilers
 CXX = clang++
 
-# Algemene settings
-INCLUDES = -I include -I include/sim -I include/players -I my_lib/include
+INCLUDEDIRS := $(shell find include my_lib/include -type d)
+INCLUDES := $(patsubst %,-I%, $(INCLUDEDIRS))
 
 # Debug flags
 CXXFLAGS = -g -Wall -Wextra -Werror -DDEBUG=1 -std=c++20 $(INCLUDES)

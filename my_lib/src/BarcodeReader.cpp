@@ -1,6 +1,7 @@
 #include "BarcodeReader.hpp"
 
 #include <raylib.h>
+#include <algorithm>
 
 void BarcodeReader::update()
 {
@@ -22,26 +23,43 @@ void BarcodeReader::update()
         else
         {
             if (building && !buffer.empty())
-                callback(buffer.c_str());
+            {
+                runCallback();
+                continue; // TODO: ik denk dat ge kunt returnen
+            }
             buffer.clear();
             building = false;
         }
 
         if (key == KEY_ENTER && building)
-        {
-            callback(buffer.c_str());
-            buffer.clear();
-            building = false;
-        }
+            runCallback();
 
         key = GetKeyPressed();
         now = GetTime();
     }
 
     if (building && (GetTime() - lastKeyTime) > timeout)
-    {
-        callback(buffer.c_str());
-        buffer.clear();
-        building = false;
-    }
+        runCallback();
+}
+
+void BarcodeReader::cleanBuffer(void)
+{
+    // remove non-printable characters
+    buffer.erase(std::remove_if(buffer.begin(), buffer.end(),
+                                [](unsigned char c)
+                                { return !std::isprint(c); }),
+                 buffer.end());
+
+    // Trim spaces at the beginning and end
+    buffer.erase(0, buffer.find_first_not_of(' '));
+    buffer.erase(buffer.find_last_not_of(' ') + 1);
+}
+
+void BarcodeReader::runCallback(void)
+{
+
+    cleanBuffer();
+    callback(buffer);
+    buffer.clear();
+    building = false;
 }

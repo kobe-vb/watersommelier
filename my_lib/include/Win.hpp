@@ -39,6 +39,7 @@ public:
     void update_tabs(void);
     bool capture_tab(int direction) override;
     UI *get_ui_at(int i) const;
+    UI *get_last_ui() const;
     int get_num_of_elements() const;
     void set_current_tab(int i);
     void pop_ui_back(void);
