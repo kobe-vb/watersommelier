@@ -50,7 +50,7 @@ void History::save_data(std::ofstream &file, size_t &counter, const std::string 
 void History::saveGlass(GlassModel &glass, ScoreGlassModel &scoreGlass)
 {
     int i = get_num_of_elements();
-    add_ui(std::make_unique<HistoryGlass>(i, glass, scoreGlass));
+    add_ui(std::make_unique<HistoryGlass>(i, rect, glass, scoreGlass));
 
     for (int i = 0; i < get_num_of_elements(); i++)
         dynamic_cast<HistoryGlass &>(*get_ui_at(i)).set_pos(get_num_of_elements() - i - 1, 0);
@@ -99,12 +99,14 @@ void History::draw(void) const
 
     for (int i = 0; i < get_num_of_elements(); i++)
         dynamic_cast<HistoryGlass &>(*get_ui_at(i)).draww();
+
+
     DrawRectangleRounded(rect, ROUNDED, 10, UIView::get_dcolor(UiColors::FIRST));
     if (BORDER_WIDTH > 0)
         DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, BORDER_WIDTH, UIView::get_dcolor(UiColors::BORDER));
     
 
-    BeginScissorMode(rect.x, rect.y, rect.width, rect.height);
+    BeginScissorMode(rect.x, rect.y, rect.width * 1.5, rect.height);
     Win::draw();
     EndScissorMode();
 

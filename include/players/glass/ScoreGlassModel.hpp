@@ -5,7 +5,7 @@
 #include "TextInpModel.hpp"
 #include "ButtonModel.hpp"
 
-class ScoreGlassModel: public UIModel
+class ScoreGlassModel : public UIModel
 {
 
 private:
@@ -17,8 +17,6 @@ private:
                                           { next_glass(); });
     TextInpModel thief_input = TextInpModel("type code/name Thief", [this]()
                                             { steal_glass(); });
-
-    void add_score(void);
 
     std::function<void()> next_glass;
     std::function<bool()> steal_glass;
@@ -34,6 +32,7 @@ public:
     std::map<std::string, TextInpModel> hastags;
 
     int get_hastag_value(const TextInpModel &inp) const;
+    void add_score(void);
 
     std::string const &get_comment_text(void) const { return comment_input.get_text(); }
     std::map<std::string, int> get_hastags(void) const;

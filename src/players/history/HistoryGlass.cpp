@@ -29,18 +29,22 @@ void draw_my_text(const char *name, float val, int x, int y)
     DrawText(buffer, x, y, 30, DARKBLUE);
 }
 
-HistoryGlass::HistoryGlass(int i, GlassModel &glass, ScoreGlassModel &scoreGlass) : BufferedWin(&model, ((GetScreenWidth() - (PEDING * 4)) * 1 / 3) + PEDING * 2, LINE + PEDING * 4,
-                                                              ((GetScreenWidth() - (PEDING * 4)) * 1 / 3), 120),
-                                                  i(i),
-                                                  bar(glass.bar),
-                                                  comment(scoreGlass.get_comment_text()),
-                                                  hastags(scoreGlass.get_hastags()),
-                                                  osmo(glass.osmo),
-                                                  volume(glass.volume)
+HistoryGlass::HistoryGlass(int i, Rectangle &ref_rect, GlassModel &glass, ScoreGlassModel &scoreGlass) : BufferedWin(&model, ref_rect.x, ref_rect.y, ref_rect.width * 1.3, 200),
+                                                                                    i(i),
+                                                                                    bar(glass.bar),
+                                                                                    comment(scoreGlass.get_comment_text()),
+                                                                                    hastags(scoreGlass.get_hastags()),
+                                                                                    osmo(glass.osmo),
+                                                                                    volume(glass.volume)
 {
-    bar_view = StackedBarHView(&bar, PEDING, PEDING, (int)(rect.width - PEDING * 2), BUTTON_HEIGHT);
+    rect.width = ((GetScreenWidth() - (UI_BORDER * 4) - (PEDING * 2)) * 1 / 3);
+    rect.height = 180;
 
-    rect = {((float)GetScreenWidth() * 1 / 3) + PEDING, LINE + PEDING * 4, (float)win.texture.width, (float)win.texture.height};
+    rect.x = PEDING;
+    rect.y = PEDING;
+    rect.width -= PEDING * 2;
+
+    bar_view = StackedBarHView(&bar, rect.x + PEDING, rect.y + PEDING, (int)(rect.width - PEDING * 2), BUTTON_HEIGHT);
 };
 
 void HistoryGlass::save_data(std::ofstream &file, GameData &data, WebsiteData &websiteData)
@@ -60,15 +64,14 @@ void HistoryGlass::save_data(std::ofstream &file, GameData &data, WebsiteData &w
                 break;
             }
         }
-        file << (val / bar.get_total_volume()) * 100 << ";";         // % --> todo .f2
-        file << val << ";";                                          // mol
+        file << (val / bar.get_total_volume()) * 100 << ";";            // % --> todo .f2
+        file << val << ";";                                             // mol
         file << val * data.get_ion_data(ion.first).gram_per_mol << ";"; // mg
     }
 
     file << hastags.size() * 2 << ";";
     for (auto &tags : hastags)
         file << tags.first << ";" << tags.second << ";";
-
 }
 
 std::string HistoryGlass::to_json() const
@@ -93,28 +96,23 @@ std::string HistoryGlass::to_json() const
 
 void HistoryGlass::set_pos(int i, float scrollOffset)
 {
-    this->pos.x = (GetScreenWidth() * 1 / 3) + PEDING;
-    this->pos.y = LINE + PEDING * 4 + (i * 140) - scrollOffset;
+    this->pos.y = LINE + (rect.height + PEDING) * i - scrollOffset;
 
-    rect.x = pos.x;
-    rect.y = pos.y;
+    // rect.y = PEDING + (rect.height + PEDING) * i;
 
-    float screenTop = LINE;
-    float screenBottom = GetScreenHeight() - PEDING;
+    // float screenTop = LINE;
+    // float screenBottom = GetScreenHeight() - PEDING;
 
-    if (rect.y + rect.height < screenTop || rect.y > screenBottom)
-        model.set_visible(false);
-    else
-        model.set_visible(true);
+    // if (rect.y + rect.height < screenTop || rect.y > screenBottom)
+    //     model.set_visible(false);
+    // else
+    //     model.set_visible(true);
 }
 
 void HistoryGlass::draw(void) const
 {
     if (!model.is_visible())
         return;
-
-    DrawRectangleRounded(rect, ROUNDED, 10, get_dcolor(UiColors::FIRST));
-    DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
 
     DrawTextureRec(
         this->win.texture,
@@ -130,6 +128,11 @@ void HistoryGlass::draww(void) const
 
     BeginTextureMode(this->win);
     clear();
+    // ClearBackground({255, 0, 0, 150});
+
+    DrawRectangleRounded(rect, ROUNDED, 10, UIView::get_dcolor(UiColors::BG));
+    // DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
+
 
     // draw_my_text("pH: %.2f", ph, PEDING * 3, 80);
     // draw_my_text("mol: %.2f", mol, PEDING * 3 + 200, 80);

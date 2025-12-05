@@ -65,5 +65,5 @@ private:
 
     void lock(bool lock = true);
 
-    // void generate_random_data(bool full = true);
+    void generate_random_data(bool full = true);
 };

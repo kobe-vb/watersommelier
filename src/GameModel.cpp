@@ -108,7 +108,7 @@ void GameModel::switch_players(int id)
 void GameModel::reset_sim(void)
 {
     sim.set_rect(); // //////////////////////
-    sim.reset();
+    // sim.reset();
 }
 
 int GameModel::create_player()

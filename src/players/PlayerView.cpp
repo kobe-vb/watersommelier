@@ -17,7 +17,8 @@
 #include <thread>
 #include <MyDraw.hpp>
 
-PlayerView::PlayerView(PlayerModel *model) : Win(model), model(model), glass(GlassView(&model->get_glass(), rect))
+PlayerView::PlayerView(PlayerModel *model) : Win(model), model(model), glass(GlassView(&model->get_glass(), rect)),
+    score_glass(ScoreGlassView(&model->get_score_glass(), rect))
 {
 }
 
@@ -26,7 +27,7 @@ bool PlayerView::capture_tab(int direction)
 {
     if (model->is_locked())
         return (false);
-    return (glass.capture_tab(direction));
+    return (glass.capture_tab(direction) || score_glass.capture_tab(direction));
 }
 
 
@@ -37,7 +38,7 @@ bool PlayerView::update(void)
 
     Win::update();
     model->update();
-    return (glass.update());
+    return (glass.update() || score_glass.update());
 }
 
 /*
@@ -79,7 +80,7 @@ void PlayerView::draw(void) const
     // DrawText(("Code: " + (code.length() ? code : "None")).c_str(), 50, 200, 80, BLACK);
     // DrawText(("Name: " + name).c_str(), 600, 200, 80, BLACK);
 
-    // history.draw();
+    model->history.draw();
 
     DrawRectangleRounded(rect, ROUNDED, 10, get_color(UiColors::FIRST));
     if (BORDER_WIDTH > 0)
@@ -99,5 +100,7 @@ void PlayerView::draw(void) const
     //     return;
     // }
     glass.draw();
+    score_glass.draw();
+
     Win::draw();
 }

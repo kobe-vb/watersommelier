@@ -23,6 +23,7 @@
 #include "GlassView.hpp"
 
 #include <optional>
+#include "ScoreGlassView.hpp"
 
 
 class PlayerView: public Win
@@ -33,6 +34,7 @@ private:
     Rectangle rect;
 
     GlassView glass;
+    ScoreGlassView score_glass;
 
     void draw_qr(void) const;
     

@@ -32,20 +32,21 @@ protected:
     const std::string name;
     GlassModel glass;
     ScoreGlassModel scoreGlass;
-    History history;
-private:
-
+    private:
+    
     std::string code;
-
+    
     // TODO: refactor
     std::optional<qrcodegen::QrCode> qr;
     std::string website;
     WebsiteData website_data;
     
-public:
+    public:
     PlayerModel(const std::string &name, GameData &data, Sim &sim);
     ~PlayerModel() = default;
-
+    
+    History history;
+    
     void update(void);
 
     void next_glass();
@@ -70,4 +71,5 @@ public:
     const std::string &get_name(void) const { return (name); }
 
     GlassModel &get_glass(void) { return (glass); }
+    ScoreGlassModel &get_score_glass(void) { return (scoreGlass); }
 };

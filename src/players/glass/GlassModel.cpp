@@ -17,11 +17,12 @@ void GlassModel::lock(bool lock)
 
 void GlassModel::reset(void)
 {
+    lock(false);
     bar.reset();
     osmo = 0;
     volume = 25;
 
-    this->sim.reset();
+    // this->sim.reset();
     // TODO
     // hastags.clear();
     // comment.clear();
@@ -30,10 +31,10 @@ void GlassModel::reset(void)
 
 void GlassModel::reset_sim(void)
 {
-    this->sim.reset();
+    // this->sim.reset();
 
-    for (auto &ion : bar.get_data())
-        sim.addParticles((int)(ion.val * SIM_FACTOR), ion.col);
+    // for (auto &ion : bar.get_data())
+    //     sim.addParticles((int)(ion.val * SIM_FACTOR), ion.col);
     // std::cout << "reset sim with " << bar.get_data().size() << " ions\n";
 }
 
@@ -77,7 +78,7 @@ void GlassModel::save_ion(Ion &ion, int amount, float M)
     Color col = data.get_ion_data(ion.name).color;
 
     bar.add_value(ion.name, col, molarity);
-    sim.addParticles(int(molarity * SIM_FACTOR), col);
+    // sim.addParticles(int(molarity * SIM_FACTOR), col);
 }
 
 void GlassModel::save_drops(int drops, Element *elm)
@@ -130,28 +131,28 @@ bool GlassModel::take_code(const std::string &code)
     return true;
 }
 
-// void GlassModel::generate_random_data(bool full)
-// {
-//     for (int i = 0; i < 8; i++)
-//     {
-//         int a = std::rand() % 15 + 10;
-//         Element &elm = data.get_element(data.names[std::rand() % data.names.size()]);
+void GlassModel::generate_random_data(bool full)
+{
+    for (int i = 0; i < 8; i++)
+    {
+        int a = std::rand() % 15 + 10;
+        Element &elm = data.get_element(data.names[std::rand() % data.names.size()]);
 
-//         _save_druple(a, &elm);
-//     }
-//     if (!full)
-//         return;
-//     _add_comment();
+        save_drops(a, &elm);
+    }
+    if (!full)
+        return;
+    // _add_comment();
 
-//     std::string comment;
-//     std::vector<std::string> opties = {"#flats", "#bitter", "#salty"};
+    // std::string comment;
+    // std::vector<std::string> opties = {"#flats", "#bitter", "#salty"};
 
-//     int max = std::rand() % 2 + 1;
-//     for (int i = 0; i < max; i++)
-//         comment += opties[std::rand() % opties.size()] + " ";
+    // int max = std::rand() % 2 + 1;
+    // for (int i = 0; i < max; i++)
+    //     comment += opties[std::rand() % opties.size()] + " ";
 
-//     ((TextInp *)get_ui_at(3))->set_text(comment);
-//     _add_score();
-//     for (auto &tag : hastags)
-//         tag.second = std::rand() % 5 + 1;
-// }
+    // ((TextInp *)get_ui_at(3))->set_text(comment);
+    // _add_score();
+    // for (auto &tag : hastags)
+    //     tag.second = std::rand() % 5 + 1;
+}

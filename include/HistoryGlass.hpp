@@ -20,7 +20,7 @@ private:
     UIModel model;
 
 public:
-    HistoryGlass(int i, GlassModel &glass, ScoreGlassModel &scoreGlass);
+    HistoryGlass(int i, Rectangle &rect, GlassModel &glass, ScoreGlassModel &scoreGlass);
     ~HistoryGlass() = default;
 
     void set_pos(int i, float scrollOffset);

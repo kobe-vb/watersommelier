@@ -4,6 +4,7 @@ PlayerModel::PlayerModel(const std::string &name, GameData &data, Sim &sim) : na
                                                               glass(GlassModel(data, [this]()
                                                                           { score_glass(); }, sim)), scoreGlass([this](){next_glass();}, [this](){return steal_glass();})
 {
+    scoreGlass.disable();
 }
 
 void PlayerModel::demo(void)
@@ -11,12 +12,12 @@ void PlayerModel::demo(void)
     int max = std::rand() % 6 + 4;
     for (int i = 0; i < max; i++)
     {
-        // glass.generate_random_data();
+        glass.generate_random_data();
         history.saveGlass(glass, scoreGlass);
         glass.reset();
     }
-    // glass.generate_random_data(false);
-    glass.reset_sim();
+    glass.generate_random_data(false);
+    // glass.reset_sim();
 }
 
 // TODO: refactor
@@ -55,12 +56,14 @@ void PlayerModel::fiks_sim(void)
 void PlayerModel::score_glass()
 {
     glass.lock();
+    scoreGlass.activate();
 }
 
 void PlayerModel::next_glass()
 {
     history.saveGlass(glass, scoreGlass);
     glass.reset();
+    scoreGlass.disable();
 }
 
 bool PlayerModel::steal_glass()

@@ -21,4 +21,6 @@ class ScoreGlassView: public Win
         ~ScoreGlassView() = default;
 
         void draw(void) const override;
+
+        void reset(void);
 };

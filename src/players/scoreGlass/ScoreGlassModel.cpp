@@ -23,6 +23,7 @@ void ScoreGlassModel::add_score(void)
             inp.set_text("5");
         hastags.emplace(it->str(), inp);
     }
+
 }
 
 int ScoreGlassModel::get_hastag_value(const TextInpModel &inp) const

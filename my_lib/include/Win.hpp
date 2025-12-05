@@ -28,6 +28,9 @@ private:
     int current_tab = -1;
 
     bool ui_elements_is_changed = false;
+protected:
+
+    void clear_ui(void) { ui_elements.clear(); };
 
 public:
     Win(UIModel *model) : UIView(model) {};

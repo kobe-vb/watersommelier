@@ -5,6 +5,15 @@ ScoreGlassView::ScoreGlassView(ScoreGlassModel *model, Rectangle &rect) : Win(mo
 {
     // void Glass::_add_comment(void)
     // _set_lock(true);
+    reset();
+
+    model->get_score_button().set_callback([this]() { this->add_score(); });
+
+}
+
+void ScoreGlassView::reset(void)
+{
+    clear_ui();
 
     int x = rect.x + rect.width - PEDING - BUTTON_WIDTH;
     int y = rect.y + (BUTTON_HEIGHT * 3) + (PEDING * 4);
@@ -15,7 +24,6 @@ ScoreGlassView::ScoreGlassView(ScoreGlassModel *model, Rectangle &rect) : Win(mo
         rect.x + PEDING, y,
         rect.width - PEDING * 2, h));
 
-
     y += h + PEDING;
     add_ui(std::make_unique<ButtonView>(
         &model->get_score_button(),
@@ -25,11 +33,11 @@ ScoreGlassView::ScoreGlassView(ScoreGlassModel *model, Rectangle &rect) : Win(mo
 
 void ScoreGlassView::add_score(void)
 {
-    /*
+
+    model->add_score();
+
     this->set_current_tab(this->get_num_of_elements() - 1);
-    this->pop_ui_back();
-    this->pop_ui_back();
-    */
+    this->clear_ui();
 
     int x = rect.x + rect.width - PEDING - BUTTON_WIDTH;
     int y = rect.y + (BUTTON_HEIGHT * 3) + (PEDING * 4);
