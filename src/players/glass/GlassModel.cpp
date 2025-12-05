@@ -86,6 +86,11 @@ void GlassModel::save_drops(int drops, Element *elm)
 void GlassModel::save_drops(void)
 {
     save_drops(get_new_amount(), &get_element());
+    
+    dropdown.reset();
+    amount.reset();
+    amount.set_active(false);
+    warning.clear();
 }
 
 int GlassModel::get_new_amount(void)

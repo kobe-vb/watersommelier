@@ -34,10 +34,11 @@ private:
                           { save_drops(); });
 
     void save_ion(Ion &ion, int amount, float M);
+    void save_drops(int drops, Element *elm);
+
     // te doen
     
     void _next_glass(UI &ui);
-    void save_drops(void);
     
     public:
     GlassModel(GameData &data, std::function<void()> close_glass, Sim &sim);
@@ -55,7 +56,8 @@ private:
     void reset_sim(void);
     
     void set_warning(void);
-    void save_drops(int drops, Element *elm);
+    void save_drops(void);
+
     
     int get_osmo(void) const { return osmo; }
     const std::string &get_warning(void) const { return warning; }

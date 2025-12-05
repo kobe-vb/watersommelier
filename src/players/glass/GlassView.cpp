@@ -70,12 +70,9 @@ void GlassView::reset(void)
 
 void GlassView::process_drops(void)
 {
-
-    int drops = 0;
-    Element *elm;
     try
     {
-        drops = model->get_new_amount();
+        model->get_new_amount();
     }
     catch (const std::exception &e)
     {
@@ -87,7 +84,7 @@ void GlassView::process_drops(void)
 
     try
     {
-        elm = &model->get_element();
+        model->get_element();
     }
     catch (const std::exception &e)
     {
@@ -97,13 +94,7 @@ void GlassView::process_drops(void)
     }
     name->clear_color(UiColors::BG);
 
-    model->save_drops(drops, elm);
-
-    // te doen
-    // name->reset();
-    // amount->reset();
-    // amount->set_active(false);
-    // warning.clear();
+    model->save_drops();
 }
 
 // heel de win locken?
