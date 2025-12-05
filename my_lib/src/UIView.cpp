@@ -10,10 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "UI.hpp"
+#include "UIView.hpp"
 #include "BufferedWin.hpp"
 
-std::array<Color, static_cast<size_t>(UiColors::Count)> UI::default_colors = {
+UIView::UIView(UIModel *model): model(model) {}
+
+
+std::array<Color, static_cast<size_t>(UiColors::Count)> UIView::default_colors = {
     Color{40, 50, 55, 255},     // bg
     Color{53, 60, 67, 255},     // first
     Color{90, 90, 90, 255},     // second
@@ -24,7 +27,7 @@ std::array<Color, static_cast<size_t>(UiColors::Count)> UI::default_colors = {
     Color{236, 240, 241, 255},  // BORDER
 };
 
-Color UI::get_color(UiColors color) const
+Color UIView::get_color(UiColors color) const
 {
     auto idx = static_cast<size_t>(color);
 
@@ -33,80 +36,58 @@ Color UI::get_color(UiColors color) const
     return default_colors[idx];
 }
 
-void UI::clear_color(UiColors color)
+void UIView::clear_color(UiColors color)
 {
     custom_colors[static_cast<size_t>(color)] = std::nullopt;
 }
 
-Color UI::get_dcolor(UiColors color)
+Color UIView::get_dcolor(UiColors color)
 {
     return default_colors[static_cast<size_t>(color)];
 }
 
-void UI::set_color(UiColors color, Color value)
+void UIView::set_color(UiColors color, Color value)
 {
     custom_colors[static_cast<size_t>(color)] = value;
 }
 
-void UI::set_lock(bool value)
-{
-    _is_locked = value;
-    if (value)
-        remove_tab();
-}
+// void UIView::set_lock(bool value)
+// {
+//     _is_locked = value;
+//     if (value)
+//         remove_tab();  TODO
+// }
 
-bool UI::capture_tab(int direction)
+bool UIView::capture_tab(int direction)
 {
     (void)direction;
-    if (!_is_active || _is_locked)
+    if (model->is_locked())
         return (false);
     is_tabt = !is_tabt;
     return (is_tabt);
 }
 
-void UI::set_tab(bool value)
+void UIView::set_tab(bool value)
 {
     is_tabt = value;
 }
 
-void UI::remove_tab(void)
+void UIView::remove_tab(void)
 {
     is_tabt = false;
 }
 
-void UI::set_active(bool value)
-{
-    _is_active = value;
-}
-
-void UI::set_visible(bool value)
-{
-    _is_visible = value;
-}
-
-void UI::activate(void)
-{
-    set_active(true);
-    set_visible(true);
-}
-
-void UI::disable(void)
-{
-    set_active(false);
-    set_visible(false);
-}
-
-void UI::set_parent(BufferedWin *parent)
+void UIView::set_parent(BufferedWin *parent)
 {
     this->parent = parent;
 }
 
-BufferedWin *UI::get_parent(void) const
+BufferedWin *UIView::get_parent(void) const
 {
     return (this->parent);
 }
 
-Vector2 UI::get_mouse_pos(void) const
+Vector2 UIView::get_mouse_pos(void) const
 {
     if (parent)
         return (parent->get_mouse_pos());

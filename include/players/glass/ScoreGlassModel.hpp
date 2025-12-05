@@ -5,7 +5,7 @@
 #include "TextInpModel.hpp"
 #include "ButtonModel.hpp"
 
-class ScoreGlassModel
+class ScoreGlassModel: public UIModel
 {
 
 private:

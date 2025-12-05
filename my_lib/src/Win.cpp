@@ -12,7 +12,7 @@
 
 #include "Win.hpp"
 
-void Win::add_ui(std::unique_ptr<UI> element)
+void Win::add_ui(std::unique_ptr<UIView> element)
 {
     ui_elements.push_back(std::move(element));
 }
@@ -56,7 +56,7 @@ bool Win::next_tab(int direction, bool round)
 
 bool Win::capture_tab(int direction)
 {
-    if (!_is_active)
+    if (model->is_locked())
         return (false);
 
     if (!next_tab(direction, false))
@@ -66,7 +66,7 @@ bool Win::capture_tab(int direction)
 
 bool Win::update()
 {
-    if (!_is_active)
+    if (model->is_locked())
         return false;
     int temp = current_tab;
     if (current_tab >= 0 && (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ESCAPE)))
@@ -95,7 +95,7 @@ void Win::set_current_tab(int i)
 
 void Win::update_tabs(void)
 {
-    if (!_is_active)
+    if (model->is_locked())
         return;
     if (IsKeyDown(KEY_LEFT_SHIFT) && IsKeyPressed(KEY_TAB))
         next_tab(-1, true);
@@ -105,7 +105,7 @@ void Win::update_tabs(void)
 
 void Win::draw() const
 {
-    if (!_is_visible)
+    if (!model->is_visible())
         return;
     // for (const auto &element : std::ranges::views::reverse(ui_elements))
     // {
@@ -117,12 +117,12 @@ void Win::draw() const
     }
 }
 
-UI *Win::get_ui_at(int i) const
+UIView *Win::get_ui_at(int i) const
 {
     return (ui_elements[i].get());
 }
 
-UI *Win::get_last_ui() const
+UIView *Win::get_last_ui() const
 {
     return (ui_elements.back().get());
 }

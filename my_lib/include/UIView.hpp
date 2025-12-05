@@ -13,12 +13,16 @@
 #pragma once
 
 #include "raylib.h"
+
+#include "UIModel.hpp"
+
 #include <functional>
 #include <iostream>
 #include <array>
 #include <optional>
 
-enum class UiColors {
+enum class UiColors
+{
     BG,
     FIRST,
     SECOND,
@@ -31,43 +35,35 @@ enum class UiColors {
 };
 
 class BufferedWin;
-class UI
+class UIView
 {
 private:
-
     static std::array<Color, static_cast<size_t>(UiColors::Count)> default_colors;
     std::array<std::optional<Color>, static_cast<size_t>(UiColors::Count)> custom_colors{};
-    
+
 protected:
-    bool _is_locked = false;
-    bool _is_active = true;
-    bool _is_visible = true;
+    UIModel *model;
     bool is_tabt = false;
-    
+
     BufferedWin *parent = nullptr;
-    
+
 public:
-    UI() = default; 
-    virtual ~UI() = default;
+    UIView(UIModel *model);
+    virtual ~UIView() = default;
 
     virtual void draw(void) const = 0;
     virtual bool update(void) = 0;
-    
+
     void set_tab(bool value);
-    
+
     virtual bool capture_tab(int direction = 1);
     virtual void remove_tab(void);
-       
-    void set_active(bool value);
-    void set_visible(bool value);
-    void disable(void);
-    void activate(void);
 
-    void set_lock(bool value);
-    
+    // void set_lock(bool value);
+
     void set_parent(BufferedWin *parent);
     BufferedWin *get_parent(void) const;
-    
+
     Vector2 get_mouse_pos(void) const;
 
     Color get_color(UiColors color) const;

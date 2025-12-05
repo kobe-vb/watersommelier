@@ -16,7 +16,7 @@
 #include "MyDraw.hpp"
 // #include <WebsitePlayer.hpp>
 
-GameView::GameView() : App("pompion", 0, 0, 60)
+GameView::GameView() : App("pompion", 0, 0, 60), win(Win(&model))
 {
     while (!IsWindowReady())
     {
@@ -55,15 +55,15 @@ GameView::~GameView()
 
 void GameView::draw() const
 {
-    ClearBackground(UI::get_dcolor(UiColors::FIRST));
+    ClearBackground(UIView::get_dcolor(UiColors::FIRST));
 
-    DrawRectangleRounded(screen_rect, 0.05, 8, UI::get_dcolor(UiColors::BG));
+    DrawRectangleRounded(screen_rect, 0.05, 8, UIView::get_dcolor(UiColors::BG));
     if (BORDER_WIDTH > 0)
-        DrawRectangleRoundedLinesEx(screen_rect, 0.05, 8, BORDER_WIDTH, UI::get_dcolor(UiColors::BORDER));
+        DrawRectangleRoundedLinesEx(screen_rect, 0.05, 8, BORDER_WIDTH, UIView::get_dcolor(UiColors::BORDER));
 
-    DrawRectangleRounded(players_rect, ROUNDED * 3, 8, UI::get_dcolor(UiColors::FIRST));
+    DrawRectangleRounded(players_rect, ROUNDED * 3, 8, UIView::get_dcolor(UiColors::FIRST));
     if (BORDER_WIDTH > 0)
-        DrawRectangleRoundedLinesEx(players_rect, ROUNDED, 8, BORDER_WIDTH, UI::get_dcolor(UiColors::BORDER));
+        DrawRectangleRoundedLinesEx(players_rect, ROUNDED, 8, BORDER_WIDTH, UIView::get_dcolor(UiColors::BORDER));
 
     // sim.draw(); TODO
     win.draw();
@@ -145,19 +145,19 @@ void GameView::switch_players(int new_id)
     
     model.switch_players(new_id);
     
-    for (int i = 0; i < (int)players.size(); i++)
-    {
-        if (i == new_id)
-        {
-            players[i].player->activate();
-            model.get_tokel(i).set_tokel(true);
-        }
-        else
-        {
-            model.get_tokel(i).set_tokel(false);
-            players[i].player->disable();
-        }
-    }
+    // for (int i = 0; i < (int)players.size(); i++)
+    // {
+    //     if (i == new_id)
+    //     {
+    //         players[i].player->activate();
+    //         model.get_tokel(i).set_tokel(true);
+    //     }
+    //     else
+    //     {
+    //         model.get_tokel(i).set_tokel(false);
+    //         players[i].player->disable();
+    //     }
+    // }
 
     // if (!model.get_tokel(new_id).is_active())
     // {

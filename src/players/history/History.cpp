@@ -4,7 +4,7 @@
 #include "History.hpp"
 #include "Settings.hpp"
 
-History::History(void) : scrollOffset(0), maxScrollOffset(0)
+History::History(void) :Win(&model), scrollOffset(0), maxScrollOffset(0)
 {
     rect.width = ((GetScreenWidth() - (UI_BORDER * 4) - (PEDING * 2)) * 1 / 3);
     rect.height = GetScreenHeight() - LINE - PEDING - UI_BORDER;
@@ -99,9 +99,9 @@ void History::draw(void) const
 
     for (int i = 0; i < get_num_of_elements(); i++)
         dynamic_cast<HistoryGlass &>(*get_ui_at(i)).draww();
-    DrawRectangleRounded(rect, ROUNDED, 10, UI::get_dcolor(UiColors::FIRST));
+    DrawRectangleRounded(rect, ROUNDED, 10, UIView::get_dcolor(UiColors::FIRST));
     if (BORDER_WIDTH > 0)
-        DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, BORDER_WIDTH, UI::get_dcolor(UiColors::BORDER));
+        DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, BORDER_WIDTH, UIView::get_dcolor(UiColors::BORDER));
     
 
     BeginScissorMode(rect.x, rect.y, rect.width, rect.height);

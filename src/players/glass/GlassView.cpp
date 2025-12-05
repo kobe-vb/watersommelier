@@ -20,7 +20,7 @@ static void draw_my_text(const char *name, float val, int x, int y)
     DrawText(buffer, x, y, 30, BLACK);
 }
 
-GlassView::GlassView(GlassModel *model, Rectangle &rect) : model(model), rect(rect)
+GlassView::GlassView(GlassModel *model, Rectangle &rect) : Win(model), model(model), rect(rect)
 {
 
     rect.x = UI_BORDER * 2;
@@ -51,6 +51,7 @@ GlassView::GlassView(GlassModel *model, Rectangle &rect) : model(model), rect(re
     amount = static_cast<TextInpView *>(get_last_ui());
 
     model->get_amount().set_callback([this] { this->process_drops(); });
+    model->get_save_button().set_callback([this] { this->score_glass(); });
 }
 
 void GlassView::reset(void)
@@ -97,6 +98,12 @@ void GlassView::process_drops(void)
     model->save_drops();
 }
 
+void GlassView::score_glass(void)
+{
+    model->lock();
+    model->score_glass();
+}
+
 // heel de win locken?
 // void GlassView::set_lock(bool lock)
 // {
@@ -121,7 +128,7 @@ void GlassView::process_drops(void)
 
 void GlassView::draw(void) const
 {
-    if (!_is_visible)
+    if (!model->is_visible())
         return;
 
     draw_my_text("osmo?: %.2f", model->get_osmo(), UI_BORDER * 2 + PEDING, rect.y + PEDING * 2 + BUTTON_HEIGHT);

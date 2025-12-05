@@ -21,10 +21,10 @@ class BufferedWin : public Win
         Vector2 pos;
 
     public:
-        BufferedWin(float x, float y, float w, float h);
+        BufferedWin(UIModel *model, float x, float y, float w, float h);
         ~BufferedWin();
 
-        void add_ui(std::unique_ptr<UI> element) override;
+        void add_ui(std::unique_ptr<UIView> element) override;
         void draw() const override;
 
         Vector2 get_mouse_pos(void) const;

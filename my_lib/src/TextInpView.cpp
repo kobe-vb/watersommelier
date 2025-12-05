@@ -4,7 +4,7 @@
 #include <iostream>
 
 TextInpView::TextInpView(TextInpModel *model, float x, float y, float w, float h)
-    : model(model), bounds{x, y, w, h}
+    : UIView(model), model(model), bounds{x, y, w, h}
 {
 }
 
@@ -12,7 +12,7 @@ bool TextInpView::update(void)
 {
     model->set_hover(CheckCollisionPointRec(this->get_mouse_pos(), bounds));
 
-    if (_is_locked)
+    if (model->is_locked())
     {
         if (model->is_hover())
             Mouse::update_cursor(MOUSE_CURSOR_NOT_ALLOWED);
@@ -57,13 +57,13 @@ bool TextInpView::update(void)
 
 void TextInpView::set_active(bool value)
 {
-    UI::set_active(value);
+    // UIView::set_active(value);
     model->set_active(value);
 }
 
 bool TextInpView::capture_tab(int direction)
 {
-    UI::capture_tab(direction);
+    UIView::capture_tab(direction);
     if (!is_tabt)
         model->set_active(false);
     else

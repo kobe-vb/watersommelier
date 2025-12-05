@@ -13,10 +13,10 @@
 #include "Sim.hpp"
 #include "Settings.hpp"
 #include "Particle.hpp"
-#include <UI.hpp>
 #include <thread>
 #include <vector>
 #include <algorithm>
+#include <UIView.hpp>
 
 Sim::Sim(void)
 {
@@ -208,9 +208,9 @@ void Sim::update(float dt)
 
 void Sim::draw() const
 {
-    DrawRectangleRounded(rect, ROUNDED, 10, UI::get_dcolor(UiColors::FIRST));
+    DrawRectangleRounded(rect, ROUNDED, 10, UIView::get_dcolor(UiColors::FIRST));
     if (BORDER_WIDTH > 0)
-        DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, BORDER_WIDTH, UI::get_dcolor(UiColors::BORDER));
+        DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, BORDER_WIDTH, UIView::get_dcolor(UiColors::BORDER));
     
     // Render naar texture
     BeginTextureMode(this->win);

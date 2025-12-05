@@ -1,15 +1,22 @@
 #include "GlassModel.hpp"
 #include <algorithm>
 
-GlassModel::GlassModel(GameData &data, std::function<void()> close_glass, Sim &sim) : data(data), sim(sim)
+GlassModel::GlassModel(GameData &data, std::function<void()> score_glass, Sim &sim) : data(data), sim(sim)
 {
-    save_button = ButtonModel("Save", close_glass);
+    save_button = ButtonModel("Save", score_glass);
+    _score_glass = score_glass;
 
+}
+
+void GlassModel::lock(bool lock)
+{
+    save_button.set_locked(lock);
+    dropdown.set_locked(lock);
+    amount.set_locked(lock);
 }
 
 void GlassModel::reset(void)
 {
-    std::cout << "reset\n";
     bar.reset();
     osmo = 0;
     volume = 25;
@@ -86,7 +93,7 @@ void GlassModel::save_drops(int drops, Element *elm)
 void GlassModel::save_drops(void)
 {
     save_drops(get_new_amount(), &get_element());
-    
+
     dropdown.reset();
     amount.reset();
     amount.set_active(false);

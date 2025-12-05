@@ -13,6 +13,9 @@
 class History: public Win
 {
 private:
+
+    UIModel model;
+
     float scrollOffset;    
     float maxScrollOffset;
     Rectangle rect;

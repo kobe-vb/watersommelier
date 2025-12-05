@@ -1,7 +1,7 @@
 #include "ScoreGlassView.hpp"
 #include "Settings.hpp"
 
-ScoreGlassView::ScoreGlassView(ScoreGlassModel *model, Rectangle &rect) : model(model), rect(rect)
+ScoreGlassView::ScoreGlassView(ScoreGlassModel *model, Rectangle &rect) : Win(model), model(model), rect(rect)
 {
     // void Glass::_add_comment(void)
     // _set_lock(true);
@@ -86,7 +86,7 @@ void ScoreGlassView::next_glass()
 
 void ScoreGlassView::draw(void) const
 {
-    if (!_is_visible)
+    if (!model->is_visible())
         return;
 
     Win::draw();

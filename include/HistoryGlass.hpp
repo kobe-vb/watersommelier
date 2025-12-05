@@ -15,6 +15,10 @@
 
 class HistoryGlass : public BufferedWin
 {
+private:
+
+    UIModel model;
+
 public:
     HistoryGlass(int i, GlassModel &glass, ScoreGlassModel &scoreGlass);
     ~HistoryGlass() = default;

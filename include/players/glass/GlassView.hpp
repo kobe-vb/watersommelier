@@ -25,8 +25,7 @@ private:
     DropdownView *name;
 
     void process_drops();
-
-    // void _set_lock(bool lock);
+    void score_glass();
 
 public:
     GlassView(GlassModel *model, Rectangle &rect);
@@ -35,5 +34,7 @@ public:
     void reset(void);
 
     void draw(void) const override;
+
+    void lock(bool lock=true);
 
 };

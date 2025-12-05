@@ -1,12 +1,12 @@
 #pragma once
 
-#include "UI.hpp"
+#include "UIView.hpp"
 #include "TextInpModel.hpp"
 
 #include <sstream>
 #include <string>
 
-class TextInpView : public UI
+class TextInpView : public UIView
 {
 private:
     TextInpModel *model;

@@ -14,7 +14,7 @@
 #include "Mouse.hpp"
 
 TokelView::TokelView(TokelModel *model, float x, float y, float w, float h)
-    : UI(), model(model), bounds({x, y, w, h})
+    : UIView(model), model(model), bounds({x, y, w, h})
 {
     int fontSize = 20;
     float padding = 10.0f;

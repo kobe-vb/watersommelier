@@ -22,7 +22,7 @@
 
 #include <vector>
 
-class GameModel
+class GameModel : public UIModel
 {
 private:
     BarcodeReader barcode_reader;

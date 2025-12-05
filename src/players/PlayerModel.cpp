@@ -2,7 +2,7 @@
 
 PlayerModel::PlayerModel(const std::string &name, GameData &data, Sim &sim) : name(name),
                                                               glass(GlassModel(data, [this]()
-                                                                          { next_glass(); }, sim)), scoreGlass([this](){next_glass();}, [this](){return steal_glass();})
+                                                                          { score_glass(); }, sim)), scoreGlass([this](){next_glass();}, [this](){return steal_glass();})
 {
 }
 
@@ -50,6 +50,11 @@ std::string PlayerModel::to_json() const
 void PlayerModel::fiks_sim(void)
 {
     glass.reset_sim();
+}
+
+void PlayerModel::score_glass()
+{
+    glass.lock();
 }
 
 void PlayerModel::next_glass()

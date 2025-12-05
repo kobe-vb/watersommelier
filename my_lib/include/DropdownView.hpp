@@ -4,10 +4,10 @@
 #include <functional>
 #include <algorithm>
 
-#include "UI.hpp"
+#include "UIView.hpp"
 #include "DropdownModel.hpp"
 
-class DropdownView : public UI
+class DropdownView : public UIView
 {
 private:
     DropdownModel *model;

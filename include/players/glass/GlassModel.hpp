@@ -13,7 +13,7 @@
 
 #define SIM_FACTOR 100000000
 
-class GlassModel
+class GlassModel: public UIModel
 {
     friend class HistoryGlass;
 
@@ -28,6 +28,7 @@ private:
     std::string warning;
 
     ButtonModel save_button;
+    std::function<void()> _score_glass;
     DropdownModel dropdown = DropdownModel(data.names, "Select a posion", [this]()
                              { set_warning(); });
     TextInpModel amount = TextInpModel("??hoeveel??", [this]()
@@ -38,10 +39,9 @@ private:
 
     // te doen
     
-    void _next_glass(UI &ui);
     
     public:
-    GlassModel(GameData &data, std::function<void()> close_glass, Sim &sim);
+    GlassModel(GameData &data, std::function<void()> score_glass, Sim &sim);
     ~GlassModel() {};
     
     StackedBarModel &get_bar(void) { return bar; }
@@ -57,17 +57,13 @@ private:
     
     void set_warning(void);
     void save_drops(void);
-
+    void score_glass(void) { _score_glass(); }
     
     int get_osmo(void) const { return osmo; }
     const std::string &get_warning(void) const { return warning; }
     bool take_code(const std::string &code);
-    // te doen
 
-
-    void add_comment(UI &ui);
-
-    std::string get_comment(void) const;
+    void lock(bool lock = true);
 
     // void generate_random_data(bool full = true);
 };

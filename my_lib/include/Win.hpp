@@ -12,17 +12,17 @@
 
 #pragma once
 
-#include "UI.hpp"
+#include "UIView.hpp"
 
 #include <vector>
 #include <memory>
 #include <iostream>
 #include <ranges>
 
-class Win : public UI
+class Win : public UIView
 {
 private:
-    std::vector<std::unique_ptr<UI>> ui_elements;
+    std::vector<std::unique_ptr<UIView>> ui_elements;
     bool next_tab(int direction, bool round);
     void remove_tab(void) override;
     int current_tab = -1;
@@ -30,16 +30,16 @@ private:
     bool ui_elements_is_changed = false;
 
 public:
-    Win() = default;
+    Win(UIModel *model) : UIView(model) {};
     ~Win() = default;
-    virtual void add_ui(std::unique_ptr<UI> element);
+    virtual void add_ui(std::unique_ptr<UIView> element);
     bool update() override;
     void draw() const override;
 
     void update_tabs(void);
     bool capture_tab(int direction) override;
-    UI *get_ui_at(int i) const;
-    UI *get_last_ui() const;
+    UIView *get_ui_at(int i) const;
+    UIView *get_last_ui() const;
     int get_num_of_elements() const;
     void set_current_tab(int i);
     void pop_ui_back(void);

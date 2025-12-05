@@ -29,7 +29,7 @@ void draw_my_text(const char *name, float val, int x, int y)
     DrawText(buffer, x, y, 30, DARKBLUE);
 }
 
-HistoryGlass::HistoryGlass(int i, GlassModel &glass, ScoreGlassModel &scoreGlass) : BufferedWin(((GetScreenWidth() - (PEDING * 4)) * 1 / 3) + PEDING * 2, LINE + PEDING * 4,
+HistoryGlass::HistoryGlass(int i, GlassModel &glass, ScoreGlassModel &scoreGlass) : BufferedWin(&model, ((GetScreenWidth() - (PEDING * 4)) * 1 / 3) + PEDING * 2, LINE + PEDING * 4,
                                                               ((GetScreenWidth() - (PEDING * 4)) * 1 / 3), 120),
                                                   i(i),
                                                   bar(glass.bar),
@@ -103,18 +103,14 @@ void HistoryGlass::set_pos(int i, float scrollOffset)
     float screenBottom = GetScreenHeight() - PEDING;
 
     if (rect.y + rect.height < screenTop || rect.y > screenBottom)
-    {
-        this->_is_visible = false;
-    }
+        model.set_visible(false);
     else
-    {
-        this->_is_visible = true;
-    }
+        model.set_visible(true);
 }
 
 void HistoryGlass::draw(void) const
 {
-    if (!_is_visible)
+    if (!model.is_visible())
         return;
 
     DrawRectangleRounded(rect, ROUNDED, 10, get_dcolor(UiColors::FIRST));
@@ -129,7 +125,7 @@ void HistoryGlass::draw(void) const
 
 void HistoryGlass::draww(void) const
 {
-    if (!_is_visible)
+    if (!model.is_visible())
         return;
 
     BeginTextureMode(this->win);

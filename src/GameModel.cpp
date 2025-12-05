@@ -75,18 +75,19 @@ int GameModel::get_active_player(void)
 
 void GameModel::switch_players(int id)
 {
-
-    // for (int i = 0; i < (int)players.size(); i++)
-    // {
-    //     if (i == id)
-    //     {
-    //         players[i]->activate();
-    //     }
-    //     else
-    //     {
-    //         players[i]->disable();
-    //     }
-    // }
+    for (int i = 0; i < (int)players.size(); i++)
+    {
+        if (i == id)
+        {
+            get_player(i)->activate();
+            get_tokel(i).set_tokel(true);
+        }
+        else
+        {
+            get_tokel(i).set_tokel(false);
+            get_player(i)->disable();
+        }
+    }
     active_player = id;
 
     // std::cout << "switch_players id: " << id << std::endl;

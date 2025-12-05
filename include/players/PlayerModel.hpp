@@ -26,7 +26,7 @@
 
 
 // TODO: refactor player heeft versilende fases, data verzamel score, lenen, qr/bednqking
-class PlayerModel
+class PlayerModel: public UIModel
 {
 protected:
     const std::string name;
@@ -50,6 +50,7 @@ public:
 
     void next_glass();
     bool steal_glass();
+    void score_glass();
 
     void fiks_sim(void);
 

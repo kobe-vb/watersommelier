@@ -12,7 +12,7 @@
 
 #include "BufferedWin.hpp"
 
-BufferedWin::BufferedWin(float x, float y, float w, float h) : Win(), pos({x, y})
+BufferedWin::BufferedWin(UIModel *model, float x, float y, float w, float h) : Win(model), pos({x, y})
 {
     this->win = LoadRenderTexture(w, h);
 }
@@ -22,7 +22,7 @@ BufferedWin::~BufferedWin()
     UnloadRenderTexture(this->win);
 }
 
-void BufferedWin::add_ui(std::unique_ptr<UI> element)
+void BufferedWin::add_ui(std::unique_ptr<UIView> element)
 {
     element->set_parent(this);
     Win::add_ui(std::move(element));
@@ -35,7 +35,7 @@ void BufferedWin::clear(void) const
 
 void BufferedWin::draw() const
 {
-    if (!_is_visible)
+    if (!model->is_visible())
         return;
     BeginTextureMode(this->win);
     clear();

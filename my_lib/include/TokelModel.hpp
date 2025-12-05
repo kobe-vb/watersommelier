@@ -12,7 +12,6 @@
 
 #pragma once
 
-#include "UI.hpp"
 #include "UIModel.hpp"
 #include <string>
 

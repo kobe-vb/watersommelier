@@ -16,7 +16,7 @@
 #include "Mouse.hpp"
 
 ButtonView::ButtonView(ButtonModel *model, float x, float y, float w, float h)
-    : model(model), bounds{x, y, w, h}{}
+    : UIView(model), model(model), bounds{x, y, w, h}{}
 
 void ButtonView::draw(void) const
 {
@@ -46,7 +46,7 @@ bool ButtonView::update(void)
 {
     model->set_hover(CheckCollisionPointRec(this->get_mouse_pos(), bounds));
 
-    if (_is_locked)
+    if (model->is_locked())
     {
         if (model->is_hover())
             Mouse::update_cursor(MOUSE_CURSOR_NOT_ALLOWED);

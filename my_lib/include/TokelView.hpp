@@ -12,11 +12,11 @@
 
 #pragma once
 
-#include "UI.hpp"
+#include "UIView.hpp"
 #include "TokelModel.hpp"
 #include <string>
 
-class TokelView : public UI
+class TokelView : public UIView
 {
 private:
     TokelModel *model;

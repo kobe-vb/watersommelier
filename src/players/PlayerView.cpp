@@ -17,14 +17,14 @@
 #include <thread>
 #include <MyDraw.hpp>
 
-PlayerView::PlayerView(PlayerModel *model) : model(model), glass(GlassView(&model->get_glass(), rect))
+PlayerView::PlayerView(PlayerModel *model) : Win(model), model(model), glass(GlassView(&model->get_glass(), rect))
 {
 }
 
 
 bool PlayerView::capture_tab(int direction)
 {
-    if (!_is_active)
+    if (model->is_locked())
         return (false);
     return (glass.capture_tab(direction));
 }
@@ -32,7 +32,7 @@ bool PlayerView::capture_tab(int direction)
 
 bool PlayerView::update(void)
 {
-    if (!_is_active)
+    if (model->is_locked())
         return (false);
 
     Win::update();
@@ -70,7 +70,7 @@ void PlayerView::draw_qr(void) const
 
 void PlayerView::draw(void) const
 {
-    if (!_is_visible)
+    if (!model->is_visible())
         return;
 
     MyDraw::text("first", ("Code: " + (model->get_code().length() ? model->get_code() : "None")).c_str(), UI_BORDER * 2 + PEDING, UI_BORDER + PEDING + BUTTON_HEIGHT, 80, WHITE);

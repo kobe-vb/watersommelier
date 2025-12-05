@@ -12,10 +12,10 @@
 
 #pragma once
 
-#include "UI.hpp"
+#include "UIView.hpp"
 #include "ButtonModel.hpp"
 
-class ButtonView : public UI
+class ButtonView : public UIView
 {
 private:
     ButtonModel *model;

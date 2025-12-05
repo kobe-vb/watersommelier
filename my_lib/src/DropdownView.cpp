@@ -6,7 +6,7 @@
 #include "Mouse.hpp"
 
 DropdownView::DropdownView(DropdownModel *model, float x, float y, float w, float h)
-    : model(model), bounds{x, y, w, h}
+    : UIView(model), model(model), bounds{x, y, w, h}
 {
 }
 
@@ -43,7 +43,7 @@ bool DropdownView::update()
     Vector2 mouse = this->get_mouse_pos();
     model->set_hover(CheckCollisionPointRec(mouse, bounds));
 
-    if (_is_locked)
+    if (model->is_locked())
     {
         if (model->is_hover())
             Mouse::update_cursor(MOUSE_CURSOR_NOT_ALLOWED);
@@ -130,7 +130,7 @@ void DropdownView::draw() const
 
 bool DropdownView::capture_tab(int direction)
 {
-    UI::capture_tab(direction);
+    UIView::capture_tab(direction);
     if (!is_tabt)
         model->close();
     return (is_tabt);
