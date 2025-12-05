@@ -24,6 +24,8 @@
 
 #include <optional>
 
+enum class Role { Player, Sudo};
+
 
 // TODO: refactor player heeft versilende fases, data verzamel score, lenen, qr/bednqking
 class PlayerModel: public UIModel
@@ -45,6 +47,8 @@ protected:
     PlayerModel(const std::string &name, GameData &data, Sim &sim);
     ~PlayerModel() = default;
     
+    Role role = Role::Player;
+
     History history;
     
     void update(void);

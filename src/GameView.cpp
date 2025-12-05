@@ -14,6 +14,8 @@
 #include "Settings.hpp"
 // #include "SudoPlayer.hpp"
 #include "MyDraw.hpp"
+#include <SudoPlayerModel.hpp>
+#include <SudoPlayerView.hpp>
 // #include <WebsitePlayer.hpp>
 
 GameView::GameView() : App("pompion", 0, 0, 60), win(Win(&model))
@@ -29,11 +31,6 @@ GameView::GameView() : App("pompion", 0, 0, 60), win(Win(&model))
     screen_rect.y = UI_BORDER;
     screen_rect.width = GetScreenWidth() - (UI_BORDER * 2);
     screen_rect.height = GetScreenHeight() - (UI_BORDER * 2);
-
-    players_rect.x = UI_BORDER * 2;
-    players_rect.y = UI_BORDER + PLAYER_HEIGHT + PEDING * 2;
-    players_rect.width = GetScreenWidth() - (UI_BORDER * 4);
-    players_rect.height = LINE - players_rect.y - PEDING;
 
     win.add_ui(std::make_unique<TextInpView>(
         &model.get_name_input(),
@@ -61,11 +58,7 @@ void GameView::draw() const
     if (BORDER_WIDTH > 0)
         DrawRectangleRoundedLinesEx(screen_rect, 0.05, 8, BORDER_WIDTH, UIView::get_dcolor(UiColors::BORDER));
 
-    DrawRectangleRounded(players_rect, ROUNDED * 3, 8, UIView::get_dcolor(UiColors::FIRST));
-    if (BORDER_WIDTH > 0)
-        DrawRectangleRoundedLinesEx(players_rect, ROUNDED, 8, BORDER_WIDTH, UIView::get_dcolor(UiColors::BORDER));
-
-    // sim.draw(); TODO
+    model.get_sim().draw();
     win.draw();
     if (DEBUG)
         DrawFPS(UI_BORDER * 2, 5);
@@ -112,7 +105,13 @@ void GameView::create_new_player(void)
     model.get_tokel(ind).set_callback([this, ind]()
                                       { switch_players(ind); });
 
-    auto pl = std::make_unique<PlayerView>(model.get_player(ind));
+    PlayerModel *pm = model.get_player(ind);
+    std::unique_ptr<PlayerView> pl;
+    if (pm->role == Role::Sudo)
+        pl = std::make_unique<SudoPlayerView>(model.get_player(ind));
+    else
+        pl = std::make_unique<PlayerView>(model.get_player(ind));
+
     if (name == "demo")
         model.get_player(ind)->demo();
 
@@ -141,10 +140,8 @@ void GameView::create_new_player(void)
 
 void GameView::switch_players(int new_id)
 {
-    std::cout << "switch_players id: " << new_id << " from " <<  model.get_active_player() << std::endl;
-    
     model.switch_players(new_id);
-    
+
     // for (int i = 0; i < (int)players.size(); i++)
     // {
     //     if (i == new_id)

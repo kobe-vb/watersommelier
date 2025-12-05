@@ -15,7 +15,7 @@ static std::string loadFile(const std::string &path)
     return buffer.str();
 }
 
-SurveyServer::SurveyServer(std::unordered_map<std::string, Player &> &Players) : players(Players)
+SurveyServer::SurveyServer(std::unordered_map<std::string, PlayerModel &> &Players) : players(Players)
 {
 }
 
@@ -77,7 +77,7 @@ server.Post("/send-data", [this](const httplib::Request &req, httplib::Response 
         if (username_it != params.end()) {
             auto player_it = players.find(username_it->second);
             if (player_it != players.end()) {
-                Player& player = player_it->second;
+                PlayerModel& player = player_it->second;
 
                 player.set_website_data(req.body);
                 std::string file = loadFile("./data/www/thx.html");

@@ -11,7 +11,7 @@
 
 #define BORDER_WIDTH 0
 
-#define PLAYER_WIDTH 90
+#define PLAYER_WIDTH 120
 #define PLAYER_HEIGHT 60
 #define PLAYER_PEDING 20
 

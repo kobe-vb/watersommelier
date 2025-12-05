@@ -1,4 +1,4 @@
-#include "SudoPlayer.hpp"
+#include "SudoPlayerModel.hpp"
 
 #include <iostream>
 
@@ -60,52 +60,31 @@ std::string getLocalIP() {
 }
 
 
-SudoPlayer::SudoPlayer(std::string &name, GameData &data, Sim &sim, std::vector<Player_data> &raw_players) :
-Player(name, data, sim), server(players)
+SudoPlayerModel::SudoPlayerModel(const std::string &name, GameData &data, Sim &sim, std::vector<PlayerModel *> players_ref) :
+PlayerModel(name, data, sim), server(players)
 {
-    int i = 0;
-    for (auto &player : raw_players)
+    role = Role::Sudo;
+    for (auto player : players_ref)
     {
-        players.insert({player.player->get_name(), *player.player});
-        add_ui(std::make_unique<Tokel>(1300 + (i % 5) * 117, 100 + (i / 5) * 100, 105,  60, player.player->get_name(), 
-                                             [this](UI &uii)
-                                         { set_player_website(uii); }));
-        i++;
+        players.insert({player->get_name(), *player});
+        buttons.insert({player->get_name(), TokelModel(player->get_name(), [this, player]() { set_player_website(player->get_name()); })});
     }
-    players.insert({this->get_name(), *this});
-    add_ui(std::make_unique<Tokel>(1300 + (i % 5) * 117, 100 + (i / 5) * 100, 105, 60, this->get_name(),
-                                                 [this](UI &uii)
-                                         { set_player_website(uii); }));
+        players.insert({get_name(), *this});
+        buttons.insert({get_name(), TokelModel(get_name(), [this, name]() { set_player_website(name); })});
 }
 
-void SudoPlayer::start_server(void)
+void SudoPlayerModel::start_server(void)
 {
     server.startServer(getLocalIP(), 8080);
 }
 
-void SudoPlayer::set_player_website(UI &ui)
+void SudoPlayerModel::set_player_website(const std::string &name)
 {
+    std::cout << "set_player_website by: " << name << "" << std::endl;
     this->start_server();
-    Tokel &tokel = dynamic_cast<Tokel &>(ui);
-    Player &player = players.at(tokel.get_text());
-    std::cout << server.getPath(tokel.get_text()) << std::endl;
-    player.set_website(server.getPath(tokel.get_text()));
+
+    PlayerModel &player = players.at(name);
+    std::cout << server.getPath(name) << std::endl;
+    player.set_website(server.getPath(name));
 }
 
-bool SudoPlayer::update(void)
-{
-    if (!_is_active)
-        return false;
-    Player::update();
-
-    return false;
-}
-
-void SudoPlayer::draw(void) const
-{
-    if (!_is_visible)
-        return;
-    Player::draw();
-
-    DrawText("Role: Sudo", 300, 170, 80, BLACK);
-}

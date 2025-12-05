@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cstdint>
 #include <filesystem>
+#include <SudoPlayerModel.hpp>
 
 // TODO: refactor
 static void saveCounter(size_t counter, const std::string &filename)
@@ -35,7 +36,6 @@ GameModel::GameModel()
 
     // TODO: refactor
     load_data(data);
-
 }
 
 // TODO: refactor
@@ -111,17 +111,30 @@ void GameModel::reset_sim(void)
     // sim.reset();
 }
 
+std::vector<PlayerModel *> GameModel::get_players_ref()
+{
+    std::vector<PlayerModel *> refs;
+    refs.reserve(players.size());
+
+    for (auto &p : players)
+        refs.push_back(p.get());
+
+    return refs;
+}
+
 int GameModel::create_player()
 {
     const std::string &name = name_input.get_text();
-    
-    // TODO: add other players
-    players.push_back(std::make_unique<PlayerModel>(name, data, sim));
+
+    if (name == "tiboon")
+        players.push_back(std::make_unique<SudoPlayerModel>(name, data, sim, get_players_ref()));
+    else
+        players.push_back(std::make_unique<PlayerModel>(name, data, sim));
 
     int id = players.size() - 1;
 
     buttons.push_back(std::make_unique<TokelModel>(name, [this, id]()
-                   { switch_players(id); }));
+                                                   { switch_players(id); }));
     return id;
 }
 
@@ -134,7 +147,6 @@ bool GameModel::name_is_taken(const std::string &name)
     }
     return (false);
 }
-
 
 void GameModel::handleCode(const std::string &code)
 {

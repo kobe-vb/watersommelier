@@ -41,7 +41,6 @@ class GameView : public App
 
         Win win;
 
-        Rectangle players_rect;
         Rectangle screen_rect;
 
         Music music;

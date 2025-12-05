@@ -20,6 +20,11 @@
 PlayerView::PlayerView(PlayerModel *model) : Win(model), model(model), glass(GlassView(&model->get_glass(), rect)),
     score_glass(ScoreGlassView(&model->get_score_glass(), rect))
 {
+    players_info_rect.x = UI_BORDER * 2;
+    players_info_rect.y = UI_BORDER + PLAYER_HEIGHT + PEDING * 2;
+    players_info_rect.width = GetScreenWidth() - (UI_BORDER * 4);
+    players_info_rect.height = LINE - players_info_rect.y - PEDING;
+
 }
 
 
@@ -73,6 +78,10 @@ void PlayerView::draw(void) const
 {
     if (!model->is_visible())
         return;
+
+    DrawRectangleRounded(players_info_rect, ROUNDED * 3, 8, UIView::get_dcolor(UiColors::FIRST));
+    if (BORDER_WIDTH > 0)
+        DrawRectangleRoundedLinesEx(players_info_rect, ROUNDED, 8, BORDER_WIDTH, UIView::get_dcolor(UiColors::BORDER));
 
     MyDraw::text("first", ("Code: " + (model->get_code().length() ? model->get_code() : "None")).c_str(), UI_BORDER * 2 + PEDING, UI_BORDER + PEDING + BUTTON_HEIGHT, 80, WHITE);
     MyDraw::text("first", ("Name: " + model->get_name()).c_str(), UI_BORDER * 2 + PEDING, UI_BORDER + PEDING + BUTTON_HEIGHT + 70, 80, WHITE);

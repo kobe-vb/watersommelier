@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# pragma once
+#pragma once
 
 #include "BufferedWin.hpp"
 #include "GameData.hpp"
@@ -25,19 +25,21 @@
 #include <optional>
 #include "ScoreGlassView.hpp"
 
-
-class PlayerView: public Win
+class PlayerView : public Win
 {
 
 private:
     PlayerModel *model;
-    Rectangle rect;
 
     GlassView glass;
     ScoreGlassView score_glass;
 
     void draw_qr(void) const;
-    
+
+protected:
+    Rectangle rect;
+    Rectangle players_info_rect;
+
 public:
     PlayerView(PlayerModel *model);
     ~PlayerView() = default;

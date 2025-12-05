@@ -39,6 +39,8 @@ private:
 private:
     void handleCode(const std::string &code);
 
+    std::vector<PlayerModel*> get_players_ref();
+
 public:
     GameModel();
     ~GameModel() = default;
@@ -55,4 +57,6 @@ public:
     TokelModel &get_tokel(int id) { return *buttons[id]; }
     int get_active_player(void);
     void set_active_player(int id) { active_player = id; }
+
+    const Sim &get_sim(void) const { return sim; }
 };
