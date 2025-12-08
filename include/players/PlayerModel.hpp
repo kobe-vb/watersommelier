@@ -27,6 +27,8 @@ enum class Role
     Sudo
 };
 
+class GameModel;
+
 // TODO: refactor player heeft versilende fases, data verzamel score, lenen, qr/bednqking
 class PlayerModel : public UIModel
 {
@@ -36,16 +38,20 @@ protected:
     ScoreGlassModel scoreGlass;
     WebsiteModel website;
 
+    GameModel *game;
+
 private:
     std::string code;
 
 public:
-    PlayerModel(const std::string &name, GameData &data, Sim &sim);
+    PlayerModel(const std::string &name, GameData &data, Sim &sim, GameModel *game);
     ~PlayerModel() = default;
 
     Role role = Role::Player;
 
     History history;
+
+    PlayerModel *thief = nullptr;
 
     void update(void);
 
@@ -58,6 +64,7 @@ public:
     bool set_code(const std::string &code);
     bool take_code_for_dropdown(const std::string &code);
     bool is_my_code(const std::string &code) const;
+    bool is_me(const std::string &key) const { return key == name || key == code; }
 
     void set_data(std::string website_data);
     void set_website(std::string website);

@@ -1,8 +1,9 @@
 #include "PlayerModel.hpp"
+#include "GameModel.hpp"
 
-PlayerModel::PlayerModel(const std::string &name, GameData &data, Sim &sim) : name(name),
+PlayerModel::PlayerModel(const std::string &name, GameData &data, Sim &sim, GameModel *game) : name(name),
                                                               glass(GlassModel(data, [this]()
-                                                                          { score_glass(); }, sim)), scoreGlass([this](){next_glass();}, [this](){return steal_glass();})
+                                                                          { score_glass(); }, sim)), scoreGlass([this](){next_glass();}, [this](){return steal_glass();}), game(game)
 {
     scoreGlass.disable();
     website.disable();
@@ -62,7 +63,13 @@ void PlayerModel::score_glass()
 
 void PlayerModel::next_glass()
 {
-    history.saveGlass(glass, scoreGlass);
+    if (thief)
+    {
+        thief->history.saveGlass(glass, scoreGlass);
+        thief = nullptr;
+    }
+    else
+        history.saveGlass(glass, scoreGlass);
     glass.reset();
     scoreGlass.reset();
     scoreGlass.disable();
@@ -70,8 +77,21 @@ void PlayerModel::next_glass()
 
 bool PlayerModel::steal_glass()
 {
-    std::cout << "steal glass\n";
-    return false;
+    if (thief)
+    {
+        thief->history.saveGlass(glass, scoreGlass);
+        thief = nullptr;
+    }
+    else
+        history.saveGlass(glass, scoreGlass);
+    
+    const std::string &key = scoreGlass.get_thief();
+    std::cout << "steal glass for " << key << "\n";
+    thief = game->get_player(key);
+    if (!thief || thief == this)
+        return false;
+    scoreGlass.reset();
+    return true;
 }
 
 bool PlayerModel::is_my_code(const std::string &code) const

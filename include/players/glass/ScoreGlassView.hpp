@@ -15,6 +15,7 @@ class ScoreGlassView: public Win
         void add_score(void);
         bool valid_score(void);
         void save(void);
+        void steal(void);
 
     public:
         ScoreGlassView(ScoreGlassModel *model, Rectangle &rect);

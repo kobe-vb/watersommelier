@@ -73,19 +73,30 @@ int GameModel::get_active_player(void)
     return active_player;
 }
 
+// key is either name or code
+PlayerModel *GameModel::get_player(const std::string &key)
+{
+    for (auto &player : players)
+    {
+        if (player->is_me(key))
+            return player.get();
+    }
+    return nullptr;
+}
+
 void GameModel::switch_players(int id)
 {
     for (int i = 0; i < (int)players.size(); i++)
     {
         if (i == id)
         {
-            get_player(i)->activate();
+            get_player_by_id(i)->activate();
             get_tokel(i).set_tokel(true);
         }
         else
         {
+            get_player_by_id(i)->disable();
             get_tokel(i).set_tokel(false);
-            get_player(i)->disable();
         }
     }
     active_player = id;
@@ -127,9 +138,9 @@ int GameModel::create_player()
     const std::string &name = name_input.get_text();
 
     if (name == "tiboon")
-        players.push_back(std::make_unique<SudoPlayerModel>(name, data, sim, get_players_ref()));
+        players.push_back(std::make_unique<SudoPlayerModel>(name, data, sim, this));
     else
-        players.push_back(std::make_unique<PlayerModel>(name, data, sim));
+        players.push_back(std::make_unique<PlayerModel>(name, data, sim, this));
 
     int id = players.size() - 1;
 

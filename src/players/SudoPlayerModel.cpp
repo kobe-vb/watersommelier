@@ -59,12 +59,13 @@ std::string getLocalIP() {
     return std::string(ipStr);
 }
 
+#include "GameModel.hpp"
 
-SudoPlayerModel::SudoPlayerModel(const std::string &name, GameData &data, Sim &sim, std::vector<PlayerModel *> players_ref) :
-PlayerModel(name, data, sim), server(players)
+SudoPlayerModel::SudoPlayerModel(const std::string &name, GameData &data, Sim &sim, GameModel *game) :
+PlayerModel(name, data, sim, game), server(players)
 {
     role = Role::Sudo;
-    for (auto player : players_ref)
+    for (auto player : game->get_players_ref())
     {
         players.insert({player->get_name(), *player});
         buttons.insert({player->get_name(), TokelModel(player->get_name(), [this, player]() { set_player_website(player->get_name()); })});

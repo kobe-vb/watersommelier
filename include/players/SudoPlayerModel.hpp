@@ -16,7 +16,7 @@ private:
     void start_server(void);
     public:
     
-    SudoPlayerModel(const std::string &name, GameData &data, Sim &sim, std::vector<PlayerModel *> players_ref);
+    SudoPlayerModel(const std::string &name, GameData &data, Sim &sim, GameModel *game);
     ~SudoPlayerModel() = default;
     
     void set_player_website(const std::string &name);

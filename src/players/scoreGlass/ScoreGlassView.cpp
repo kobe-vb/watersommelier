@@ -63,6 +63,7 @@ void ScoreGlassView::add_score(void)
         &model->get_thief_input(),
         rect.x + PEDING, y,
         rect.width - BUTTON_WIDTH - PEDING * 3, BUTTON_HEIGHT));
+    model->get_thief_input().set_callback([this]() { this->steal(); });
 }
 
 bool ScoreGlassView::valid_score(void)
@@ -78,6 +79,17 @@ bool ScoreGlassView::valid_score(void)
         is_valid &= valid;
     }
     return is_valid;
+}
+
+void ScoreGlassView::steal(void)
+{
+    if (!model->steal_glass())
+    {
+        get_last_ui()->set_color(UiColors::BG, RED);
+        return;
+    }
+    reset();
+    std::cout << "steal ok\n";
 }
 
 

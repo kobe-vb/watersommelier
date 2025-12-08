@@ -105,15 +105,15 @@ void GameView::create_new_player(void)
     model.get_tokel(ind).set_callback([this, ind]()
                                       { switch_players(ind); });
 
-    PlayerModel *pm = model.get_player(ind);
+    PlayerModel *pm = model.get_player_by_id(ind);
     std::unique_ptr<PlayerView> pl;
     if (pm->role == Role::Sudo)
-        pl = std::make_unique<SudoPlayerView>(model.get_player(ind));
+        pl = std::make_unique<SudoPlayerView>(model.get_player_by_id(ind));
     else
-        pl = std::make_unique<PlayerView>(model.get_player(ind));
+        pl = std::make_unique<PlayerView>(model.get_player_by_id(ind));
 
     if (name == "demo")
-        model.get_player(ind)->demo();
+        model.get_player_by_id(ind)->demo();
 
     const auto &rect = nameInput->get_rect();
     auto tokel = std::make_unique<TokelView>(&model.get_tokel(ind), rect.x, rect.y, rect.width, rect.height);
