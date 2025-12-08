@@ -5,6 +5,7 @@ PlayerModel::PlayerModel(const std::string &name, GameData &data, Sim &sim) : na
                                                                           { score_glass(); }, sim)), scoreGlass([this](){next_glass();}, [this](){return steal_glass();})
 {
     scoreGlass.disable();
+    website.disable();
 }
 
 void PlayerModel::demo(void)
@@ -25,7 +26,7 @@ void PlayerModel::save_data(std::ofstream &file, size_t &counter, GameData &data
 {
     if (history.get_num_of_elements() == 0)
         return;
-    history.save_data(file, counter, name, data, website_data);
+    history.save_data(file, counter, name, data, website.get_data());
 }
 
 // TODO: refactor
@@ -92,35 +93,22 @@ bool PlayerModel::set_code(const std::string &new_code)
     return false;
 }
 
+void PlayerModel::set_data(std::string website_data)
+{
+    website.set_data(website_data);
+}
+
+void PlayerModel::set_website(std::string website)
+{
+    glass.disable();
+    scoreGlass.disable();
+    this->website.activate();
+
+    this->website.set_website(website);
+}
+
 void PlayerModel::update()
 {
     history.update();
 }
 
-// TODO: refactor
-void PlayerModel::set_website(std::string website)
-{
-    this->website = website;
-    this->qr = qrcodegen::QrCode::encodeText(website.c_str(), qrcodegen::QrCode::Ecc::LOW);
-    // this->qr = qrcodegen::QrCode::encodeText("WIFI:T:WPA;S:yourAP;P:yourPassword;;", qrcodegen::QrCode::Ecc::LOW);
-
-    /*
-    this->add_ui(std::make_unique<Button>(
-        rect.x + 50, rect.y + 500, 200, 50, "Go to website",
-        [url = this->website](UI& ui)
-        {
-            (void)ui;
-            std::thread([url]()
-            {
-                // std::string command = "start \"\" \"" + url + "\"";
-                std::string command = "start " + url;
-                system(command.c_str());
-            }).detach();
-        }));
-        */
-}
-// TODO: refactor
-void PlayerModel::set_website_data(std::string website_data)
-{
-    this->website_data = WebsiteData(website_data);
-}

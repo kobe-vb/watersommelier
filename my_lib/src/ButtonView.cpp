@@ -15,8 +15,12 @@
 #include "raylib.h"
 #include "Mouse.hpp"
 
-ButtonView::ButtonView(ButtonModel *model, float x, float y, float w, float h)
-    : UIView(model), model(model), bounds{x, y, w, h}{}
+ButtonView::ButtonView(ButtonModel *model, float x, float y, float w, float h, bool center)
+    : UIView(model), model(model), bounds{x, y, w, h}
+{
+    if (center)
+        bounds.x -= MeasureText(model->get_text().c_str(), 20) / 2;
+}
 
 void ButtonView::draw(void) const
 {

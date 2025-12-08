@@ -21,6 +21,7 @@
 
 #include "PlayerModel.hpp"
 #include "GlassView.hpp"
+#include "WebsiteView.hpp"
 
 #include <optional>
 #include "ScoreGlassView.hpp"
@@ -31,12 +32,12 @@ class PlayerView : public Win
 private:
     PlayerModel *model;
 
+    
+protected:
     GlassView glass;
     ScoreGlassView score_glass;
+    WebsiteView website;
 
-    void draw_qr(void) const;
-
-protected:
     Rectangle rect;
     Rectangle players_info_rect;
 

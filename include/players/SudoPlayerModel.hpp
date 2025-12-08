@@ -10,16 +10,17 @@ private:
 
     std::unordered_map<std::string, PlayerModel &> players;    
     std::unordered_map<std::string, TokelModel> buttons;    
-    void set_player_website(const std::string &name);
     
-protected:
+    protected:
     SurveyServer server;
     void start_server(void);
-public:
-
+    public:
+    
     SudoPlayerModel(const std::string &name, GameData &data, Sim &sim, std::vector<PlayerModel *> players_ref);
     ~SudoPlayerModel() = default;
-
-    std::unordered_map<std::string, TokelModel> &get_buttons(void) { return buttons; }    
+    
+    void set_player_website(const std::string &name);
+    
+    std::unordered_map<std::string, TokelModel> &get_buttons(void) { return buttons; }  
 };
 

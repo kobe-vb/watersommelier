@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# pragma once
+#pragma once
 
 #include "BufferedWin.hpp"
 #include "GlassModel.hpp"
@@ -18,39 +18,35 @@
 #include "ScrollBar.hpp"
 #include "History.hpp"
 #include "Sim.hpp"
-# include "TokelModel.hpp"
-#include "qrcodegen.hpp"
-#include "WebsiteData.hpp"
+#include "TokelModel.hpp"
+#include "WebsiteModel.hpp"
 
-#include <optional>
-
-enum class Role { Player, Sudo};
-
+enum class Role
+{
+    Player,
+    Sudo
+};
 
 // TODO: refactor player heeft versilende fases, data verzamel score, lenen, qr/bednqking
-class PlayerModel: public UIModel
+class PlayerModel : public UIModel
 {
 protected:
     const std::string name;
     GlassModel glass;
     ScoreGlassModel scoreGlass;
-    private:
-    
+    WebsiteModel website;
+
+private:
     std::string code;
-    
-    // TODO: refactor
-    std::optional<qrcodegen::QrCode> qr;
-    std::string website;
-    WebsiteData website_data;
-    
-    public:
+
+public:
     PlayerModel(const std::string &name, GameData &data, Sim &sim);
     ~PlayerModel() = default;
-    
+
     Role role = Role::Player;
 
     History history;
-    
+
     void update(void);
 
     void next_glass();
@@ -63,9 +59,9 @@ protected:
     bool take_code_for_dropdown(const std::string &code);
     bool is_my_code(const std::string &code) const;
 
+    void set_data(std::string website_data);
     void set_website(std::string website);
-    void set_website_data(std::string website_data);
-    
+
     void save_data(std::ofstream &file, size_t &counter, GameData &data);
     std::string to_json(void) const;
 
@@ -76,4 +72,5 @@ protected:
 
     GlassModel &get_glass(void) { return (glass); }
     ScoreGlassModel &get_score_glass(void) { return (scoreGlass); }
+    WebsiteModel &get_websiteModel(void) { return (website); }
 };

@@ -7,16 +7,18 @@
 
 class SudoPlayerView : public PlayerView
 {
-protected:
+private:
+    int x_text;
 
+    void set_player_website(const std::string &name);
+
+protected:
     SudoPlayerModel *_model;
 
 public:
-
     SudoPlayerView(PlayerModel *model);
     ~SudoPlayerView() = default;
 
     bool update(void) override;
     void draw(void) const override;
 };
-

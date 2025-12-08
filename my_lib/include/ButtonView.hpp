@@ -19,10 +19,10 @@ class ButtonView : public UIView
 {
 private:
     ButtonModel *model;
-    const Rectangle bounds;
+    Rectangle bounds;
 
 public:
-    ButtonView(ButtonModel *model, float x, float y, float w, float h);
+    ButtonView(ButtonModel *model, float x, float y, float w, float h, bool center = false);
     ~ButtonView() = default;
     void draw(void) const override;
     bool update(void) override;

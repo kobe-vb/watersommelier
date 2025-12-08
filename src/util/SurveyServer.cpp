@@ -70,16 +70,14 @@ server.Post("/send-data", [this](const httplib::Request &req, httplib::Response 
 
         httplib::Params params;
         httplib::detail::parse_query_text(req.body, params);
-        
-        std::cout << req.body << std::endl;
-        
+                
         auto username_it = params.find("username");
         if (username_it != params.end()) {
             auto player_it = players.find(username_it->second);
             if (player_it != players.end()) {
                 PlayerModel& player = player_it->second;
 
-                player.set_website_data(req.body);
+                player.set_data(req.body);
                 std::string file = loadFile("./data/www/thx.html");
                 if (!file.empty())
                 {
@@ -130,7 +128,7 @@ bool SurveyServer::startServer(const std::string &host, int port)
 
     server_thread = std::thread([this, host, port]()
                                 {
-        std::cout << "🌐 Survey server gestart op http://" << host << ":" << port << std::endl;
+        std::cout << "Survey server gestart op http://" << host << ":" << port << std::endl;
         server.listen(host.c_str(), port); });
 
     path = "http://" + host + ":" + std::to_string(port);

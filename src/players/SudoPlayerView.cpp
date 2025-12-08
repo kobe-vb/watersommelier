@@ -17,7 +17,18 @@ SudoPlayerView::SudoPlayerView(PlayerModel *model) : PlayerView(model), _model(s
     {
         add_ui(std::make_unique<TokelView>(&value, x + ((i % 5) * (PEDING + w)), y + ((i / 5) * (PEDING + h)), w, h));
         i++;
+
+        // value.set_callback([this, key]() { this->set_player_website(key); });
     }
+
+    x_text = rect.x + rect.width + PEDING + (rect.width - MeasureText("Role: Sudo", 80)) / 2;
+}
+
+// weg ?
+void SudoPlayerView::set_player_website(const std::string &name)
+{
+    std::cout << "Setting website for player: " << name << std::endl;
+    _model->set_player_website(name);
 }
 
 bool SudoPlayerView::update(void)
@@ -35,5 +46,5 @@ void SudoPlayerView::draw(void) const
         return;
     PlayerView::draw();
 
-    DrawText("Role: Sudo", rect.x + rect.width + PEDING, 170, 80, BLACK);
+    DrawText("Role: Sudo", x_text, 170, 80, BLACK);
 }
