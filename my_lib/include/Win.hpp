@@ -30,7 +30,7 @@ private:
     bool ui_elements_is_changed = false;
 protected:
 
-    void clear_ui(void) { ui_elements.clear(); };
+    void clear_ui(void);
 
 public:
     Win(UIModel *model) : UIView(model) {};

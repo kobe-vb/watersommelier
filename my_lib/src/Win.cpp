@@ -19,7 +19,7 @@ void Win::add_ui(std::unique_ptr<UIView> element)
 
 void Win::remove_tab(void)
 {
-    if (current_tab == -1)
+    if (current_tab == -1 || current_tab >= (int)ui_elements.size())
         return;
     ui_elements[current_tab]->remove_tab();
     // current_tab = -1;
@@ -146,5 +146,12 @@ void Win::pop_ui_front()
     this->remove_tab();
     if (!ui_elements.empty())
         ui_elements.erase(ui_elements.begin());
+    ui_elements_is_changed = true;
+}
+
+void Win::clear_ui(void)
+{
+    this->remove_tab();
+    ui_elements.clear();
     ui_elements_is_changed = true;
 }

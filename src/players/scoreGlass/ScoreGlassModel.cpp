@@ -8,10 +8,19 @@ ScoreGlassModel::ScoreGlassModel(std::function<void()> next_glass, std::function
         comment_input.set_text("vdf #one #two cool #three, #four #five, #six #seven");
 }
 
+void ScoreGlassModel::reset(void)
+{
+    comment_input.set_text("");
+    if (DEBUG)
+        comment_input.set_text("lol");
+    hastags.clear();
+    thief_input.set_text("");
+}
+
 void ScoreGlassModel::add_score(void)
 {
     const std::string &comment = this->comment_input.get_text();
-    std::regex hashtagRegex("#\\w+");
+    std::regex hashtagRegex("#[^\\s#]+");
 
     auto it = std::sregex_iterator(comment.begin(), comment.end(), hashtagRegex);
     auto end = std::sregex_iterator();
@@ -23,7 +32,6 @@ void ScoreGlassModel::add_score(void)
             inp.set_text("5");
         hastags.emplace(it->str(), inp);
     }
-
 }
 
 int ScoreGlassModel::get_hastag_value(const TextInpModel &inp) const

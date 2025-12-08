@@ -13,8 +13,8 @@ class ScoreGlassView: public Win
         const Rectangle &rect;
 
         void add_score(void);
-        bool check_score(void);
-        void next_glass(void);
+        bool valid_score(void);
+        void save(void);
 
     public:
         ScoreGlassView(ScoreGlassModel *model, Rectangle &rect);

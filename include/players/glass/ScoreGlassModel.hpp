@@ -18,9 +18,6 @@ private:
     TextInpModel thief_input = TextInpModel("type code/name Thief", [this]()
                                             { steal_glass(); });
 
-    std::function<void()> next_glass;
-    std::function<bool()> steal_glass;
-
 public:
     ScoreGlassModel(std::function<void()> next_glass, std::function<bool()> steal_glass);
     ~ScoreGlassModel() = default;
@@ -33,7 +30,11 @@ public:
 
     int get_hastag_value(const TextInpModel &inp) const;
     void add_score(void);
+    void reset(void);
 
     std::string const &get_comment_text(void) const { return comment_input.get_text(); }
     std::map<std::string, int> get_hastags(void) const;
+
+    std::function<void()> next_glass;
+    std::function<bool()> steal_glass;
 };

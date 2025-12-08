@@ -6,9 +6,6 @@ ScoreGlassView::ScoreGlassView(ScoreGlassModel *model, Rectangle &rect) : Win(mo
     // void Glass::_add_comment(void)
     // _set_lock(true);
     reset();
-
-    model->get_score_button().set_callback([this]() { this->add_score(); });
-
 }
 
 void ScoreGlassView::reset(void)
@@ -29,6 +26,7 @@ void ScoreGlassView::reset(void)
         &model->get_score_button(),
         x, y,
         BUTTON_WIDTH, BUTTON_HEIGHT));
+    model->get_score_button().set_callback([this]() { this->add_score(); });
 }
 
 void ScoreGlassView::add_score(void)
@@ -59,6 +57,7 @@ void ScoreGlassView::add_score(void)
         &model->get_save_button(),
         x, y,
         BUTTON_WIDTH, BUTTON_HEIGHT));
+    model->get_save_button().set_callback([this]() { this->save(); });
 
     add_ui(std::make_unique<TextInpView>(
         &model->get_thief_input(),
@@ -66,30 +65,28 @@ void ScoreGlassView::add_score(void)
         rect.width - BUTTON_WIDTH - PEDING * 3, BUTTON_HEIGHT));
 }
 
-bool ScoreGlassView::check_score(void)
+bool ScoreGlassView::valid_score(void)
 {
     bool is_valid = true;
-    int i = 2; // ?
+    int i = 0;
     for (auto &tag : model->hastags)
     {
-        bool valid = model->get_hastag_value(tag.second) == -1;
+        bool valid = model->get_hastag_value(tag.second) != -1;
         TextInpView *text = dynamic_cast<TextInpView *>(get_ui_at(i++));
         text->set_color(UiColors::BG, valid ? GREEN : RED);
         tag.second.set_on_focus_clear(true);
         is_valid &= valid;
     }
-    if (!is_valid)
-        return true; // ?
-
-    return false; // ?
+    return is_valid;
 }
 
 
-void ScoreGlassView::next_glass()
+void ScoreGlassView::save()
 {
-    if (!check_score())
+    if (!valid_score())
         return;
-    // next_glas_func(ui);
+    model->next_glass();
+    this->reset();
 }
 
 void ScoreGlassView::draw(void) const

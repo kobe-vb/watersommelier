@@ -64,6 +64,7 @@ void PlayerModel::next_glass()
 {
     history.saveGlass(glass, scoreGlass);
     glass.reset();
+    scoreGlass.reset();
     scoreGlass.disable();
 }
 
