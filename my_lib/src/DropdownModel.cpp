@@ -1,7 +1,26 @@
 #include "DropdownModel.hpp"
 #include <algorithm>
+#include <iostream>
 
-DropdownModel::DropdownModel(const std::vector<std::string> &opts, const std::string &ph, std::function<void()> cb) : UIModel(cb), placeholder(ph), options(opts), filtered(opts) 
+#include <cctype>
+
+static bool case_insensitive_contains(const std::string& text, const std::string& pattern)
+{
+    if (pattern.empty())
+        return true;
+
+    auto it = std::search(
+        text.begin(), text.end(),
+        pattern.begin(), pattern.end(),
+        [](char a, char b) {
+            return std::toupper((unsigned char)a) == std::toupper((unsigned char)b);
+        }
+    );
+
+    return it != text.end();
+}
+
+DropdownModel::DropdownModel(const std::vector<std::string> &opts, const std::string &ph, std::function<void()> cb) : UIModel(cb), placeholder(ph), options(opts), filtered(opts)
 {
 }
 
@@ -10,7 +29,7 @@ void DropdownModel::filter_options()
     filtered.clear();
     for (const auto &opt : options)
     {
-        if (opt.find(input_text) != std::string::npos)
+        if (case_insensitive_contains(opt, input_text))
             filtered.push_back(opt);
     }
 }
@@ -40,6 +59,11 @@ void DropdownModel::reset(void)
 
 void DropdownModel::set(int index)
 {
+    if (index > (int)options.size())
+    {
+        std::cerr << "error: index to large!!!" << std::endl;
+        return;
+    }
     input_text = options[index];
     ind = 0;
     current_ind = 0;

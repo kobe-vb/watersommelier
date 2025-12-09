@@ -20,10 +20,11 @@ private:
     UIModel model;
 
 public:
-    HistoryGlass(int i, Rectangle &rect, GlassModel &glass, ScoreGlassModel &scoreGlass);
+    HistoryGlass(int id, Rectangle &rect, GlassModel &glass, ScoreGlassModel &scoreGlass);
     ~HistoryGlass() = default;
 
     void set_pos(int i, float scrollOffset);
+    int get_id(void) const { return i;};
 
     void draw(void) const override;
     void draww(void) const;

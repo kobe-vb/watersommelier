@@ -47,10 +47,13 @@ void History::save_data(std::ofstream &file, size_t &counter, const std::string 
     }
 }
 
-void History::saveGlass(GlassModel &glass, ScoreGlassModel &scoreGlass)
+void History::saveGlass(int id, GlassModel &glass, ScoreGlassModel &scoreGlass)
 {
-    int i = get_num_of_elements();
-    add_ui(std::make_unique<HistoryGlass>(i, rect, glass, scoreGlass));
+    const HistoryGlass * old_glass = dynamic_cast<HistoryGlass *>(get_last_ui());
+    if (old_glass && old_glass->get_id() == id)
+        return;
+
+    add_ui(std::make_unique<HistoryGlass>(id, rect, glass, scoreGlass));
 
     for (int i = 0; i < get_num_of_elements(); i++)
         dynamic_cast<HistoryGlass &>(*get_ui_at(i)).set_pos(get_num_of_elements() - i - 1, 0);

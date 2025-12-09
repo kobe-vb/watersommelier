@@ -38,6 +38,8 @@ protected:
     ScoreGlassModel scoreGlass;
     WebsiteModel website;
 
+    History history;
+
     GameModel *game;
 
 private:
@@ -49,8 +51,6 @@ public:
 
     Role role = Role::Player;
 
-    History history;
-
     PlayerModel *thief = nullptr;
 
     void update(void);
@@ -58,6 +58,8 @@ public:
     void next_glass();
     bool steal_glass();
     void score_glass();
+
+    void save_stolen_glass(GlassModel &glass, ScoreGlassModel &scoreGlass);
 
     void fiks_sim(void);
 
@@ -80,4 +82,6 @@ public:
     GlassModel &get_glass(void) { return (glass); }
     ScoreGlassModel &get_score_glass(void) { return (scoreGlass); }
     WebsiteModel &get_websiteModel(void) { return (website); }
+
+    void draw_history(void) { history.draw(); }
 };

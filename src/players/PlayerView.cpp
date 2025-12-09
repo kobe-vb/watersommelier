@@ -92,7 +92,7 @@ void PlayerView::draw(void) const
     // DrawText(("Code: " + (code.length() ? code : "None")).c_str(), 50, 200, 80, BLACK);
     // DrawText(("Name: " + name).c_str(), 600, 200, 80, BLACK);
 
-    model->history.draw();
+    model->draw_history();
 
     DrawRectangleRounded(rect, ROUNDED, 10, get_color(UiColors::FIRST));
     if (BORDER_WIDTH > 0)

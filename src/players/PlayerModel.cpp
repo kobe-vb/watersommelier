@@ -15,7 +15,7 @@ void PlayerModel::demo(void)
     for (int i = 0; i < max; i++)
     {
         glass.generate_random_data();
-        history.saveGlass(glass, scoreGlass);
+        history.saveGlass(i, glass, scoreGlass);
         glass.reset();
     }
     glass.generate_random_data(false);
@@ -65,11 +65,11 @@ void PlayerModel::next_glass()
 {
     if (thief)
     {
-        thief->history.saveGlass(glass, scoreGlass);
+        thief->save_stolen_glass(glass, scoreGlass);
         thief = nullptr;
     }
     else
-        history.saveGlass(glass, scoreGlass);
+        history.saveGlass(glass.get_id(), glass, scoreGlass);
     glass.reset();
     scoreGlass.reset();
     scoreGlass.disable();
@@ -79,19 +79,28 @@ bool PlayerModel::steal_glass()
 {
     if (thief)
     {
-        thief->history.saveGlass(glass, scoreGlass);
+        thief->save_stolen_glass(glass, scoreGlass);
         thief = nullptr;
     }
     else
-        history.saveGlass(glass, scoreGlass);
+        history.saveGlass(glass.get_id(), glass, scoreGlass);
     
     const std::string &key = scoreGlass.get_thief();
     std::cout << "steal glass for " << key << "\n";
     thief = game->get_player(key);
     if (!thief || thief == this)
+    {
+        thief = nullptr;
         return false;
+    }
     scoreGlass.reset();
     return true;
+}
+
+void PlayerModel::save_stolen_glass(GlassModel &glass, ScoreGlassModel &scoreGlass)
+{
+    history.saveGlass(this->glass.get_id(), glass, scoreGlass);
+    this->glass.inc();
 }
 
 bool PlayerModel::is_my_code(const std::string &code) const

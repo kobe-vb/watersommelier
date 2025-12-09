@@ -1,5 +1,6 @@
 
 #include "GameModel.hpp"
+#include "Settings.hpp"
 
 #include <fstream>
 #include <cstdint>
@@ -55,12 +56,12 @@ void GameModel::save_data(void)
             file << "hastags;" << std::endl;
         }
 
-        // for (auto &player : players)
-        // {
-        //     if (!DEBUG && (player.player->get_name().starts_with("demo") || player.player->get_name().starts_with("web")))
-        //         continue;
-        //     player.player->save_data(file, counter, data);
-        // }
+        for (auto &player : players)
+        {
+            if (!DEBUG && (player->get_name().starts_with("demo") || player->get_name().starts_with("web")))
+                continue;
+            player->save_data(file, counter, data);
+        }
         file.close();
     }
     saveCounter(counter, "data/output/counter.bin");

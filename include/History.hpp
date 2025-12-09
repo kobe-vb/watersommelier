@@ -28,7 +28,7 @@ public:
     History(void);
     ~History(void) = default;
 
-    void saveGlass(GlassModel &glass, ScoreGlassModel &scoreGlass);
+    void saveGlass(int id, GlassModel &glass, ScoreGlassModel &scoreGlass);
 
     bool update(void) override;
     void draw(void) const override;

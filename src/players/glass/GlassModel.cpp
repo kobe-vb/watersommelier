@@ -21,6 +21,7 @@ void GlassModel::reset(void)
     bar.reset();
     osmo = 0;
     volume = 25;
+    id++;
 
     // this->sim.reset();
     // TODO

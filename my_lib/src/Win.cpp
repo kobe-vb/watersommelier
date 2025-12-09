@@ -124,6 +124,8 @@ UIView *Win::get_ui_at(int i) const
 
 UIView *Win::get_last_ui() const
 {
+    if (ui_elements.size() == 0)
+        return nullptr;
     return (ui_elements.back().get());
 }
 

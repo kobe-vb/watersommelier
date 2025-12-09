@@ -1,15 +1,25 @@
 #include "StackedBarModel.hpp"
 
-void StackedBarModel::add_value(const std::string &name, Color col, float val)
+Data *StackedBarModel::operator[](const std::string& name)
 {
     for (auto &segment : data)
     {
         if (segment.name == name)
         {
-            segment.val += val;
-            total_volume += val;
-            return;
+            return &segment;
         }
+    }
+    return nullptr;
+}
+
+void StackedBarModel::add_value(const std::string &name, Color col, float val)
+{
+    Data *existing_data = (*this)[name];
+    if (existing_data != nullptr)
+    {
+        existing_data->val += val;
+        total_volume += val;
+        return;
     }
     data.push_back({name, col, val});
     total_volume += val;

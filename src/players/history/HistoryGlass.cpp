@@ -21,6 +21,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <MyDraw.hpp>
 
 void draw_my_text(const char *name, float val, int x, int y)
 {
@@ -29,8 +30,8 @@ void draw_my_text(const char *name, float val, int x, int y)
     DrawText(buffer, x, y, 30, DARKBLUE);
 }
 
-HistoryGlass::HistoryGlass(int i, Rectangle &ref_rect, GlassModel &glass, ScoreGlassModel &scoreGlass) : BufferedWin(&model, ref_rect.x, ref_rect.y, ref_rect.width * 1.3, 200),
-                                                                                    i(i),
+HistoryGlass::HistoryGlass(int id, Rectangle &ref_rect, GlassModel &glass, ScoreGlassModel &scoreGlass) : BufferedWin(&model, ref_rect.x, ref_rect.y, ref_rect.width * 1.3, 200),
+                                                                                    i(id),
                                                                                     bar(glass.bar),
                                                                                     comment(scoreGlass.get_comment_text()),
                                                                                     hastags(scoreGlass.get_hastags()),
@@ -51,19 +52,12 @@ void HistoryGlass::save_data(std::ofstream &file, GameData &data, WebsiteData &w
 {
     file << comment << ";" << websiteData.get("final_comment") << ";" << osmo << ";" << volume << ";";
 
-    auto elements = bar.get_data();
-
     for (auto &ion : data.ions)
     {
         float val = 0;
-        for (auto &element : elements)
-        {
-            if (element.name == ion.first)
-            {
-                val = element.val;
-                break;
-            }
-        }
+        Data *ion_data = bar[ion.first];
+        if (ion_data != nullptr)
+            val = ion_data->val;
         file << (val / bar.get_total_volume()) * 100 << ";";            // % --> todo .f2
         file << val << ";";                                             // mol
         file << val * data.get_ion_data(ion.first).gram_per_mol << ";"; // mg
@@ -137,6 +131,8 @@ void HistoryGlass::draww(void) const
     // draw_my_text("pH: %.2f", ph, PEDING * 3, 80);
     // draw_my_text("mol: %.2f", mol, PEDING * 3 + 200, 80);
     // DrawText(keyWords.c_str(), PEDING * 3, 100, 20, DARKBLUE);
+
+    MyDraw::text("first", "glass:" + std::to_string(i), rect.x + PEDING, rect.y + BUTTON_HEIGHT + PEDING, 40, BLACK);
 
     bar_view.draw(this->get_mouse_pos());
     EndTextureMode();

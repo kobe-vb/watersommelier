@@ -24,6 +24,7 @@ private:
     StackedBarModel bar;
     float osmo = 0;
     float volume = 25;
+    int id = 0;
 
     std::string warning;
 
@@ -52,11 +53,14 @@ public:
     void reset(void);
     void reset_sim(void);
 
+    void inc(void) { id++; };
+
     void set_warning(void);
     void save_drops(void);
     void score_glass(void) { _score_glass(); }
 
     int get_osmo(void) const { return osmo; }
+    int get_id(void) const { return id; }
     const std::string &get_warning(void) const { return warning; }
     bool take_code(const std::string &code);
 

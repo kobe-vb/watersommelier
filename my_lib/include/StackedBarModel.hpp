@@ -26,4 +26,6 @@ public:
     void add_value(const std::string &name, Color col, float val);
     const std::vector<Data> &get_data(void) const { return data; }
     float get_total_volume(void) const { return total_volume; }
+
+    Data *operator[](const std::string& name);
 };
