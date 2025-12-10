@@ -23,10 +23,10 @@
 #include <string>
 #include <MyDraw.hpp>
 
-void draw_my_text(const char *name, float val, int x, int y)
+void draw_my_text(const char *name, float mol, int x, int y)
 {
     char buffer[64];
-    snprintf(buffer, sizeof(buffer), name, val);
+    snprintf(buffer, sizeof(buffer), name, mol);
     DrawText(buffer, x, y, 30, DARKBLUE);
 }
 
@@ -54,13 +54,13 @@ void HistoryGlass::save_data(CSVDownloader &csv, GameData &data, WebsiteData &we
 
     for (auto &ion : data.ions)
     {
-        float val = 0;
+        float mol = 0;
         Data *ion_data = bar[ion.first];
         if (ion_data != nullptr)
-            val = ion_data->val;
-        csv << (val / bar.get_total_volume()) * 100;            // % --> todo .f2
-        csv << val;                                             // mol
-        csv << val * data.get_ion_data(ion.first).gram_per_mol; // mg
+            mol = ion_data->val;
+        csv << (mol / bar.get_total_volume()) * 100;            // % --> todo .f2
+        csv << mol;                                             // mol
+        csv << mol * data.get_ion_data(ion.first).gram_per_mol; // mg
     }
 
     csv << hastags.size() * 2;

@@ -2,6 +2,7 @@
 
 #include <raylib.h>
 #include <algorithm>
+#include <iostream>
 
 void BarcodeReader::update()
 {
@@ -40,6 +41,7 @@ void BarcodeReader::update()
 
     if (building && (GetTime() - lastKeyTime) > timeout)
         runCallback();
+    // std::cout << "barcode reader code: \"" << buffer << "\"\n";
 }
 
 void BarcodeReader::cleanBuffer(void)

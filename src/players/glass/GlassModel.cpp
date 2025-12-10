@@ -5,7 +5,7 @@ GlassModel::GlassModel(GameData &data, std::function<void()> score_glass, Sim &s
 {
     save_button = ButtonModel("Save", score_glass);
     _score_glass = score_glass;
-
+    reset();
 }
 
 void GlassModel::lock(bool lock)
@@ -20,7 +20,7 @@ void GlassModel::reset(void)
     lock(false);
     bar.reset();
     osmo = 0;
-    volume = 25;
+    volume = 0.025;
     id++;
 
     // this->sim.reset();
@@ -42,54 +42,44 @@ void GlassModel::reset_sim(void)
 void GlassModel::set_warning(void)
 {
     std::string name = dropdown.get_selected_text();
+    auto zout = data.get_element(name);
 
-    auto elm = data.get_element(name);
-    auto elements = bar.get_data();
+    const IonData &anion_data = data.get_ion_data(zout.anion.name);
+    const IonData &kation_data = data.get_ion_data(zout.kation.name);
 
-    auto &ion = data.get_ion_data(elm.anion.name);
-    auto &kion = data.get_ion_data(elm.kation.name);
+    float anion_mol = bar.contains(zout.anion.name) ? bar[zout.anion.name]->val : 0 ; // mol
+    float kation_mol =  bar.contains(zout.kation.name) ? bar[zout.kation.name]->val : 0 ; // mol
 
-    float ion_val = 0; //  som van (M * amount * 0.000055 * ion.n) // mol
-    float kion_val = 0;
-    for (auto &element : elements)
-    {
-        if (element.name == elm.anion.name)
-            ion_val = element.val;
-        if (element.name == elm.kation.name)
-            kion_val = element.val;
-    }
+    float delta_anion = anion_data.max_mol_per_glass - anion_mol;
+    float delta_kation = kation_data.max_mol_per_glass - kation_mol; // dt mol
 
-    float delta_ion = ion.max_glass_mg - ((ion_val * ion.gram_per_mol));
-    float delta_kion = kion.max_glass_mg - ((kion_val * kion.gram_per_mol)); // dt mg
+    float mol_per_druppel_anion = zout.m * zout.anion.n * 1 * VOLUME_DRUPEL;
+    float mol_per_druppel_kation = zout.m * zout.kation.n * 1 * VOLUME_DRUPEL;
 
-    float massa_one_druple_i = (elm.Mol_per_liter_per_zout * elm.anion.n * ion.gram_per_mol * 0.000055); // mg
-    float massa_one_druple_k = (elm.Mol_per_liter_per_zout * elm.kation.n * kion.gram_per_mol * 0.000055);
+    float max_drupel_anion = delta_anion / mol_per_druppel_anion;
+    float max_drupel_kation = delta_kation / mol_per_druppel_kation;
 
-    float max_drupel_ion = (delta_ion) / (massa_one_druple_i);
-    float max_drupel_kion = (delta_kion) / (massa_one_druple_k);
+    float min = std::min(max_drupel_anion, max_drupel_kation);
 
-    float min = std::min(max_drupel_ion, max_drupel_kion);
-
-    warning = "nog max " + std::to_string((int)min) + " drupels";
+    warning = "nog max " + std::to_string((double)min) + " drupels";
 }
 
 void GlassModel::save_ion(Ion &ion, int amount, float M)
 {
-    float molarity = M * amount * 0.000055 * ion.n;
+    float mol = M * ion.n * amount * VOLUME_DRUPEL;
     Color col = data.get_ion_data(ion.name).color;
 
-    bar.add_value(ion.name, col, molarity);
+    bar.add_value(ion.name, col, mol);
     // sim.addParticles(int(molarity * SIM_FACTOR), col);
 }
 
-void GlassModel::save_drops(int drops, Element *elm)
+void GlassModel::save_drops(int drops, Element *zout)
 {
-    volume += drops * 0.055;
-    osmo += drops * 40 * elm->dosdr;
-    // osmo += number_of_druplets * 40 * (elm->anion.Nat + elm->kation.Nat) * elm->M;
-
-    save_ion(elm->anion, drops, elm->Mol_per_liter_per_zout);
-    save_ion(elm->kation, drops, elm->Mol_per_liter_per_zout);
+    volume += drops * VOLUME_DRUPEL;
+    osmo += (drops * VOLUME_DRUPEL * zout->m * (zout->anion.n + zout->kation.n));
+    
+    save_ion(zout->anion, drops, zout->m);
+    save_ion(zout->kation, drops, zout->m);
 }
 
 void GlassModel::save_drops(void)
@@ -117,6 +107,8 @@ Element &GlassModel::get_element(void)
 
 bool GlassModel::take_code(const std::string &code)
 {
+    
+
     auto it = std::find(this->data.codes.begin(), this->data.codes.end(), code);
     if (it == this->data.codes.end())
         return false;
@@ -137,9 +129,9 @@ void GlassModel::generate_random_data(bool full)
     for (int i = 0; i < 8; i++)
     {
         int a = std::rand() % 15 + 10;
-        Element &elm = data.get_element(data.names[std::rand() % data.names.size()]);
+        Element &zout = data.get_element(data.names[std::rand() % data.names.size()]);
 
-        save_drops(a, &elm);
+        save_drops(a, &zout);
     }
     if (!full)
         return;

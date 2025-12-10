@@ -136,13 +136,16 @@ void GameModel::handleCode(const std::string &code)
     if (players.size() > 0 && active_player >= 0 && players[active_player]->take_code_for_dropdown(code))
         return;
     // switch players
+    int i = 0;
     for (auto &player : players)
     {
         if (player->is_my_code(code))
         {
-            // playerWrapper.tokel->set_tokel(true);
+            // buttons[i]->set_tokel(true);
+            switch_players(i);
             return;
         }
+        i++;
     }
     if (players.size() == 0 || active_player < 0)
         return;

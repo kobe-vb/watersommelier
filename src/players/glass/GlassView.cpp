@@ -135,7 +135,7 @@ void GlassView::draw(void) const
     draw_my_text("osmo?: %.2f", model->get_osmo(), UI_BORDER * 2 + PEDING, rect.y + PEDING * 2 + BUTTON_HEIGHT);
     MyDraw::text("first", ("glass: " + std::to_string(model->get_id())), UI_BORDER * 2 + PEDING + 200, rect.y + PEDING * 2 + BUTTON_HEIGHT, 40, BLACK);
 
-    DrawText(model->get_warning().c_str(), PEDING * 3 + 50, LINE + 170, 30, RED);
+    DrawText(model->get_warning().c_str(), PEDING * 3 + 50, LINE + 300, 30, RED);
     bar.draw(this->get_mouse_pos());
     Win::draw();
 }

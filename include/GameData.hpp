@@ -9,6 +9,8 @@
 
 #include "raylib.h"
 
+#define VOLUME_DRUPEL 0.000055
+
 struct Ion
 {
     std::string name;
@@ -20,20 +22,20 @@ struct Element // zout
 {
     Ion anion;
     Ion kation;
-    double Mol_per_liter_per_zout;
-    double dosdr;
+    double m;
+    double dosdr; // todo weg halen
 
     Element(const Ion &a, const Ion &k, double m, double d)
-        : anion(a), kation(k), Mol_per_liter_per_zout(m), dosdr(d) {}
+        : anion(a), kation(k), m(m), dosdr(d) {}
 };
 
 struct IonData
 {
     Color color;
     float gram_per_mol;
-    float max_glass_mg;
+    float max_mol_per_glass;
 
-    IonData(Color c, float a, float m) : color(c), gram_per_mol(a), max_glass_mg(m) {}
+    IonData(Color c, float a, float m) : color(c), gram_per_mol(a), max_mol_per_glass(m) {}
 };
 
 struct GameData
@@ -50,7 +52,7 @@ struct GameData
         auto it = ions.find(ion);
         if (it != ions.end())
             return it->second;
-        throw std::invalid_argument("Ion not found");        
+        throw std::invalid_argument("Ion not found");
     }
 
     Element &get_element(const std::string &name)

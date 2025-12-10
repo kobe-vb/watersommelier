@@ -85,4 +85,5 @@ public:
     WebsiteModel &get_websiteModel(void) { return (website); }
 
     void draw_history(void) { history.draw(); }
+    void remove_code(void) { code = ""; }
 };

@@ -57,3 +57,13 @@ std::map<std::string, int> ScoreGlassModel::get_hastags(void) const
         res[it.first] = get_hastag_value(it.second);
     return res;
 }
+
+bool ScoreGlassModel::take_code(const std::string &code)
+{
+    if (!thief_input.is_active())
+        return false;
+    thief_input.set_text(code);
+    thief_input.run_callback();
+    thief_input.set_active(false);
+    return true;
+}

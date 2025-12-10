@@ -28,4 +28,5 @@ public:
     float get_total_volume(void) const { return total_volume; }
 
     Data *operator[](const std::string& name);
+    bool contains(const std::string& name) const;
 };

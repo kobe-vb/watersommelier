@@ -12,6 +12,16 @@ Data *StackedBarModel::operator[](const std::string& name)
     return nullptr;
 }
 
+bool StackedBarModel::contains(const std::string& name) const
+{
+    for (const auto &segment : data)
+    {
+        if (segment.name == name)
+            return true;
+    }
+    return false;
+}
+
 void StackedBarModel::add_value(const std::string &name, Color col, float val)
 {
     Data *existing_data = (*this)[name];

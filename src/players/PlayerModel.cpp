@@ -109,6 +109,8 @@ bool PlayerModel::is_my_code(const std::string &code) const
 
 bool PlayerModel::take_code_for_dropdown(const std::string &code)
 {
+    if (scoreGlass.take_code(code))
+        return true;
     return glass.take_code(code);
 }
 

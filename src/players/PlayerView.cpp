@@ -39,38 +39,16 @@ bool PlayerView::update(void)
     if (model->is_locked())
         return (false);
 
+    if (IsKeyDown(KEY_LEFT_CONTROL))
+    {
+        if (IsKeyPressed(KEY_R))
+            model->remove_code();
+    }
+
     Win::update();
     model->update();
     return (glass.update() || score_glass.update() || website.update());
 }
-
-/*
-void PlayerView::draw_qr(void) const
-{
-
-    if (!qr.has_value())
-        return;
-
-    const int pixelSize = 10;
-    const int qrSize = qr.value().getSize();
-
-    int dx = rect.x + 150;
-    int dy = rect.y + 50;
-
-    for (int y = 0; y < qrSize; y++)
-    {
-        for (int x = 0; x < qrSize; x++)
-        {
-            if (qr.value().getModule(x, y))
-            {
-                DrawRectangle(dx + x * pixelSize, dy + y * pixelSize, pixelSize, pixelSize, BLACK);
-            }
-        }
-    }
-
-    DrawText(("Website: " + website).c_str(), 50, rect.y + 400, 30, BLACK);
-}
-    */
 
 void PlayerView::draw(void) const
 {
@@ -85,12 +63,7 @@ void PlayerView::draw(void) const
     MyDraw::text("first", ("Name: " + model->get_name()).c_str(), UI_BORDER * 2 + PEDING, UI_BORDER + PEDING + BUTTON_HEIGHT + 70, 80, WHITE);
 
     if (model->thief)
-    {
         MyDraw::text("first", ("Guest: " + model->thief->get_name()).c_str(), (UI_BORDER + PEDING) * 2 + rect.width, UI_BORDER + PEDING + BUTTON_HEIGHT, 80, WHITE);
-    }
-
-    // DrawText(("Code: " + (code.length() ? code : "None")).c_str(), 50, 200, 80, BLACK);
-    // DrawText(("Name: " + name).c_str(), 600, 200, 80, BLACK);
 
     model->draw_history();
 
@@ -98,19 +71,6 @@ void PlayerView::draw(void) const
     if (BORDER_WIDTH > 0)
         DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, BORDER_WIDTH, get_color(UiColors::BORDER));
 
-    // if (!website_data.empty())
-    // {
-    //     DrawText("nice i got the data", 50, rect.y + 300, 30, BLACK);
-    //     Win::draw();
-    //     return;
-    // }
-
-    // if (!website.empty())
-    // {
-    //     draw_qr();
-    //     Win::draw();
-    //     return;
-    // }
     glass.draw();
     score_glass.draw();
     website.draw();

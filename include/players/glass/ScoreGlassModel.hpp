@@ -32,6 +32,8 @@ public:
     void add_score(void);
     void reset(void);
 
+    bool take_code(const std::string &code);
+
     std::string get_thief(void) const { return thief_input.get_text(); }
 
     std::string const &get_comment_text(void) const { return comment_input.get_text(); }
