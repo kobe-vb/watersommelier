@@ -9,6 +9,7 @@
 #include "HistoryGlass.hpp"
 #include "raylib.h"
 #include "WebsiteData.hpp"
+#include "CSVDownloader.hpp"
 
 class History: public Win
 {
@@ -33,6 +34,6 @@ public:
     bool update(void) override;
     void draw(void) const override;
 
-    void save_data(std::ofstream &file, size_t &counter, const std::string &name, GameData &data, WebsiteData &websiteData);
+    void save_data(CSVDownloader &csv, const std::string &name, GameData &data, WebsiteData &websiteData);
 };
 

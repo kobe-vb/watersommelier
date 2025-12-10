@@ -36,7 +36,8 @@ private:
     TextInpModel name_input = TextInpModel("type name", [this]()
                                            { create_player(); });
 
-private:
+    std::string generate_header(void);
+                                           private:
     void handleCode(const std::string &code);
 
 public:
@@ -59,5 +60,5 @@ public:
 
     const Sim &get_sim(void) const { return sim; }
 
-    std::vector<PlayerModel*> get_players_ref();
+    std::vector<PlayerModel *> get_players_ref();
 };

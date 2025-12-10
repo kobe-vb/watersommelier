@@ -14,7 +14,7 @@ History::History(void) :Win(&model), scrollOffset(0), maxScrollOffset(0)
 
 }
 
-void History::save_data(std::ofstream &file, size_t &counter, const std::string &name, GameData &data, WebsiteData &websiteData)
+void History::save_data(CSVDownloader &csv, const std::string &name, GameData &data, WebsiteData &websiteData)
 {
     auto now = std::chrono::system_clock::now();
     std::time_t t = std::chrono::system_clock::to_time_t(now);
@@ -28,22 +28,21 @@ void History::save_data(std::ofstream &file, size_t &counter, const std::string 
                         std::to_string(tm.tm_mon + 1) + "-" +
                         std::to_string(tm.tm_year + 1900);
 
-    websiteData.set_begin_index(counter);
+    websiteData.set_begin_index(csv.get_index());
     for (int i = 0; i < get_num_of_elements(); i++)
     {
-        file << counter++ << ";"
-        << datum << ";"
-        << name << ";"
-        << websiteData.get("zoet") << ";"
-        << websiteData.get("zout") << ";"
-        << websiteData.get("zuur") << ";"
-        << websiteData.get("bitter") << ";"
-        << websiteData.get("umami") << ";";
+        csv << datum
+        << name
+        << websiteData.get("zoet") 
+        << websiteData.get("zout") 
+        << websiteData.get("zuur") 
+        << websiteData.get("bitter") 
+        << websiteData.get("umami") ;
 
-        dynamic_cast<HistoryGlass &>(*get_ui_at(i)).save_data(file, data, websiteData);
+        dynamic_cast<HistoryGlass &>(*get_ui_at(i)).save_data(csv, data, websiteData);
         
-        file << websiteData.get_end_data()
-        << std::endl;
+        csv << websiteData.get_end_data();
+        csv.newline();
     }
 }
 

@@ -22,12 +22,11 @@ void PlayerModel::demo(void)
     // glass.reset_sim();
 }
 
-// TODO: refactor
-void PlayerModel::save_data(std::ofstream &file, size_t &counter, GameData &data)
+void PlayerModel::save_data(CSVDownloader &csv, GameData &data)
 {
     if (history.get_num_of_elements() == 0)
         return;
-    history.save_data(file, counter, name, data, website.get_data());
+    history.save_data(csv, name, data, website.get_data());
 }
 
 // TODO: refactor

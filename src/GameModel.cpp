@@ -1,70 +1,38 @@
 
 #include "GameModel.hpp"
 #include "Settings.hpp"
-
-#include <fstream>
-#include <cstdint>
-#include <filesystem>
 #include <SudoPlayerModel.hpp>
-
-// TODO: refactor
-static void saveCounter(size_t counter, const std::string &filename)
-{
-    std::ofstream out(filename, std::ios::binary);
-    if (!out)
-    {
-        std::cerr << "Failed to open file for writing: " << filename << std::endl;
-        return;
-    }
-    out.write(reinterpret_cast<const char *>(&counter), sizeof(counter));
-}
-
-// TODO: refactor
-static size_t loadCounter(const std::string &filename)
-{
-    std::ifstream in(filename, std::ios::binary);
-    if (!in)
-        return 1;
-    size_t counter;
-    in.read(reinterpret_cast<char *>(&counter), sizeof(counter));
-    return counter;
-}
+#include <CSVDownloader.hpp>
 
 GameModel::GameModel()
 {
     barcode_reader = BarcodeReader([this](const std::string &code)
                                    { handleCode(code); });
 
-    // TODO: refactor
     load_data(data);
 }
 
-// TODO: refactor
+std::string GameModel::generate_header(void)
+{
+    std::stringstream ss;
+    
+    ss << "i;datum;name;SsC Zoet; SsC Zout; SsC zuur; SsC Bitter; SsC Umami;comment;end comment;osmo;Tot volume(ml);";
+    for (auto &ion : data.ions)
+        ss << ion.first << " %" << ";" << ion.first << " mol" << ";" << ion.first << " mg" << ";";
+    ss << "hastags;";
+    return ss.str();
+}
+
 void GameModel::save_data(void)
 {
-    size_t counter = loadCounter("data/output/counter.bin");
+    CSVDownloader csv = CSVDownloader("data/output/data.csv", [this]() { return generate_header(); });
 
-    bool file_exists = std::filesystem::exists("data/output/data.csv");
-    std::ofstream file("data/output/data.csv", std::ios::app);
-    if (file.is_open())
+    for (auto &player : players)
     {
-        if (!file_exists)
-        {
-            file << "i;datum;name;SsC Zoet; SsC Zout; SsC zuur; SsC Bitter; SsC Umami;comment;end comment;osmo;Tot volume(ml);";
-            for (auto &ion : data.ions)
-                file << ion.first << " %" << ";" << ion.first << " mol" << ";" << ion.first << " mg" << ";";
-            file << "hastags;" << std::endl;
-        }
-
-        for (auto &player : players)
-        {
-            if (!DEBUG && (player->get_name().starts_with("demo") || player->get_name().starts_with("web")))
-                continue;
-            player->save_data(file, counter, data);
-        }
-        file.close();
+        if (!DEBUG && (player->get_name().starts_with("demo") || player->get_name().starts_with("web")))
+            continue;
+        player->save_data(csv, data);
     }
-    saveCounter(counter, "data/output/counter.bin");
 }
 
 int GameModel::get_active_player(void)

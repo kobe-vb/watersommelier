@@ -48,9 +48,9 @@ HistoryGlass::HistoryGlass(int id, Rectangle &ref_rect, GlassModel &glass, Score
     bar_view = StackedBarHView(&bar, rect.x + PEDING, rect.y + PEDING, (int)(rect.width - PEDING * 2), BUTTON_HEIGHT);
 };
 
-void HistoryGlass::save_data(std::ofstream &file, GameData &data, WebsiteData &websiteData)
+void HistoryGlass::save_data(CSVDownloader &csv, GameData &data, WebsiteData &websiteData)
 {
-    file << comment << ";" << websiteData.get("final_comment") << ";" << osmo << ";" << volume << ";";
+    csv << comment << websiteData.get("final_comment") << osmo << volume;
 
     for (auto &ion : data.ions)
     {
@@ -58,14 +58,14 @@ void HistoryGlass::save_data(std::ofstream &file, GameData &data, WebsiteData &w
         Data *ion_data = bar[ion.first];
         if (ion_data != nullptr)
             val = ion_data->val;
-        file << (val / bar.get_total_volume()) * 100 << ";";            // % --> todo .f2
-        file << val << ";";                                             // mol
-        file << val * data.get_ion_data(ion.first).gram_per_mol << ";"; // mg
+        csv << (val / bar.get_total_volume()) * 100;            // % --> todo .f2
+        csv << val;                                             // mol
+        csv << val * data.get_ion_data(ion.first).gram_per_mol; // mg
     }
 
-    file << hastags.size() * 2 << ";";
+    csv << hastags.size() * 2;
     for (auto &tags : hastags)
-        file << tags.first << ";" << tags.second << ";";
+        csv << tags.first << tags.second;
 }
 
 std::string HistoryGlass::to_json() const

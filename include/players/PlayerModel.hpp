@@ -20,6 +20,7 @@
 #include "Sim.hpp"
 #include "TokelModel.hpp"
 #include "WebsiteModel.hpp"
+#include "CSVDownloader.hpp"
 
 enum class Role
 {
@@ -71,7 +72,7 @@ public:
     void set_data(std::string website_data);
     void set_website(std::string website);
 
-    void save_data(std::ofstream &file, size_t &counter, GameData &data);
+    void save_data(CSVDownloader &csv, GameData &data);
     std::string to_json(void) const;
 
     void demo(void);

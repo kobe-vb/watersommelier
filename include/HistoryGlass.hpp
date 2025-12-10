@@ -12,8 +12,10 @@
 #include "raylib.h"
 #include "StackedBarModel.hpp"
 #include "StackedBarHView.hpp"
+#include "CSVDownloader.hpp"
 
 class HistoryGlass : public BufferedWin
+
 {
 private:
 
@@ -29,7 +31,7 @@ public:
     void draw(void) const override;
     void draww(void) const;
 
-    void save_data(std::ofstream &file, GameData &data, WebsiteData &websiteData);
+    void save_data(CSVDownloader &csv, GameData &data, WebsiteData &websiteData);
     std::string to_json(void) const;
 
 private:
