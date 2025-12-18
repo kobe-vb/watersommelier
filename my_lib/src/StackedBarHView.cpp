@@ -1,6 +1,9 @@
 #include "StackedBarModel.hpp"
 #include "StackedBarHView.hpp"
 
+#include <sstream>
+#include <iomanip>
+
 StackedBarHView::StackedBarHView(StackedBarModel *model, int x, int y, int w, int h)
     : model(model), x(x), y(y), width(w), height(h) {}
 
@@ -49,7 +52,10 @@ void StackedBarHView::draw(Vector2 mouse) const
 
         if (CheckCollisionPointRec(mouse, rect))
         {
-            label = segment.name + " (" + std::to_string(static_cast<int>((segment.val / model->get_total_volume()) * 100)) + "%)";
+            double pct = (segment.val / model->get_total_volume()) * 100.0;
+            std::ostringstream ss;
+            ss << segment.name << " (" << std::fixed << std::setprecision(2) << pct << "%)";
+            label = ss.str();
             is_hover = true;
             DrawRectangleLinesEx({currentX, y, segmentWidth, height}, 4, BLACK);
         }

@@ -89,6 +89,7 @@ void ScoreGlassView::steal(void)
         return;
     }
     reset();
+    remove_tab();
     std::cout << "steal ok\n";
 }
 

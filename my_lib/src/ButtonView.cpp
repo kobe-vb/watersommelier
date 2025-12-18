@@ -24,26 +24,21 @@ ButtonView::ButtonView(ButtonModel *model, float x, float y, float w, float h, b
 
 void ButtonView::draw(void) const
 {
-    // Kleur afhankelijk van hover/focus
-    Color btnColor = (model->is_hover() || is_tabt) ? LIGHTGRAY : GRAY;
 
-    // Teken afgeronde rechthoek (0.3f = afrondingsgraad, 10 = segments)
-    DrawRectangleRounded(bounds, 0.3f, 10, btnColor);
-
-    // Tekst uitmeten
+    DrawRectangleRounded(bounds, 0.3f, 10, get_color(UiColors::SECOND));
+    if (model->is_hover() || is_tabt)
+        DrawRectangleRounded(bounds, 0.3f, 10, get_dcolor(UiColors::HOVER));
+    // DrawRectangleRoundedLinesEx(bounds, 0.3f, 10, 2.0f, get_color(UiColors::BORDER));
+    
     int fontSize = 20;
     int textWidth = MeasureText(model->get_text().c_str(), fontSize);
-    int textHeight = fontSize; // Raylib gebruikt fontSize als "hoogte"
+    int textHeight = fontSize;
 
-    // Gecentreerde positie berekenen
     float textX = bounds.x + (bounds.width - textWidth) / 2;
     float textY = bounds.y + (bounds.height - textHeight) / 2;
 
-    // Tekst tekenen
-    DrawText(model->get_text().c_str(), textX, textY, fontSize, BLACK);
+    DrawText(model->get_text().c_str(), textX, textY, fontSize, get_color(UiColors::TEXT));
 
-    // Optioneel: rand tekenen (outline)
-    DrawRectangleRoundedLinesEx(bounds, 0.3f, 10, 4.0f, BLACK);
 }
 
 bool ButtonView::update(void)

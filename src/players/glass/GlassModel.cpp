@@ -23,10 +23,6 @@ void GlassModel::reset(void)
     volume = 0.025;
     id++;
 
-    // this->sim.reset();
-    // TODO
-    // hastags.clear();
-    // comment.clear();
     warning.clear();
 }
 

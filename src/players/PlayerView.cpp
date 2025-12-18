@@ -59,11 +59,11 @@ void PlayerView::draw(void) const
     if (BORDER_WIDTH > 0)
         DrawRectangleRoundedLinesEx(players_info_rect, ROUNDED, 8, BORDER_WIDTH, UIView::get_dcolor(UiColors::BORDER));
 
-    MyDraw::text("first", ("Code: " + (model->get_code().length() ? model->get_code() : "None")).c_str(), UI_BORDER * 2 + PEDING, UI_BORDER + PEDING + BUTTON_HEIGHT, 80, WHITE);
-    MyDraw::text("first", ("Name: " + model->get_name()).c_str(), UI_BORDER * 2 + PEDING, UI_BORDER + PEDING + BUTTON_HEIGHT + 70, 80, WHITE);
+    MyDraw::text("first", ("Code: " + (model->get_code().length() ? model->get_code() : "None")).c_str(), UI_BORDER * 2 + PEDING, UI_BORDER + PEDING + BUTTON_HEIGHT, 80, get_color(UiColors::TEXT));
+    MyDraw::text("first", ("Name: " + model->get_name()).c_str(), UI_BORDER * 2 + PEDING, UI_BORDER + PEDING + BUTTON_HEIGHT + 70, 80, get_color(UiColors::TEXT));
 
     if (model->thief)
-        MyDraw::text("first", ("Guest: " + model->thief->get_name()).c_str(), (UI_BORDER + PEDING) * 2 + rect.width, UI_BORDER + PEDING + BUTTON_HEIGHT, 80, WHITE);
+        MyDraw::text("first", ("Guest: " + model->thief->get_name()).c_str(), (UI_BORDER + PEDING) * 2 + rect.width, UI_BORDER + PEDING + BUTTON_HEIGHT, 80, get_color(UiColors::TEXT));
 
     model->draw_history();
 

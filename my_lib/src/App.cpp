@@ -41,12 +41,13 @@ void App::run()
         if (IsKeyPressed(KEY_F11))
             ToggleFullscreen();
         
+        
         Mouse::update_cursor(MOUSE_CURSOR_DEFAULT);
         update();
-        Mouse::set_cursor();
         BeginDrawing();
         draw();
         EndDrawing();
+        Mouse::set_cursor();
     }
     MyDraw::destroy();
 }

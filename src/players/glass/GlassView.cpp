@@ -14,13 +14,6 @@
 #include "Settings.hpp"
 #include "MyDraw.hpp"
 
-static void draw_my_text(const char *name, float val, int x, int y)
-{
-    char buffer[64];
-    snprintf(buffer, sizeof(buffer), name, val);
-    DrawText(buffer, x, y, 30, BLACK);
-}
-
 GlassView::GlassView(GlassModel *model, Rectangle &rect) : Win(model), model(model), rect(rect)
 {
 
@@ -132,8 +125,8 @@ void GlassView::draw(void) const
     if (!model->is_visible())
         return;
 
-    draw_my_text("osmo?: %.2f", model->get_osmo(), UI_BORDER * 2 + PEDING, rect.y + PEDING * 2 + BUTTON_HEIGHT);
-    MyDraw::text("first", ("glass: " + std::to_string(model->get_id())), UI_BORDER * 2 + PEDING + 200, rect.y + PEDING * 2 + BUTTON_HEIGHT, 40, BLACK);
+    MyDraw::text("first", ("osmo?: " + std::to_string(model->get_osmo())).c_str(), UI_BORDER * 2 + PEDING, rect.y + PEDING * 2 + BUTTON_HEIGHT, 40, get_color(UiColors::TEXT));
+    MyDraw::text("first", ("glass: " + std::to_string(model->get_id())), UI_BORDER * 2 + PEDING + 200, rect.y + PEDING * 2 + BUTTON_HEIGHT, 40, get_color(UiColors::TEXT));
 
     DrawText(model->get_warning().c_str(), PEDING * 3 + 50, LINE + 300, 30, RED);
     bar.draw(this->get_mouse_pos());

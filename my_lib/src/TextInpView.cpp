@@ -2,6 +2,7 @@
 #include "TextInpModel.hpp"
 #include "Mouse.hpp"
 #include <iostream>
+#include <MyDraw.hpp>
 
 TextInpView::TextInpView(TextInpModel *model, float x, float y, float w, float h)
     : UIView(model), model(model), bounds{x, y, w, h}
@@ -76,15 +77,15 @@ void TextInpView::draw(void) const
 
     // std::cout << "TextInpView: " << bounds.x << " " << bounds.y << " " << bounds.width << " " << bounds.height << std::endl;
 
-    DrawRectangleRounded(bounds, 0.2f, 8, get_color(UiColors::BG));
+    DrawRectangleRounded(bounds, 0.2f, 8, get_color(UiColors::SECOND));
     if (model->is_hover() || is_tabt)
         DrawRectangleRounded(bounds, 0.2f, 8, get_dcolor(UiColors::HOVER));
 
     // Border
-    DrawRectangleRoundedLines(bounds, 0.2f, 8, DARKGRAY);
+    // DrawRectangleRoundedLinesEx(bounds, 0.2f, 8, 2, get_color(UiColors::BORDER));
 
     const std::string display_text = model->get_display_text();
-    Color text_color = (model->is_empty() && !model->is_active()) ? GRAY : BLACK;
+    Color text_color = (model->is_empty() && !model->is_active()) ? get_color(UiColors::PLACEHOLDER) : get_color(UiColors::TEXT);
 
     int font_size = 20;
     float max_width = bounds.width - 20;
@@ -135,21 +136,22 @@ void TextInpView::draw(void) const
         float x = bounds.x + (bounds.width - line_width) / 2;
 
         DrawText(lines[i].c_str(), x, y, font_size, text_color);
+        // MyDraw::text("first", lines[i].c_str(), x, y, font_size, text_color);
 
         // Cursor op laatste regel
         if (model->is_active() && i == lines.size() - 1 && (static_cast<int>(GetTime() * 2) % 2 == 0))
         {
-            int cursor_x = x + line_width;
-            DrawLine(cursor_x, y, cursor_x, y + font_size, BLACK);
+            float cursor_x = x + line_width + 3;
+            DrawLineEx({cursor_x, y}, {cursor_x, y + font_size}, 2, get_color(UiColors::TEXT));
         }
 
         y += font_size + 2;
     }
     if (model->is_active() && lines.size() == 0 && (static_cast<int>(GetTime() * 2) % 2 == 0))
     {
-        int x = bounds.x + (bounds.width - font_size) / 2;
-        int y = bounds.y + (bounds.height - font_size) / 2;
-        DrawLine(x, y, x, y + font_size, BLACK);
+        float x = bounds.x + (bounds.width - font_size) / 2;
+        float y = bounds.y + (bounds.height - font_size) / 2;
+        DrawLineEx({x, y}, {x, y + font_size}, 2, get_color(UiColors::TEXT));
     }
 }
 

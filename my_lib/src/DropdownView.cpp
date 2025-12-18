@@ -86,7 +86,7 @@ bool DropdownView::update()
 
         for (int i = 0; i + model->get_index() < model->get_visible_size() && i < model->get_max_opt(); ++i)
         {
-            Rectangle opt_rect = {bounds.x, bounds.y + (i + 1) * bounds.height, bounds.width, bounds.height};
+            Rectangle opt_rect = {bounds.x + 20, bounds.y + 30 + 20 + (i + 1) * (bounds.height - 30), bounds.width - 40, bounds.height - 40};
             if (CheckCollisionPointRec(mouse, opt_rect) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
                 model->select(i);
@@ -105,25 +105,53 @@ void DropdownView::draw() const
 {
     Vector2 mouse = this->get_mouse_pos();
 
-    DrawRectangleRec(bounds, get_color(UiColors::BG));
+    DrawRectangleRounded(bounds, 0.3f, 10, get_color(UiColors::SECOND));
     if (model->is_hover() || is_tabt)
-        DrawRectangleRec(bounds, get_dcolor(UiColors::HOVER));
-    DrawText(model->is_empty() ? model->get_placeholder().c_str() : model->get_input_text().c_str(), bounds.x + 10, bounds.y + 10, 20, model->is_empty() ? DARKGRAY : BLACK);
+        DrawRectangleRounded(bounds, 0.3f, 10, get_dcolor(UiColors::HOVER));
+
+    const char *text;
+    Color color;
+    if (model->is_open() || !model->is_empty())
+    {
+        text = model->get_input_text().c_str();
+        color = get_color(UiColors::TEXT);
+    }
+    else
+    {
+        text = model->get_placeholder().c_str();
+        color = get_color(UiColors::PLACEHOLDER);
+    }
+    int textWidth = MeasureText(text, 20);
+
+    float x = bounds.x + (bounds.width - textWidth) / 2;
+    float y = bounds.y + (bounds.height - 20) / 2;
+
+    DrawText(text, x, y, 20, color);
 
     if (model->is_open())
     {
-        for (int i = 0; i + model->get_index() < model->get_visible_size() && i < model->get_max_opt(); ++i)
+        if ((static_cast<int>(GetTime() * 2) % 2 == 0)) // Blinking cursor
         {
-            Rectangle opt_rect = {bounds.x, bounds.y + (i + 1) * bounds.height, bounds.width, bounds.height};
-            DrawRectangleRec(opt_rect, CheckCollisionPointRec(mouse, opt_rect) || i == model->get_current_index() ? LIGHTGRAY : GRAY);
-            DrawText(model->get_option(i).c_str(), opt_rect.x + 10, opt_rect.y + 10, 20, BLACK);
+            int text_width = MeasureText(model->get_input_text().c_str(), 20) + 3;
+            DrawLineEx({x + text_width, y},
+                       {x + text_width, y + 20}, 2, get_color(UiColors::TEXT));
         }
 
-        if ((static_cast<int>(GetTime() * 2) % 2 == 0))
+        Rectangle big_rect = {bounds.x, bounds.y + 10 + bounds.height, bounds.width, (bounds.height - 30) * model->get_max_opt() + 10};
+        DrawRectangleRounded(big_rect, 0.1f, 10, get_color(UiColors::SECOND));
+        bool is_hovering = CheckCollisionPointRec(mouse, big_rect);
+
+        for (int i = 0; i + model->get_index() < model->get_visible_size() && i < model->get_max_opt(); ++i)
         {
-            int text_width = MeasureText(model->get_input_text().c_str(), 20);
-            DrawLine(bounds.x + 10 + text_width, bounds.y + 10,
-                     bounds.x + 10 + text_width, bounds.y + 30, BLACK);
+            Rectangle opt_rect = {bounds.x + 20, bounds.y + 30 + 20 + (i + 1) * (bounds.height - 30), bounds.width - 40, bounds.height - 40};
+            // DrawRectangleRounded(opt_rect, 0.3f, 10, get_color(UiColors::SECOND));
+            if (CheckCollisionPointRec(mouse, opt_rect) || (!is_hovering && i == model->get_current_index()))
+            {
+                if (is_hovering)
+                    Mouse::update_cursor(MOUSE_CURSOR_POINTING_HAND);
+                DrawRectangleRounded(opt_rect, 0.3f, 10, get_dcolor(UiColors::HOVER));
+            }
+            DrawText(model->get_option(i).c_str(), opt_rect.x + 10, opt_rect.y + 10, 20, BLACK);
         }
     }
 }

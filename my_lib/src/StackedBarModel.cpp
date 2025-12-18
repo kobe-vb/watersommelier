@@ -1,4 +1,5 @@
 #include "StackedBarModel.hpp"
+#include <iostream>
 
 Data *StackedBarModel::operator[](const std::string& name)
 {
@@ -26,13 +27,17 @@ void StackedBarModel::add_value(const std::string &name, Color col, float val)
 {
     Data *existing_data = (*this)[name];
     if (existing_data != nullptr)
-    {
         existing_data->val += val;
-        total_volume += val;
-        return;
-    }
-    data.push_back({name, col, val});
+    else
+        data.push_back({name, col, val});
+
     total_volume += val;
+
+    std::cout << "Added new data: " << name << " with value " << val << "\n";
+    for (const auto &d : data)
+    {
+        std::cout << "  Data: " << d.name << " = " << d.val << "\n";
+    }
 }
 
 void StackedBarModel::reset(void)

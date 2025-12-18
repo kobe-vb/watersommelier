@@ -30,6 +30,8 @@ enum class UiColors
     HOVER,
     ON,
     OFF,
+    TEXT,
+    PLACEHOLDER,
     BORDER,
     Count
 };

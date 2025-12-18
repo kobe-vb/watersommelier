@@ -32,7 +32,7 @@ private:
     std::function<void()> _score_glass;
     DropdownModel dropdown = DropdownModel(data.names, "Select a posion", [this]()
                                            { set_warning(); });
-    TextInpModel amount = TextInpModel("??hoeveel??", [this]()
+    TextInpModel amount = TextInpModel("hoeveel", [this]()
                                        { save_drops(); });
 
     void save_ion(Ion &ion, int amount, float M);

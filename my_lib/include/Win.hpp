@@ -24,7 +24,6 @@ class Win : public UIView
 private:
     std::vector<std::unique_ptr<UIView>> ui_elements;
     bool next_tab(int direction, bool round);
-    void remove_tab(void) override;
     int current_tab = -1;
 
     bool ui_elements_is_changed = false;
@@ -47,4 +46,5 @@ public:
     void set_current_tab(int i);
     void pop_ui_back(void);
     void pop_ui_front(void);
+    void remove_tab(void) override;
 };

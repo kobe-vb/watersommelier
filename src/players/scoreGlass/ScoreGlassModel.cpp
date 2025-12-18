@@ -15,6 +15,7 @@ void ScoreGlassModel::reset(void)
         comment_input.set_text("lol");
     hastags.clear();
     thief_input.set_text("");
+    thief_input.set_active(false);
 }
 
 void ScoreGlassModel::add_score(void)

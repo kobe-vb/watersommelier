@@ -16,16 +16,32 @@
 UIView::UIView(UIModel *model): model(model) {}
 
 
+// std::array<Color, static_cast<size_t>(UiColors::Count)> UIView::default_colors = {
+//     Color{40, 50, 55, 255},     // bg
+//     Color{53, 60, 67, 255},     // first
+//     Color{90, 90, 90, 255},     // second
+//     Color{110, 110, 110, 255},  // third
+//     Color{255, 255, 255, 30},   // hover
+//     Color{40, 180, 99, 255},    // ON  
+//     Color{52, 73, 94, 255},      // OFF
+//     Color{255, 255, 255, 255},  // TEXT
+//     Color{255, 255, 255, 255},   // PLACEHOLDER
+//     Color{0, 0, 0, 255},  // BORDER
+// };
+
 std::array<Color, static_cast<size_t>(UiColors::Count)> UIView::default_colors = {
-    Color{40, 50, 55, 255},     // bg
-    Color{53, 60, 67, 255},     // first
-    Color{90, 90, 90, 255},     // second
-    Color{110, 110, 110, 255},  // third
-    Color{255, 255, 255, 30},   // hover
-    Color{40, 180, 99, 255},    // ON  
-    Color{52, 73, 94, 255},      // OFF
-    Color{236, 240, 241, 255},  // BORDER
+    Color{18, 30, 36, 255},     // bg (diep water)
+    Color{28, 44, 52, 255},     // first (panel)
+    Color{42, 60, 70, 255},     // second (sub-panel)
+    Color{62, 82, 92, 255},     // third (raised)
+    Color{255, 255, 255, 24},  // hover (subtiel)
+    Color{46, 204, 170, 255},  // ON (aqua / water)
+    Color{80, 94, 102, 255},   // OFF (neutral)
+    Color{235, 245, 250, 255}, // TEXT
+    Color{160, 200, 210, 255}, // PLACEHOLDER
+    Color{12, 18, 22, 255},    // BORDER
 };
+
 
 Color UIView::get_color(UiColors color) const
 {

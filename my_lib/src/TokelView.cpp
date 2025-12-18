@@ -12,6 +12,7 @@
 
 #include "TokelView.hpp"
 #include "Mouse.hpp"
+#include <MyDraw.hpp>
 
 TokelView::TokelView(TokelModel *model, float x, float y, float w, float h)
     : UIView(model), model(model), bounds({x, y, w, h})
@@ -58,9 +59,10 @@ void TokelView::draw(void) const
     DrawRectangleRounded(bounds, 0.2f, 10, baseColor);
     if (model->is_hover() || is_tabt)
         DrawRectangleRounded(bounds, 0.2f, 10, get_dcolor(UiColors::HOVER));
-    DrawRectangleRoundedLinesEx(bounds, 0.2f, 10, 2, get_dcolor(UiColors::BORDER));
+    // DrawRectangleRoundedLinesEx(bounds, 0.2f, 10, 2, get_dcolor(UiColors::BORDER));
 
-    DrawText(display_text.c_str(), (int)textX, (int)textY, fontSize, WHITE);
+    DrawText(display_text.c_str(), (int)textX, (int)textY, fontSize, get_color(UiColors::TEXT));
+    // MyDraw::text("first", display_text.c_str(), (int)textX, (int)textY, fontSize, get_color(UiColors::TEXT));
 }
 
 
