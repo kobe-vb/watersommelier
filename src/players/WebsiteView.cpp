@@ -49,12 +49,12 @@ void WebsiteView::draw(void) const
 
     if (model->get_data().is_innit())
     {
-        MyDraw::text("first", "thx for participating!", rect.x - PEDING, rect.y, 50, BLACK);
+        MyDraw::text("first", "thx for participating!", rect.x - PEDING, rect.y, 50, get_color(UiColors::TEXT));
         return;
     }
     Win::draw();
 
-    DrawRectangleRounded(rect, ROUNDED, 10, get_color(UiColors::BG));
+    DrawRectangleRounded(rect, ROUNDED, 10, WHITE);
 
     if (qr.has_value())
     {
