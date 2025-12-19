@@ -28,11 +28,10 @@ void GlassModel::reset(void)
 
 void GlassModel::reset_sim(void)
 {
-    // this->sim.reset();
+    this->sim.reset();
 
-    // for (auto &ion : bar.get_data())
-    //     sim.addParticles((int)(ion.val * SIM_FACTOR), ion.col);
-    // std::cout << "reset sim with " << bar.get_data().size() << " ions\n";
+    for (auto &ion : bar.get_data())
+        sim.addParticles((int)(ion.val * SIM_FACTOR), ion.col);
 }
 
 void GlassModel::set_warning(void)
@@ -66,7 +65,7 @@ void GlassModel::save_ion(Ion &ion, int amount, float M)
     Color col = data.get_ion_data(ion.name).color;
 
     bar.add_value(ion.name, col, mol);
-    // sim.addParticles(int(molarity * SIM_FACTOR), col);
+    sim.addParticles(int(mol * SIM_FACTOR), col);
 }
 
 void GlassModel::save_drops(int drops, Element *zout)

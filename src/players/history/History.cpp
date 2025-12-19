@@ -3,6 +3,7 @@
 
 #include "History.hpp"
 #include "Settings.hpp"
+#include <cmath>
 
 History::History(void) :Win(&model), scrollOffset(0), maxScrollOffset(0)
 {

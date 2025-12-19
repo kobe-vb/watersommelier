@@ -87,8 +87,7 @@ void GameModel::switch_players(int id)
 
 void GameModel::reset_sim(void)
 {
-    sim.set_rect(); // //////////////////////
-    // sim.reset();
+    sim.reset();
 }
 
 std::vector<PlayerModel *> GameModel::get_players_ref()
