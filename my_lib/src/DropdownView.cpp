@@ -151,7 +151,7 @@ void DropdownView::draw() const
                     Mouse::update_cursor(MOUSE_CURSOR_POINTING_HAND);
                 DrawRectangleRounded(opt_rect, 0.3f, 10, get_dcolor(UiColors::HOVER));
             }
-            DrawText(model->get_option(i).c_str(), opt_rect.x + 10, opt_rect.y + 10, 20, BLACK);
+            DrawText(model->get_option(i).c_str(), opt_rect.x + 10, opt_rect.y + 10, 20, get_color(UiColors::TEXT));
         }
     }
 }

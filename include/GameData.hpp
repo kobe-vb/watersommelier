@@ -15,7 +15,7 @@ struct Ion
 {
     std::string name;
     int n;
-    Ion(const std::string &i, int m) : name(i), n(m) {}
+    Ion(const std::string &name, int m) : name(name), n(m) {}
 };
 
 struct Element // zout
@@ -23,10 +23,9 @@ struct Element // zout
     Ion anion;
     Ion kation;
     double m;
-    double dosdr; // todo weg halen
 
-    Element(const Ion &a, const Ion &k, double m, double d)
-        : anion(a), kation(k), m(m), dosdr(d) {}
+    Element(const Ion &a, const Ion &k, double m)
+        : anion(a), kation(k), m(m) {}
 };
 
 struct IonData

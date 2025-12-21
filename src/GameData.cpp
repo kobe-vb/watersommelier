@@ -40,10 +40,10 @@ static void store_element(GameData &data, std::vector<std::string> row)
         {
             if (to_float(row[2]) > 1)
                 throw std::invalid_argument("M > 1");
-            Ion anion(to_lowercase(row[5]), to_float(row[4]));
-            Ion kation(to_lowercase(row[7]), to_float(row[6]));
-            Element element(anion, kation, to_float(row[3]), to_float(row[2]));
-            data.add_element(row[0], row[1], element);
+            Ion anion(to_lowercase(row[4]), to_float(row[3]));
+            Ion kation(to_lowercase(row[6]), to_float(row[5]));
+            Element element(anion, kation, to_float(row[7]));
+            data.add_element(row[2], row[1], element);
             // std::cout << anion.ion << " : " << anion.mol << std::endl;
         }
     }
@@ -93,7 +93,7 @@ static bool load_elements(GameData &data)
         std::string cell;
         std::vector<std::string> row;
 
-        while (std::getline(ss, cell, ';'))
+        while (std::getline(ss, cell, ','))
             row.push_back(cell);
         store_element(data, row);
     }
