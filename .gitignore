@@ -35,8 +35,10 @@
 */obj
 /obj
 /bin
+/.vscode
 
 /data/output
 
 /release
+
 */release
