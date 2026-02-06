@@ -4,7 +4,7 @@
 
 #include <cctype>
 
-static bool case_insensitive_contains(const std::string& text, const std::string& pattern)
+static bool case_insensitive_contains(const std::string &text, const std::string &pattern)
 {
     if (pattern.empty())
         return true;
@@ -12,10 +12,10 @@ static bool case_insensitive_contains(const std::string& text, const std::string
     auto it = std::search(
         text.begin(), text.end(),
         pattern.begin(), pattern.end(),
-        [](char a, char b) {
+        [](char a, char b)
+        {
             return std::toupper((unsigned char)a) == std::toupper((unsigned char)b);
-        }
-    );
+        });
 
     return it != text.end();
 }
@@ -93,7 +93,7 @@ void DropdownModel::on_change(void)
 
 void DropdownModel::open()
 {
-    input_text.clear();   
+    input_text.clear();
     filter_options();
     ind = 0;
     current_ind = 0;
@@ -128,22 +128,16 @@ void DropdownModel::move_down()
 
 void DropdownModel::select_current()
 {
-    if (filtered.size() == 1)
-    {
-        _open = false;
-        run_callback();
-    }
-    input_text = filtered[current_ind + ind];
-    filter_options();
+    select(current_ind);
+
     ind = 0;
     current_ind = 0;
-    close();
 }
 
 void DropdownModel::select(int index)
 {
     input_text = filtered[index + ind];
     filter_options();
-    _open = false;
+    close();
     run_callback();
 }

@@ -1,5 +1,6 @@
 #include "GlassModel.hpp"
 #include <algorithm>
+#include <format>
 
 GlassModel::GlassModel(GameData &data, std::function<void()> score_glass, Sim &sim) : data(data), sim(sim)
 {
@@ -57,7 +58,7 @@ void GlassModel::set_warning(void)
 
     float min = std::min(max_drupel_anion, max_drupel_kation);
 
-    warning = "nog max " + std::to_string((double)min) + " drupels";
+    warning = std::format("Max: {:.0f} dr", min);
 }
 
 void GlassModel::save_ion(Ion &ion, int amount, float M)

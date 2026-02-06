@@ -87,13 +87,11 @@ static bool load_elements(GameData &data)
 
     while (std::getline(file, line))
     {
-        std::replace(line.begin(), line.end(), ';', ',');
-
         std::stringstream ss(line);
         std::string cell;
         std::vector<std::string> row;
 
-        while (std::getline(ss, cell, ','))
+        while (std::getline(ss, cell, ';'))
             row.push_back(cell);
         store_element(data, row);
     }
@@ -115,12 +113,11 @@ static bool load_ions(GameData &data)
 
     while (std::getline(file, line))
     {
-        std::replace(line.begin(), line.end(), ';', ',');
         std::stringstream ss(line);
         std::string cell;
         std::vector<std::string> row;
 
-        while (std::getline(ss, cell, ','))
+        while (std::getline(ss, cell, ';'))
             row.push_back(cell);
         store_ion(data, row);
     }
