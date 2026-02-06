@@ -74,7 +74,7 @@ bool ScoreGlassView::valid_score(void)
     {
         bool valid = model->get_hastag_value(tag.second) != -1;
         TextInpView *text = dynamic_cast<TextInpView *>(get_ui_at(i++));
-        text->set_color(UiColors::BG, valid ? GREEN : RED);
+        text->set_color(UiColors::SECOND, valid ? GREEN : RED);
         tag.second.set_on_focus_clear(true);
         is_valid &= valid;
     }
@@ -85,7 +85,7 @@ void ScoreGlassView::steal(void)
 {
     if (!model->steal_glass())
     {
-        get_last_ui()->set_color(UiColors::BG, RED);
+        get_last_ui()->set_color(UiColors::SECOND, RED);
         return;
     }
     reset();

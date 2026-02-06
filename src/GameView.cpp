@@ -94,10 +94,11 @@ void GameView::create_new_player(void)
     // check if name is taken
     if (!DEBUG && (model.name_is_taken(name) || name.empty()))
     {
-        nameInput->set_color(UiColors::BG, RED);
+        nameInput->set_color(UiColors::SECOND, RED);
         return;
     }
-    nameInput->clear_color(UiColors::BG);
+
+    nameInput->clear_color(UiColors::SECOND);
 
     model.reset_sim();
 

@@ -71,11 +71,11 @@ void GlassView::process_drops(void)
     }
     catch (const std::exception &e)
     {
-        amount->set_color(UiColors::BG, RED);
+        amount->set_color(UiColors::SECOND, RED);
         std::cerr << e.what() << '\n';
         return;
     }
-    amount->clear_color(UiColors::BG);
+    amount->clear_color(UiColors::SECOND);
 
     try
     {
@@ -83,11 +83,11 @@ void GlassView::process_drops(void)
     }
     catch (const std::exception &e)
     {
-        name->set_color(UiColors::BG, RED);
+        name->set_color(UiColors::SECOND, RED);
         std::cerr << e.what() << '\n';
         return;
     }
-    name->clear_color(UiColors::BG);
+    name->clear_color(UiColors::SECOND);
 
     model->save_drops();
 }

@@ -18,7 +18,7 @@ void main()
     float field = 0.0;
     vec3 col = vec3(0.0);
 
-    float radius = 20.0;
+    float radius = 10.0;
     float threshold = 1.0;
     float cutoffDist = radius * 3.0;
 

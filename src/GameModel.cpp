@@ -70,19 +70,19 @@ void GameModel::switch_players(int id)
     }
     active_player = id;
 
-    // std::cout << "switch_players id: " << id << std::endl;
-    // active_player = id;
-    // if (id < 0)
-    // {
-    //     reset_sim();
-    //     return;
-    // }
-    // if (id >= (int)players.size())
-    // {
-    //     std::cerr << "Error: player id out of range: " << id << std::endl;
-    //     return;
-    // }
-    // players[id]->fiks_sim();
+    std::cout << "switch_players id: " << id << std::endl;
+    active_player = id;
+    if (id < 0)
+    {
+        reset_sim();
+        return;
+    }
+    if (id >= (int)players.size())
+    {
+        std::cerr << "Error: player id out of range: " << id << std::endl;
+        return;
+    }
+    players[id]->fiks_sim();
 }
 
 void GameModel::reset_sim(void)

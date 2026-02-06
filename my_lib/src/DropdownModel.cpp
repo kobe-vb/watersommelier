@@ -93,6 +93,7 @@ void DropdownModel::on_change(void)
 
 void DropdownModel::open()
 {
+    input_text.clear();   
     filter_options();
     ind = 0;
     current_ind = 0;
@@ -136,6 +137,7 @@ void DropdownModel::select_current()
     filter_options();
     ind = 0;
     current_ind = 0;
+    close();
 }
 
 void DropdownModel::select(int index)

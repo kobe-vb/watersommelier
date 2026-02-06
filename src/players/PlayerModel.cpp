@@ -19,7 +19,7 @@ void PlayerModel::demo(void)
         glass.reset();
     }
     glass.generate_random_data(false);
-    // glass.reset_sim();
+    glass.reset_sim();
 }
 
 void PlayerModel::save_data(CSVDownloader &csv, GameData &data)

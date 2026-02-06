@@ -23,6 +23,7 @@ void GlassModel::reset(void)
     volume = 0.025;
     id++;
 
+    this->reset_sim();
     warning.clear();
 }
 
