@@ -50,7 +50,7 @@ HistoryGlass::HistoryGlass(int id, Rectangle &ref_rect, GlassModel &glass, Score
 
 void HistoryGlass::save_data(CSVDownloader &csv, GameData &data, WebsiteData &websiteData)
 {
-    csv << comment << websiteData.get("final_comment") << osmo << volume;
+    csv << comment << websiteData.get("final_comment") << osmo * (1 / volume) * 1000 << volume;
 
     for (auto &ion : data.ions)
     {

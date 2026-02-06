@@ -15,6 +15,21 @@ static std::string loadFile(const std::string &path)
     return buffer.str();
 }
 
+// static void send_file(const std::string &path, httplib::Response &res)
+// {
+//     std::string file = loadFile(path);
+//     if (!file.empty())
+//     {
+//         res.set_content(file, "text/html");
+//         res.status = 200;
+//     }
+//     else
+//     {
+//         res.status = 404;
+//         res.set_content("Bestand niet gevonden", "text/html");
+//     }
+// }
+
 SurveyServer::SurveyServer(std::unordered_map<std::string, PlayerModel &> &Players) : players(Players)
 {
 }
@@ -45,7 +60,7 @@ void SurveyServer::setupRoutes()
 {
 
     server.Get("/get-data", [this](const httplib::Request &req, httplib::Response &res)
-    {
+               {
         auto it = req.params.find("username");
         auto player_it = players.find(it->second);
         // for (auto &player : players)
@@ -59,11 +74,10 @@ void SurveyServer::setupRoutes()
         {
             res.status = 404;
             res.set_content("Gebruiker niet gevonden", "text/plain");
-        }
-    });
+        } });
 
-server.Post("/send-data", [this](const httplib::Request &req, httplib::Response &res)
-{
+    server.Post("/send-data", [this](const httplib::Request &req, httplib::Response &res)
+                {
     if (req.has_header("Content-Type") &&
         req.get_header_value("Content-Type") == "application/x-www-form-urlencoded")
         {
@@ -94,13 +108,11 @@ server.Post("/send-data", [this](const httplib::Request &req, httplib::Response 
         }
 
         res.status = 404;
-        res.set_content("Gebruiker niet gevonden of ongeldige data", "text/plain");
+        res.set_content("Gebruiker niet gevonden of ongeldige data", "text/html");
     } else {
         res.status = 400;
         res.set_content("Ongeldig content-type", "text/plain");
-    }
-});
-
+    } });
 
     // Pre-routing handler for CORS
     server.set_pre_routing_handler([](const httplib::Request &req, httplib::Response &res)

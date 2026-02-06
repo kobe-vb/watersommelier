@@ -59,7 +59,8 @@ public:
     void save_drops(void);
     void score_glass(void) { _score_glass(); }
 
-    int get_osmo(void) const { return osmo; }
+    float get_osmo(void) const { return osmo; }
+    float get_volume(void) const { return volume; } 
     int get_id(void) const { return id; }
     const std::string &get_warning(void) const { return warning; }
     bool take_code(const std::string &code);

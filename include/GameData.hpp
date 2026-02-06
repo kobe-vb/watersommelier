@@ -66,6 +66,9 @@ struct GameData
 
     void add_element(const std::string &name, const std::string &code, const Element &element)
     {
+        if (!(name.ends_with("B") || name.ends_with("T") || name.ends_with("F")))
+            return;
+
         names.push_back(name);
         codes.push_back(code);
         elements.push_back(element);

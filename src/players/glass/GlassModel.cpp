@@ -74,6 +74,7 @@ void GlassModel::save_drops(int drops, Element *zout)
     volume += drops * VOLUME_DRUPEL;
     osmo += (drops * VOLUME_DRUPEL * zout->m * (zout->anion.n + zout->kation.n));
     
+    
     save_ion(zout->anion, drops, zout->m);
     save_ion(zout->kation, drops, zout->m);
 }
@@ -104,7 +105,6 @@ Element &GlassModel::get_element(void)
 bool GlassModel::take_code(const std::string &code)
 {
     
-
     auto it = std::find(this->data.codes.begin(), this->data.codes.end(), code);
     if (it == this->data.codes.end())
         return false;

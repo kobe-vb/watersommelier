@@ -38,19 +38,17 @@ static void store_element(GameData &data, std::vector<std::string> row)
     {
         if (row.size() >= 8) ///////////////////
         {
-            if (to_float(row[2]) > 1)
-                throw std::invalid_argument("M > 1");
-            Ion anion(to_lowercase(row[4]), to_float(row[3]));
-            Ion kation(to_lowercase(row[6]), to_float(row[5]));
-            Element element(anion, kation, to_float(row[7]));
-            data.add_element(row[2], row[1], element);
+            Ion anion(to_lowercase(row[3]), to_float(row[2]));
+            Ion kation(to_lowercase(row[5]), to_float(row[4]));
+            Element element(anion, kation, to_float(row[6]));
+            data.add_element(row[1], row[0], element);
             // std::cout << anion.ion << " : " << anion.mol << std::endl;
         }
     }
     catch (const std::exception &e)
     {
         std::cerr << e.what();
-        std::cout << "row: ";
+        std::cout << " row: ";
         for (size_t i = 0; i < row.size(); i++)
             std::cout << row[i] << " ";
         std::cout << std::endl;
@@ -89,6 +87,8 @@ static bool load_elements(GameData &data)
 
     while (std::getline(file, line))
     {
+        std::replace(line.begin(), line.end(), ';', ',');
+
         std::stringstream ss(line);
         std::string cell;
         std::vector<std::string> row;
@@ -115,11 +115,12 @@ static bool load_ions(GameData &data)
 
     while (std::getline(file, line))
     {
+        std::replace(line.begin(), line.end(), ';', ',');
         std::stringstream ss(line);
         std::string cell;
         std::vector<std::string> row;
 
-        while (std::getline(ss, cell, ';'))
+        while (std::getline(ss, cell, ','))
             row.push_back(cell);
         store_ion(data, row);
     }

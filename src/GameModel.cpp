@@ -16,7 +16,7 @@ std::string GameModel::generate_header(void)
 {
     std::stringstream ss;
     
-    ss << "i;datum;name;SsC Zoet; SsC Zout; SsC zuur; SsC Bitter; SsC Umami;comment;end comment;osmo;Tot volume(ml);";
+    ss << "i;datum;name;SsC Zoet; SsC Zout; SsC zuur; SsC Bitter; SsC Umami;comment;end comment;mOsm/l;Tot volume(l);";
     for (auto &ion : data.ions)
         ss << ion.first << " %" << ";" << ion.first << " mol" << ";" << ion.first << " mg" << ";";
     ss << "hastags;";
