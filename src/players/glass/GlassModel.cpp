@@ -44,30 +44,31 @@ void GlassModel::set_warning(void)
     const IonData &anion_data = data.get_ion_data(zout.anion.name);
     const IonData &kation_data = data.get_ion_data(zout.kation.name);
 
-    float anion_mol = bar.contains(zout.anion.name) ? bar[zout.anion.name]->val : 0 ; // mol
-    float kation_mol =  bar.contains(zout.kation.name) ? bar[zout.kation.name]->val : 0 ; // mol
+    double anion_mol = bar.contains(zout.anion.name) ? bar[zout.anion.name]->val : 0 ; // mol
+    double kation_mol =  bar.contains(zout.kation.name) ? bar[zout.kation.name]->val : 0 ; // mol
 
-    float delta_anion = anion_data.max_mol_per_glass - anion_mol;
-    float delta_kation = kation_data.max_mol_per_glass - kation_mol; // dt mol
+    double delta_anion = anion_data.max_mol_per_glass - anion_mol;
+    double delta_kation = kation_data.max_mol_per_glass - kation_mol; // dt mol
 
-    float mol_per_druppel_anion = zout.m * zout.anion.n * 1 * VOLUME_DRUPEL;
-    float mol_per_druppel_kation = zout.m * zout.kation.n * 1 * VOLUME_DRUPEL;
+    double mol_per_druppel_anion = zout.m * zout.anion.n * 1 * VOLUME_DRUPEL;
+    double mol_per_druppel_kation = zout.m * zout.kation.n * 1 * VOLUME_DRUPEL;
 
-    float max_drupel_anion = delta_anion / mol_per_druppel_anion;
-    float max_drupel_kation = delta_kation / mol_per_druppel_kation;
+    double max_drupel_anion = delta_anion / mol_per_druppel_anion;
+    double max_drupel_kation = delta_kation / mol_per_druppel_kation;
 
-    float min = std::min(max_drupel_anion, max_drupel_kation);
+    double min = std::min(max_drupel_anion, max_drupel_kation);
 
     warning = std::format("Max: {:.0f} dr", min);
+    std::cout << warning << std::endl;
 }
 
-void GlassModel::save_ion(Ion &ion, int amount, float M)
+void GlassModel::save_ion(Ion &ion, int amount, double M)
 {
-    float mol = M * ion.n * amount * VOLUME_DRUPEL;
+    double mol = M * ion.n * amount * VOLUME_DRUPEL;
     Color col = data.get_ion_data(ion.name).color;
 
     bar.add_value(ion.name, col, mol);
-    sim.addParticles(int(mol * SIM_FACTOR), col);
+    sim.addParticles(std::max(1, int(mol * SIM_FACTOR)), col);
 }
 
 void GlassModel::save_drops(int drops, Element *salt)

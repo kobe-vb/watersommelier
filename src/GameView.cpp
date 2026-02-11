@@ -119,7 +119,7 @@ void GameView::update()
 {
 
     activity.update();
-    this->isIdle = activity.seconds_since_activity() > 5;
+    this->isIdle = activity.seconds_since_activity() > 15;
     if (isIdle)
         pause_view.update();
 

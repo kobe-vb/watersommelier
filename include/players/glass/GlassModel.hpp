@@ -11,7 +11,7 @@
 #include "Sim.hpp"
 #include "GlassModel.hpp"
 
-#define SIM_FACTOR 1000000
+#define SIM_FACTOR 100000
 
 class GlassModel : public UIModel
 {
@@ -22,8 +22,8 @@ private:
     Sim &sim;
 
     StackedBarModel bar;
-    float osmo = 0;
-    float volume = 25;
+    double osmo = 0;
+    double volume = 25;
     int id = 0;
 
     std::string warning;
@@ -35,7 +35,7 @@ private:
     TextInpModel amount = TextInpModel("how many", [this]()
                                        { save_drops(); });
 
-    void save_ion(Ion &ion, int amount, float M);
+    void save_ion(Ion &ion, int amount, double M);
     void save_drops(int drops, Element *elm);
 
     int previous_drops = 0;
@@ -62,8 +62,8 @@ public:
     void save_drops(void);
     void score_glass(void) { _score_glass(); }
 
-    float get_osmo(void) const { return osmo; }
-    float get_volume(void) const { return volume; } 
+    double get_osmo(void) const { return osmo; }
+    double get_volume(void) const { return volume; } 
     int get_id(void) const { return id; }
     const std::string &get_warning(void) const { return warning; }
     bool take_code(const std::string &code);

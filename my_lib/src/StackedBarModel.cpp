@@ -23,7 +23,7 @@ bool StackedBarModel::contains(const std::string& name) const
     return false;
 }
 
-void StackedBarModel::add_value(const std::string &name, Color col, float val)
+void StackedBarModel::add_value(const std::string &name, Color col, double val)
 {
     Data *existing_data = (*this)[name];
     if (existing_data != nullptr)
