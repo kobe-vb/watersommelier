@@ -44,6 +44,8 @@ private:
 
     std::string comment;
     std::map<std::string, int> hastags;
+
+    std::string hastag_string;
     float osmo = 0;
     float volume = 0;
 };

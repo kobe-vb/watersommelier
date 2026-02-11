@@ -11,7 +11,7 @@
 #include "Sim.hpp"
 #include "GlassModel.hpp"
 
-#define SIM_FACTOR 100000000
+#define SIM_FACTOR 1000000
 
 class GlassModel : public UIModel
 {
@@ -30,9 +30,9 @@ private:
 
     ButtonModel save_button;
     std::function<void()> _score_glass;
-    DropdownModel dropdown = DropdownModel(data.names, "Select a posion", [this]()
+    DropdownModel dropdown = DropdownModel(data.names, "Select a flavor", [this]()
                                            { set_warning(); });
-    TextInpModel amount = TextInpModel("hoeveel", [this]()
+    TextInpModel amount = TextInpModel("how many", [this]()
                                        { save_drops(); });
 
     void save_ion(Ion &ion, int amount, float M);

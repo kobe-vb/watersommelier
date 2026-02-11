@@ -22,6 +22,7 @@
 #include <vector>
 #include <string>
 #include <MyDraw.hpp>
+#include <format>
 
 void draw_my_text(const char *name, float mol, int x, int y)
 {
@@ -35,7 +36,7 @@ HistoryGlass::HistoryGlass(int id, Rectangle &ref_rect, GlassModel &glass, Score
                                                                                     bar(glass.bar),
                                                                                     comment(scoreGlass.get_comment_text()),
                                                                                     hastags(scoreGlass.get_hastags()),
-                                                                                    osmo(glass.osmo),
+                                                                                    osmo(glass.osmo * (1 / glass.volume) * 1000),
                                                                                     volume(glass.volume)
 {
     rect.width = ((GetScreenWidth() - (UI_BORDER * 4) - (PEDING * 2)) * 1 / 3);
@@ -46,11 +47,23 @@ HistoryGlass::HistoryGlass(int id, Rectangle &ref_rect, GlassModel &glass, Score
     rect.width -= PEDING * 2;
 
     bar_view = StackedBarHView(&bar, rect.x + PEDING, rect.y + PEDING, (int)(rect.width - PEDING * 2), BUTTON_HEIGHT);
+
+    std::ostringstream oss;
+    bool first = true;
+
+    for (auto&& [key, value] : hastags) {
+        if (!first) oss << " ";
+        oss << std::format("{}({})", key, value);
+        first = false;
+    }
+
+    this->hastag_string = oss.str();
+
 };
 
 void HistoryGlass::save_data(CSVDownloader &csv, GameData &data, WebsiteData &websiteData)
 {
-    csv << comment << websiteData.get("final_comment") << osmo * (1 / volume) * 1000 << volume;
+    csv << comment << websiteData.get("final_comment") << osmo << volume;
 
     for (auto &ion : data.ions)
     {
@@ -130,7 +143,8 @@ void HistoryGlass::draww(void) const
     // draw_my_text("mol: %.2f", mol, PEDING * 3 + 200, 80);
     // DrawText(keyWords.c_str(), PEDING * 3, 100, 20, DARKBLUE);
 
-    MyDraw::text("first", "glass:" + std::to_string(i), rect.x + PEDING, rect.y + BUTTON_HEIGHT + PEDING, 40, get_color(UiColors::TEXT));
+    MyDraw::text("first", std::format("Osmo: {:0.2f} Glass: {:}", osmo, i), rect.x + PEDING, rect.y + BUTTON_HEIGHT + PEDING, 40, get_color(UiColors::TEXT));
+    MyDraw::text("first", this->hastag_string, rect.x + PEDING, rect.y + BUTTON_HEIGHT + PEDING + 40, 30, get_color(UiColors::TEXT));
 
     bar_view.draw(this->get_mouse_pos());
     EndTextureMode();
