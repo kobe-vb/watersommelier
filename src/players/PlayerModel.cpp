@@ -114,6 +114,11 @@ bool PlayerModel::take_code_for_dropdown(const std::string &code)
     return glass.take_code(code);
 }
 
+void PlayerModel::control_z()
+{
+    glass.remove_previous_drops();
+}
+
 bool PlayerModel::set_code(const std::string &new_code)
 {
     if (code.length() == 0)

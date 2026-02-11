@@ -60,6 +60,8 @@ public:
     bool steal_glass();
     void score_glass();
 
+    void control_z();
+
     void save_stolen_glass(GlassModel &glass, ScoreGlassModel &scoreGlass);
 
     void fiks_sim(void);

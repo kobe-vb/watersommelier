@@ -31,7 +31,6 @@ void PauseView::draw(void) const
     // --- Logo centreren ---
     float logoWidth  = logo.width  * scalePulse * 0.6f;
     float logoHeight = logo.height * scalePulse * 0.6f;
-    std::cout << logoWidth << " " << logoHeight << std::endl;
 
     float logoX = screenW / 2.0f - logoWidth / 2.0f;
     float logoY = screenH / 2.0f - logoHeight / 2.0f + 200;

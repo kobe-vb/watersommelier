@@ -70,15 +70,35 @@ void GlassModel::save_ion(Ion &ion, int amount, float M)
     sim.addParticles(int(mol * SIM_FACTOR), col);
 }
 
-void GlassModel::save_drops(int drops, Element *zout)
+void GlassModel::save_drops(int drops, Element *salt)
 {
+
+    previous_drops = drops;
+    previous_salt = salt;
+
     volume += drops * VOLUME_DRUPEL;
-    osmo += (drops * VOLUME_DRUPEL * zout->m * (zout->anion.n + zout->kation.n));
+    osmo += (drops * VOLUME_DRUPEL * salt->m * (salt->anion.n + salt->kation.n));
     
-    
-    save_ion(zout->anion, drops, zout->m);
-    save_ion(zout->kation, drops, zout->m);
+    save_ion(salt->anion, drops, salt->m);
+    save_ion(salt->kation, drops, salt->m);
 }
+
+void GlassModel::remove_previous_drops(void)
+{
+    if (previous_salt == nullptr)
+        return;
+
+    volume -= previous_drops * VOLUME_DRUPEL;
+    osmo -= (previous_drops * VOLUME_DRUPEL * previous_salt->m * (previous_salt->anion.n + previous_salt->kation.n));
+
+    save_ion(previous_salt->anion, -previous_drops, previous_salt->m);
+    save_ion(previous_salt->kation, -previous_drops, previous_salt->m);
+
+    previous_drops = 0;
+    previous_salt = nullptr;
+    reset_sim();
+}
+
 
 void GlassModel::save_drops(void)
 {

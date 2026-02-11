@@ -55,9 +55,9 @@ void GameView::draw() const
     DrawRectangleRounded(screen_rect, 0.05, 8, UIView::get_dcolor(UiColors::BG));
     if (BORDER_WIDTH > 0)
         DrawRectangleRoundedLinesEx(screen_rect, 0.05, 8, BORDER_WIDTH, UIView::get_dcolor(UiColors::BORDER));
-        
+
     model.get_sim().draw();
-    
+
     win.draw();
     if (DEBUG)
         DrawFPS(UI_BORDER * 2, 5);
@@ -122,9 +122,14 @@ void GameView::update()
     this->isIdle = activity.seconds_since_activity() > 2;
     if (isIdle)
         pause_view.update();
-    
+
     if (IsKeyDown(KEY_LEFT_CONTROL))
     {
+        if (IsKeyPressed(KEY_W))
+        {
+            std::cout << "control z\n";
+            model.control_z();
+        }
         if (IsKeyPressed(KEY_P))
         {
             if (IsMusicStreamPlaying(music))
@@ -134,6 +139,7 @@ void GameView::update()
         }
         if (IsKeyPressed(KEY_DELETE))
             this->stop();
+
     }
     UpdateMusicStream(music);
 

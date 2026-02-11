@@ -88,6 +88,13 @@ void GameModel::reset_sim(void)
     sim.reset();
 }
 
+void GameModel::control_z(void)
+{
+    if (players.size() == 0 || active_player < 0)
+        return;
+    players[active_player]->control_z();
+}
+
 std::vector<PlayerModel *> GameModel::get_players_ref()
 {
     std::vector<PlayerModel *> refs;

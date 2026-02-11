@@ -38,6 +38,9 @@ private:
     void save_ion(Ion &ion, int amount, float M);
     void save_drops(int drops, Element *elm);
 
+    int previous_drops = 0;
+    Element *previous_salt = nullptr;
+
 public:
     GlassModel(GameData &data, std::function<void()> score_glass, Sim &sim);
     ~GlassModel() {};
@@ -68,4 +71,6 @@ public:
     void lock(bool lock = true);
 
     void generate_random_data(bool full = true);
+
+    void remove_previous_drops(void);
 };

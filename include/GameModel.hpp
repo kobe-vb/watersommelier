@@ -51,6 +51,8 @@ public:
     bool name_is_taken(const std::string &name);
     void reset_sim(void);
 
+    void control_z(void);
+
     TextInpModel &get_name_input(void) { return name_input; }
     PlayerModel *get_player_by_id(int id) { return players[id].get(); }
     PlayerModel *get_player(const std::string &key);
