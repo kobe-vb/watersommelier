@@ -1,67 +1,59 @@
 #include "BarcodeReader.hpp"
-
 #include <raylib.h>
-#include <algorithm>
-#include <iostream>
+#include <cctype>
+
+BarcodeReader::BarcodeReader(Callback cb, double timeoutSeconds)
+    : callback(std::move(cb)), timeout(timeoutSeconds)
+{
+}
 
 void BarcodeReader::update()
 {
-    int key = GetKeyPressed();
+    int ch = GetCharPressed();
     double now = GetTime();
 
-    while (key > 0)
+    while (ch > 0)
     {
-        double delta = now - lastKeyTime;
-        lastKeyTime = now;
+        lastInputTime = now;
 
-        if (delta < speedThreshold)
+        if (ch == '\r' || ch == '\n')
         {
-            if (!building)
-                buffer.clear();
-            building = true;
-            buffer += (char)key;
-        }
-        else
-        {
-            if (building && !buffer.empty())
-            {
-                runCallback();
-                continue; // TODO: ik denk dat ge kunt returnen
-            }
-            buffer.clear();
-            building = false;
-        }
-
-        if (key == KEY_ENTER && building)
             runCallback();
+        }
+        else if (std::isprint(ch))
+        {
+            buffer += static_cast<char>(ch);
+        }
 
-        key = GetKeyPressed();
+        ch = GetCharPressed();
         now = GetTime();
     }
 
-    if (building && (GetTime() - lastKeyTime) > timeout)
-        runCallback();
-    // std::cout << "barcode reader code: \"" << buffer << "\"\n";
+    flushIfNeeded();
 }
 
-void BarcodeReader::cleanBuffer(void)
+void BarcodeReader::flushIfNeeded()
 {
-    // remove non-printable characters
-    buffer.erase(std::remove_if(buffer.begin(), buffer.end(),
-                                [](unsigned char c)
-                                { return !std::isprint(c); }),
-                 buffer.end());
-
-    // Trim spaces at the beginning and end
-    buffer.erase(0, buffer.find_first_not_of(' '));
-    buffer.erase(buffer.find_last_not_of(' ') + 1);
+    if (!buffer.empty())
+    {
+        double now = GetTime();
+        if ((now - lastInputTime) > timeout)
+        {
+            runCallback();
+        }
+    }
 }
 
-void BarcodeReader::runCallback(void)
+void BarcodeReader::runCallback()
 {
+    if (buffer.empty())
+        return;
 
-    cleanBuffer();
     callback(buffer);
     buffer.clear();
-    building = false;
+}
+
+void BarcodeReader::clear()
+{
+    buffer.clear();
 }

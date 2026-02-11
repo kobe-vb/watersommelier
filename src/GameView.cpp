@@ -12,11 +12,9 @@
 
 #include "GameView.hpp"
 #include "Settings.hpp"
-// #include "SudoPlayer.hpp"
 #include "MyDraw.hpp"
 #include <SudoPlayerModel.hpp>
 #include <SudoPlayerView.hpp>
-// #include <WebsitePlayer.hpp>
 
 GameView::GameView() : App("pompion", 0, 0, 60), win(Win(&model))
 {
@@ -57,41 +55,21 @@ void GameView::draw() const
     DrawRectangleRounded(screen_rect, 0.05, 8, UIView::get_dcolor(UiColors::BG));
     if (BORDER_WIDTH > 0)
         DrawRectangleRoundedLinesEx(screen_rect, 0.05, 8, BORDER_WIDTH, UIView::get_dcolor(UiColors::BORDER));
-
+        
     model.get_sim().draw();
+    
     win.draw();
     if (DEBUG)
         DrawFPS(UI_BORDER * 2, 5);
+
+    if (isIdle)
+        pause_view.draw();
 }
 
-// TODO: add other players
-
-// Player *pl_ptr = nullptr;
-// if (t.get_text() == "tiboon")
-// {
-//     auto pl = std::make_unique<SudoPlayer>(t.get_text(), data, sim, players);
-//     pl_ptr = pl.get();
-//     win.add_ui(std::move(pl));
-// }
-// else if (t.get_text() == "web")
-// {
-//     auto pl = std::make_unique<WebPlayer>(t.get_text(), data, sim, players);
-//     pl_ptr = pl.get();
-//     win.add_ui(std::move(pl));
-// }
-// else
-// {
-//     auto pl = std::make_unique<Player>(t.get_text(), data, sim);
-//     if (t.get_text() == "demo")
-//         pl->demo();
-//     pl_ptr = pl.get();
-//     win.add_ui(std::move(pl));
-// }
 void GameView::create_new_player(void)
 {
     const std::string &name = model.get_name_input().get_text();
 
-    // check if name is taken
     if (!DEBUG && (model.name_is_taken(name) || name.empty()))
     {
         nameInput->set_color(UiColors::SECOND, RED);
@@ -103,8 +81,6 @@ void GameView::create_new_player(void)
     model.reset_sim();
 
     int ind = model.create_player();
-    model.get_tokel(ind).set_callback([this, ind]()
-                                      { switch_players(ind); });
 
     PlayerModel *pm = model.get_player_by_id(ind);
     std::unique_ptr<PlayerView> pl;
@@ -126,7 +102,7 @@ void GameView::create_new_player(void)
 
     model.get_name_input().reset();
     nameInput->move(PLAYER_WIDTH + PLAYER_PEDING, 0);
-    switch_players(ind);
+    model.switch_players(ind);
 
     if (players.size() == 9)
     {
@@ -139,42 +115,14 @@ void GameView::create_new_player(void)
         win.pop_ui_front();
 }
 
-void GameView::switch_players(int new_id)
-{
-    model.switch_players(new_id);
-
-    // for (int i = 0; i < (int)players.size(); i++)
-    // {
-    //     if (i == new_id)
-    //     {
-    //         players[i].player->activate();
-    //         model.get_tokel(i).set_tokel(true);
-    //     }
-    //     else
-    //     {
-    //         model.get_tokel(i).set_tokel(false);
-    //         players[i].player->disable();
-    //     }
-    // }
-
-    // if (!model.get_tokel(new_id).is_active())
-    // {
-    //     model.set_active_player(-1);
-    //     return;
-    // }
-    // if (model.get_active_player() != -1 && model.get_active_player() != new_id)
-    // {
-    //     model.get_tokel(model.get_active_player()).set_tokel(false);
-    //     players[model.get_active_player()].player->disable();
-    // }
-
-    // model.switch_players(new_id);
-
-    // players[new_id].player->activate();
-}
-
 void GameView::update()
 {
+
+    activity.update();
+    this->isIdle = activity.seconds_since_activity() > 2;
+    if (isIdle)
+        pause_view.update();
+    
     if (IsKeyDown(KEY_LEFT_CONTROL))
     {
         if (IsKeyPressed(KEY_P))
@@ -189,8 +137,7 @@ void GameView::update()
     }
     UpdateMusicStream(music);
 
-    if (!model.update())
-        return;
     this->win.update();
     this->win.update_tabs();
+    model.update();
 }

@@ -26,6 +26,10 @@
 # include "TokelModel.hpp"
 # include "TokelView.hpp"
 
+# include "ActivityTracker.hpp"
+
+# include "PauseView.hpp"
+
 # include <vector>
 
 struct Player_data
@@ -39,6 +43,8 @@ class GameView : public App
     private:
         GameModel model;
 
+        PauseView pause_view;
+
         Win win;
 
         Rectangle screen_rect;
@@ -48,8 +54,10 @@ class GameView : public App
         std::vector<Player_data> players;
         TextInpView *nameInput;
 
+        bool isIdle;
+        ActivityTracker activity;
+
         void create_new_player(void);
-        void switch_players(int new_id);
                 
     public:
         GameView();

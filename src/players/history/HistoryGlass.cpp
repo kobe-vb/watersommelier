@@ -127,12 +127,10 @@ void HistoryGlass::draww(void) const
     DrawRectangleRounded(rect, ROUNDED, 10, UIView::get_dcolor(UiColors::BG));
     // DrawRectangleRoundedLinesEx(rect, ROUNDED, 10, 6.0f, BLACK);
 
-
-    // draw_my_text("pH: %.2f", ph, PEDING * 3, 80);
     // draw_my_text("mol: %.2f", mol, PEDING * 3 + 200, 80);
     // DrawText(keyWords.c_str(), PEDING * 3, 100, 20, DARKBLUE);
 
-    MyDraw::text("first", "glass:" + std::to_string(i), rect.x + PEDING, rect.y + BUTTON_HEIGHT + PEDING, 40, BLACK);
+    MyDraw::text("first", "glass:" + std::to_string(i), rect.x + PEDING, rect.y + BUTTON_HEIGHT + PEDING, 40, get_color(UiColors::TEXT));
 
     bar_view.draw(this->get_mouse_pos());
     EndTextureMode();

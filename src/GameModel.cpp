@@ -4,11 +4,9 @@
 #include <SudoPlayerModel.hpp>
 #include <CSVDownloader.hpp>
 
-GameModel::GameModel()
+GameModel::GameModel() : barcode_reader(BarcodeReader([this](const std::string &code)
+                                   { handleCode(code); }))
 {
-    barcode_reader = BarcodeReader([this](const std::string &code)
-                                   { handleCode(code); });
-
     load_data(data);
 }
 
@@ -156,7 +154,5 @@ bool GameModel::update(void)
 {
     this->sim.update(GetFrameTime());
     barcode_reader.update();
-    if (barcode_reader.isBuilding())
-        return false;
     return true;
 }
