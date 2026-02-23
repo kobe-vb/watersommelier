@@ -33,8 +33,8 @@ public:
 
     void reset(void);
 
+    bool update(void) override;
     void draw(void) const override;
 
     void lock(bool lock=true);
-
 };

@@ -31,7 +31,7 @@ void draw_my_text(const char *name, float mol, int x, int y)
     DrawText(buffer, x, y, 30, DARKBLUE);
 }
 
-HistoryGlass::HistoryGlass(int id, Rectangle &ref_rect, GlassModel &glass, ScoreGlassModel &scoreGlass) : BufferedWin(&model, ref_rect.x, ref_rect.y, ref_rect.width * 1.3, 200),
+HistoryGlass::HistoryGlass(int id, Rectangle &ref_rect, GlassModel &glass, ScoreGlassModel &scoreGlass) : BufferedWin(&model, ref_rect.x, ref_rect.y, ref_rect.width * 1.5, 350),
                                                                                     i(id),
                                                                                     bar(glass.bar),
                                                                                     comment(scoreGlass.get_comment_text()),
@@ -47,6 +47,8 @@ HistoryGlass::HistoryGlass(int id, Rectangle &ref_rect, GlassModel &glass, Score
     rect.width -= PEDING * 2;
 
     bar_view = StackedBarHView(&bar, rect.x + PEDING, rect.y + PEDING, (int)(rect.width - PEDING * 2), BUTTON_HEIGHT);
+
+    bar_view.set_converter([volume = this->volume](double x) { return (x / volume) * 1000; }, "mOsm/kg");
 
     std::ostringstream oss;
     bool first = true;
@@ -114,6 +116,15 @@ void HistoryGlass::set_pos(int i, float scrollOffset)
     //     model.set_visible(false);
     // else
     //     model.set_visible(true);
+}
+
+bool HistoryGlass::update(void)
+{
+    if (!model.is_visible())
+        return (false);
+
+    bar_view.update(this->get_mouse_pos());
+    return true;
 }
 
 void HistoryGlass::draw(void) const

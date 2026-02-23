@@ -25,6 +25,8 @@ GlassView::GlassView(GlassModel *model, Rectangle &rect) : Win(model), model(mod
 
     bar = StackedBarHView(&model->get_bar(), rect.x + PEDING, rect.y + PEDING, rect.width - PEDING * 2, BUTTON_HEIGHT);
 
+    bar.set_converter([this](double x) { return (x /this->model->get_volume()) * 1000; }, "mOsm/kg");
+
     int x = rect.x + rect.width - PEDING - BUTTON_WIDTH;
     int y = rect.y + PEDING + BUTTON_HEIGHT + PEDING;
     add_ui(std::make_unique<ButtonView>(
@@ -120,6 +122,15 @@ void GlassView::score_glass(void)
 //     Win::draw();
 //     EndTextureMode();
 // }
+
+bool GlassView::update(void)
+{
+    if (!model->is_visible())
+        return (false);
+
+    bar.update(this->get_mouse_pos());
+    return Win::update();
+}
 
 void GlassView::draw(void) const
 {

@@ -28,6 +28,7 @@ public:
     void set_pos(int i, float scrollOffset);
     int get_id(void) const { return i;};
 
+    bool update(void) override;
     void draw(void) const override;
     void draww(void) const;
 

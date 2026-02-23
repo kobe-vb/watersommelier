@@ -116,6 +116,13 @@ bool PlayerModel::take_code_for_dropdown(const std::string &code)
 
 void PlayerModel::control_z()
 {
+    if (scoreGlass.is_visible())
+    {
+        scoreGlass.reset();
+        scoreGlass.disable();
+        glass.lock(false);
+        return;
+    }
     glass.remove_previous_drops();
 }
 

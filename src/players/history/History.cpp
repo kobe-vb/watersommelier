@@ -94,6 +94,10 @@ bool History::update()
             glass.set_pos(get_num_of_elements() - i - 1, scrollOffset);
         }
     }
+
+    for (int i = 0; i < get_num_of_elements(); i++)
+        dynamic_cast<HistoryGlass &>(*get_ui_at(i)).update();
+
     return (false);
 }
 
